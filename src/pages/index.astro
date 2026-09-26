@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Digital Commons Japan — オープンなデジタル基盤と共有知">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Mock · Preview deployment</p>
+        <h1>デジタルコモンズを、<br />日本からひらく。</h1>
+        <p class="hero-lead">
+          Digital Commons Japan は、オープンなデジタル基盤・共有される知・公共的なプロトコルを育てるための実験的なハブです。
+          いまはサイトのモック公開中。まずはビジョンとプロジェクトの骨格を共有します。
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">プロジェクトを見る</a>
+          <a class="btn btn-ghost" href="https://codeberg.org/digico/digitalcommons.jp">ソースを見る</a>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="ハイライト">
+        <div class="stat-row">
+          <div class="stat">
+            <strong>Open</strong>
+            <span>基盤とプロトコル</span>
+          </div>
+          <div class="stat">
+            <strong>Local</strong>
+            <span>日本の文脈から</span>
+          </div>
+          <div class="stat">
+            <strong>Common</strong>
+            <span>共有される知</span>
+          </div>
+        </div>
+        <p class="panel-note">
+          このページは Astro で組んだモックです。Codeberg Pages から <code>digitalcommons.jp</code> として配信する想定で作っています。
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="section-head">
+        <h2>共有知のインフラをつくる</h2>
+        <p>
+          一過性のサービスではなく、長く使える公共的なデジタル基盤へ。
+          データ・アイデンティティ・出版・実験環境を、オープンな手順で組み立てます。
+        </p>
+      </div>
+      <div class="about-grid">
+        <article class="card">
+          <h3>Why Digital Commons</h3>
+          <p>
+            情知の共有は、単なるアーカイブではありません。誰もが検証でき、fork でき、次の仕事に接続できる基盤です。
+            そのための標準・ツール・運用知を、日本語の文脈から積み上げます。
+          </p>
+        </article>
+        <article class="card">
+          <h3>Who it’s for</h3>
+          <p>
+            研究者、開発者、図書館・公文書、コミュニティメディア、公共ICT の実務者。
+            「公開して終わり」ではなく、共同で維持するための場をつくります。
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="pillars">
+    <div class="container">
+      <div class="section-head">
+        <h2>Focus areas</h2>
+        <p>最初に据える三つの柱。すべて相互接続を前提にしています。</p>
+      </div>
+      <div class="pillars">
+        <article class="pillar">
+          <div class="pillar-index">01 / PROTOCOL</div>
+          <h3>プロトコルと相互運用</h3>
+          <p>
+            ActivityPub・DID・オープンな発行プロトコルなど、相互接続できる仕組みの実装と運用知を共有します。
+          </p>
+        </article>
+        <article class="pillar">
+          <div class="pillar-index">02 / ARCHIVE</div>
+          <h3>保存と再利用</h3>
+          <p>
+            長期保存できる形式、参照可能なメタデータ、再利用可能なAPI。
+            「読める」だけで終わらないアーカイブを目指します。
+          </p>
+        </article>
+        <article class="pillar">
+          <div class="pillar-index">03 / PRACTICE</div>
+          <h3>運用の民主化</h3>
+          <p>
+            self-host、分散インフラ、コミュニティ運営のプレイブックを開き、実践可能な形で残します。
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="container">
+      <div class="section-head">
+        <h2>Projects</h2>
+        <p>いま動いている（動かしつつある）取り組みのスケッチです。</p>
+      </div>
+      <div class="project-list">
+        <article class="project">
+          <div class="project-tag">Identity</div>
+          <div>
+            <h3>Open identity layer</h3>
+            <p>コミュニティに馴染む分散IDと認証の共通実装。日本語運用に耐える設計を重視。</p>
+          </div>
+          <a class="project-link" href="#join">Coming soon</a>
+        </article>
+        <article class="project">
+          <div class="project-tag">Publishing</div>
+          <div>
+            <h3>Commons publishing stack</h3>
+            <p>静的サイトからジャーナルまで、オープン出版を支えるAstroベースのスタック。</p>
+          </div>
+          <a class="project-link" href="#join">Coming soon</a>
+        </article>
+        <article class="project">
+          <div class="project-tag">Archive</div>
+          <div>
+            <h3>Living archive</h3>
+            <p>地域・分野の知を、fork可能な形で保存・再配信する実験的なリポジトリ。</p>
+          </div>
+          <a class="project-link" href="#join">Coming soon</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="join" id="join">
+    <div class="container">
+      <div class="join-panel">
+        <h2>一緒に、公共的な基盤をつくる</h2>
+        <p>
+          これはモックです。フィードバック・共同開発・寄稿の相談は歓迎します。
+          コードは Codeberg で公開しています。
+        </p>
+        <div class="join-actions">
+          <a class="btn btn-primary" href="https://codeberg.org/digico/digitalcommons.jp">Codeberg を開く</a>
+          <a class="btn btn-ghost" href="mailto:hello@digitalcommons.jp">連絡する</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
