@@ -1,4 +1,6 @@
 ---
+import site from '../content/settings/site.json';
+
 interface Props {
   title: string;
   description?: string;
@@ -6,8 +8,19 @@ interface Props {
 
 const {
   title,
-  description = 'Digital Commons Japan — オープンなデジタル基盤と共有知を育てるコミュニティ',
+  description = site.description,
 } = Astro.props;
+
+// Join paths under Astro `base` (needed on path-based hosts).
+const withBase = (path: string) => {
+  const base = import.meta.env.BASE_URL.endsWith('/')
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
+  return `${base}${path.replace(/^\//, '')}`;
+};
+const adminHref = withBase('admin/');
+const homeHref = withBase('');
+const faviconHref = withBase('favicon.svg');
 ---
 
 <!doctype html>
@@ -21,13 +34,13 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://digitalcommons.jp/" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={faviconHref} />
     <title>{title}</title>
   </head>
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="logo" href="/">
+        <a class="logo" href={homeHref}>
           <span class="logo-mark" aria-hidden="true"></span>
           <span class="logo-text">Digital Commons<span class="logo-jp">.jp</span></span>
         </a>
@@ -37,7 +50,7 @@ const {
           <a href="#projects">Projects</a>
           <a href="#join">Join</a>
         </nav>
-        <a class="header-cta" href="#join">参加する</a>
+        <a class="header-cta" href="#join">{site.ctaLabel}</a>
       </div>
     </header>
 
@@ -56,9 +69,13 @@ const {
         </div>
         <div class="footer-meta">
           <p>
-            <a href="https://codeberg.org/digico/digitalcommons.jp">Source on Codeberg</a>
+            <a href="https://github.com/yno9/digitalcommons.jp">Source on GitHub</a>
+            {' · '}
+            <a href="https://codeberg.org/digico/digitalcommons.jp">Codeberg</a>
+            {' · '}
+            <a href={adminHref}>CMS</a>
           </p>
-          <p class="muted">© {new Date().getFullYear()} Digital Commons Japan</p>
+          <p class="muted">© {new Date().getFullYear()} {site.title}</p>
         </div>
       </div>
     </footer>
