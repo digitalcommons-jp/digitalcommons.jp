@@ -20,12 +20,23 @@ git subtree push --prefix dist origin pages
 # or: push the contents of dist/ to a pages branch
 ```
 
-Custom domain `digitalcommons.jp` points at Codeberg Pages (`217.197.84.141`).
-Authorization TXT record (webhook deploy):
+## Public URL (mock)
+
+**https://digico.codeberg.page/digitalcommons.jp/**
+
+Codeberg Pages webhooks (Forgejo, branch filter `pages`):
+
+- `https://digico.codeberg.page/digitalcommons.jp/`
+- `http://digitalcommons.jp/` (custom domain, first deploy must be HTTP)
+
+## Custom domain `digitalcommons.jp` (not live yet)
+
+As of 2026-09-26 the domain has **no public DNS zone** (NXDOMAIN). Once registered, point it at Codeberg Pages and authorize this repo:
 
 | Name | Type | Value |
 |------|------|-------|
+| `@` | A | `217.197.84.141` |
+| `@` | AAAA | `2a0a:4580:103f:c0de::2` |
 | `_git-pages-repository.digitalcommons.jp` | TXT | `https://codeberg.org/digico/digitalcommons.jp.git` |
 
-Webhook target (Forgejo): `http://digitalcommons.jp/` (first deploy), then `https://digitalcommons.jp/`.
-Branch filter: `pages`.
+Then redeploy (push to `pages`) and switch the webhook URL to `https://digitalcommons.jp/` after the first successful HTTPS deploy.
