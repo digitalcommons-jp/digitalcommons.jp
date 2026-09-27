@@ -1,111 +1,103 @@
 ---
-// Two-line logo block.
-// Width fill is done by scaling font-size (not by stretching glyphs),
-// so letterforms stay undistorted. Line 1 drives the scale; line 2 follows.
+// Two-line logo block (HTML so normal CSS line-height applies).
+// After fonts load, font-size is scaled so each line fills 100% width
+// without stretching glyphs.
 const line1 = 'digital';
 const line2 = 'commons';
-
-const VB_W = 400;
-const VB_H = 168;
-// Fallback sizes until the fit script runs (and for no-JS).
-const LINE1_SIZE = 120;
-const LINE2_RATIO = 0.7;
-const LINE2_SIZE = Math.round(LINE1_SIZE * LINE2_RATIO);
-const LINE1_BASELINE = 120;
-const LINE2_BASELINE = 164;
 ---
 
-<svg
-  class="logo-block logo"
-  viewBox={`0 0 ${VB_W} ${VB_H}`}
-  role="img"
-  aria-label={`${line1} ${line2}`}
-  xmlns="http://www.w3.org/2000/svg"
-  data-logo-block
-  data-fit-width={VB_W}
->
-  <!--
-    textLength + lengthAdjust="spacing" only: letter-spacing may adjust,
-    glyph shapes are never stretched. After fonts load, the script removes
-    textLength and sets font-size so the natural width is exactly 100%.
-  -->
-  <text
-    class="logo-line logo-line-1"
-    x="0"
-    y={LINE1_BASELINE}
-    font-size={LINE1_SIZE}
-    textLength={VB_W}
-    lengthAdjust="spacing">{line1}</text
-  >
-  <text
-    class="logo-line logo-line-2"
-    x="0"
-    y={LINE2_BASELINE}
-    font-size={LINE2_SIZE}
-    textLength={VB_W}
-    lengthAdjust="spacing">{line2}</text
-  >
-</svg>
+<span class="logo-block logo" aria-label={`${line1} ${line2}`} data-logo-block data-fit>
+  <span class="logo-line logo-line-1">{line1}</span>
+  <span class="logo-line logo-line-2">{line2}</span>
+</span>
 
 <style>
   /*
    * Logo block — human-editable.
    *
-   * `.logo-block` width tracks the screen; SVG scales as one unit, so
-   * line 1 grows/shrinks with the screen and line 2 keeps its ratio.
-   * Both lines fill 100% width via font-size fitting (see script).
+   * Width tracks the screen. line-height on .logo-line-1 controls vertical
+   * spacing (line box height / gap under line 1). Each line is scaled to
+   * fill 100% width by the fit script — glyphs stay undistorted.
    */
   .logo-block {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     width: clamp(7.5rem, 20vw, 14rem);
-    height: auto;
     color: inherit;
-    overflow: visible;
+    user-select: none;
   }
 
   .logo-line {
+    display: block;
+    width: 100%;
     font-family:
       'Fira Sans',
       var(--font-fira),
       sans-serif;
     font-weight: 800;
-    fill: currentColor;
+    line-height: 1;
     letter-spacing: normal;
+    text-transform: lowercase;
+    white-space: nowrap;
+    /* overflow visible so scaled text isn't clipped while fitting */
+    overflow: visible;
+  }
+
+  .logo-line-1 {
+    /* line 1: "digital" — line-height applies here */
+    line-height: 0.92;
+    margin-top: 0;
   }
 
   .logo-line-2 {
-    /* size follows line 1 (fit script + LINE2_RATIO fallback) */
+    /* line 2: "commons" — size follows line 1 via fit + ratio below */
+    line-height: 1;
     opacity: 0.92;
+    /* Fallback proportion of line 1 until JS runs */
+    font-size: 0.68em;
   }
 </style>
 
 <script>
-  // Scale each line's font-size so its natural text width equals the block
-  // (viewBox width). Uniform scale — glyphs are not sheared or stretched.
-  function fitLogo(svg: SVGSVGElement) {
-    const target = Number(svg.dataset.fitWidth || 400);
-    const lines = svg.querySelectorAll<SVGTextElement>('.logo-line');
-    lines.forEach((line) => {
-      line.removeAttribute('textLength');
-      line.removeAttribute('lengthAdjust');
-      const natural = line.getComputedTextLength();
-      if (!natural) return;
-      const current = Number(line.getAttribute('font-size')) || 100;
-      line.setAttribute('font-size', String((current * target) / natural));
-    });
+  // Scale font-size so the natural text width equals the block width.
+  function fitLine(el: HTMLElement, target: number) {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const natural = range.getBoundingClientRect().width;
+    if (!natural) return;
+
+    const current = parseFloat(getComputedStyle(el).fontSize);
+    // Reset any previous inline size so we measure from a clean base
+    // (previous fit already set inline fontSize — ratio still holds if we
+    // use relative measure from current computed size).
+    const next = (current * target) / natural;
+    el.style.fontSize = `${next}px`;
+  }
+
+  function fitLogo(block: HTMLElement) {
+    const target = block.getBoundingClientRect().width;
+    if (!target) return;
+    const line1 = block.querySelector<HTMLElement>('.logo-line-1');
+    const line2 = block.querySelector<HTMLElement>('.logo-line-2');
+    if (line1) fitLine(line1, target);
+    if (line2) fitLine(line2, target);
   }
 
   function fitAll() {
-    document.querySelectorAll<SVGSVGElement>('[data-logo-block]').forEach(fitLogo);
+    document.querySelectorAll<HTMLElement>('[data-logo-block]').forEach(fitLogo);
   }
 
-  if (document.fonts?.ready) {
-    document.fonts.ready.then(fitAll);
-  } else {
-    window.addEventListener('load', fitAll);
-  }
-  // Re-run after client-side navigations (header is persisted).
-  document.addEventListener('astro:page-load', () => {
-    document.fonts?.ready.then(fitAll);
+  const ready = () => {
+    if (document.fonts?.ready) document.fonts.ready.then(fitAll);
+    else window.addEventListener('load', fitAll);
+  };
+  ready();
+  document.addEventListener('astro:page-load', ready);
+
+  let t: number | undefined;
+  window.addEventListener('resize', () => {
+    window.clearTimeout(t);
+    t = window.setTimeout(fitAll, 100);
   });
 </script>
