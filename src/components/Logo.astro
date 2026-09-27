@@ -1,17 +1,17 @@
 ---
 // Two-line logo block.
-// SVG `textLength` forces both lines to fill 100% of the block width.
-// Font size of line 1 scales with the block (screen); line 2 follows via ratio.
+// Width fill is done by scaling font-size (not by stretching glyphs),
+// so letterforms stay undistorted. Line 1 drives the scale; line 2 follows.
 const line1 = 'digital';
 const line2 = 'commons';
 
-// viewBox units: line 1 drives the scale; line 2 follows at LINE2_RATIO of line 1.
 const VB_W = 400;
 const VB_H = 168;
-const LINE1_SIZE = 112;
-const LINE2_RATIO = 0.68;
+// Fallback sizes until the fit script runs (and for no-JS).
+const LINE1_SIZE = 120;
+const LINE2_RATIO = 0.7;
 const LINE2_SIZE = Math.round(LINE1_SIZE * LINE2_RATIO);
-const LINE1_BASELINE = 118;
+const LINE1_BASELINE = 120;
 const LINE2_BASELINE = 164;
 ---
 
@@ -21,12 +21,29 @@ const LINE2_BASELINE = 164;
   role="img"
   aria-label={`${line1} ${line2}`}
   xmlns="http://www.w3.org/2000/svg"
+  data-logo-block
+  data-fit-width={VB_W}
 >
-  <text class="logo-line logo-line-1" x="0" y={LINE1_BASELINE} font-size={LINE1_SIZE} textLength={VB_W}
-    lengthAdjust="spacingAndGlyphs">{line1}</text
+  <!--
+    textLength + lengthAdjust="spacing" only: letter-spacing may adjust,
+    glyph shapes are never stretched. After fonts load, the script removes
+    textLength and sets font-size so the natural width is exactly 100%.
+  -->
+  <text
+    class="logo-line logo-line-1"
+    x="0"
+    y={LINE1_BASELINE}
+    font-size={LINE1_SIZE}
+    textLength={VB_W}
+    lengthAdjust="spacing">{line1}</text
   >
-  <text class="logo-line logo-line-2" x="0" y={LINE2_BASELINE} font-size={LINE2_SIZE} textLength={VB_W}
-    lengthAdjust="spacingAndGlyphs">{line2}</text
+  <text
+    class="logo-line logo-line-2"
+    x="0"
+    y={LINE2_BASELINE}
+    font-size={LINE2_SIZE}
+    textLength={VB_W}
+    lengthAdjust="spacing">{line2}</text
   >
 </svg>
 
@@ -34,9 +51,9 @@ const LINE2_BASELINE = 164;
   /*
    * Logo block — human-editable.
    *
-   * Width tracks the viewport (screen size). Because the SVG scales as one
-   * unit, line 1 grows/shrinks with the screen and line 2 always keeps its
-   * size ratio to line 1. `textLength` keeps both lines at 100% block width.
+   * `.logo-block` width tracks the screen; SVG scales as one unit, so
+   * line 1 grows/shrinks with the screen and line 2 keeps its ratio.
+   * Both lines fill 100% width via font-size fitting (see script).
    */
   .logo-block {
     display: block;
@@ -53,16 +70,42 @@ const LINE2_BASELINE = 164;
       sans-serif;
     font-weight: 800;
     fill: currentColor;
-    /* Optional letter-spacing fine-tune (SVG also stretches to 100%): */
-    letter-spacing: -0.02em;
-  }
-
-  .logo-line-1 {
-    /* line 1: "digital" — drives the scale */
+    letter-spacing: normal;
   }
 
   .logo-line-2 {
-    /* line 2: "commons" — size follows line 1 (see font-size on the element) */
+    /* size follows line 1 (fit script + LINE2_RATIO fallback) */
     opacity: 0.92;
   }
 </style>
+
+<script>
+  // Scale each line's font-size so its natural text width equals the block
+  // (viewBox width). Uniform scale — glyphs are not sheared or stretched.
+  function fitLogo(svg: SVGSVGElement) {
+    const target = Number(svg.dataset.fitWidth || 400);
+    const lines = svg.querySelectorAll<SVGTextElement>('.logo-line');
+    lines.forEach((line) => {
+      line.removeAttribute('textLength');
+      line.removeAttribute('lengthAdjust');
+      const natural = line.getComputedTextLength();
+      if (!natural) return;
+      const current = Number(line.getAttribute('font-size')) || 100;
+      line.setAttribute('font-size', String((current * target) / natural));
+    });
+  }
+
+  function fitAll() {
+    document.querySelectorAll<SVGSVGElement>('[data-logo-block]').forEach(fitLogo);
+  }
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(fitAll);
+  } else {
+    window.addEventListener('load', fitAll);
+  }
+  // Re-run after client-side navigations (header is persisted).
+  document.addEventListener('astro:page-load', () => {
+    document.fonts?.ready.then(fitAll);
+  });
+</script>
