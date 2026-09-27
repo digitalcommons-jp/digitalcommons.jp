@@ -10,10 +10,6 @@ export interface Props {
 }
 
 const { metadata } = Astro.props;
-
-// Landing pages show a reduced header: only the "Landing" dropdown from the
-// main navigation (looked up by label so reordering navigation.ts is safe).
-const landingMenu = headerData?.links?.find((link) => link.text === 'Landing');
 ---
 
 <PageLayout metadata={metadata}>
@@ -22,17 +18,7 @@ const landingMenu = headerData?.links?.find((link) => link.text === 'Landing');
   </Fragment>
   <Fragment slot="header">
     <slot name="header">
-      <Header
-        links={landingMenu ? [landingMenu] : undefined}
-        actions={[
-          {
-            text: 'Download',
-            href: 'https://github.com/arthelokyo/astrowind',
-          },
-        ]}
-        showToggleTheme
-        position="right"
-      />
+      <Header links={headerData?.links} actions={[]} isSticky />
     </slot>
   </Fragment>
   <slot />
