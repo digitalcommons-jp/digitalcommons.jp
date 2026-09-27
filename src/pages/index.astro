@@ -1,144 +1,166 @@
 ---
-import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
-import site from '../content/settings/site.json';
-import hero from '../content/home/hero.json';
-import about from '../content/home/about.json';
-import join from '../content/home/join.json';
+import Layout from '~/layouts/PageLayout.astro';
 
-const projects = (await getCollection('projects')).sort(
-  (a, b) => a.data.order - b.data.order,
-);
-const headingLines = hero.heading.split('\n');
+import Hero from '~/components/widgets/Hero.astro';
+import Note from '~/components/widgets/Note.astro';
+import Features from '~/components/widgets/Features.astro';
+import Content from '~/components/widgets/Content.astro';
+import BlogHighlightedPosts from '~/components/widgets/BlogHighlightedPosts.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'Digital Commons Japan — デジタルコモンズを、日本からひらく。',
+  ignoreTitleTemplate: true,
+};
 ---
 
-<Base title={`${site.title} — ${site.description}`} description={site.description}>
-  <section class="hero">
-    <div class="container hero-grid">
-      <div>
-        <p class="eyebrow">{hero.eyebrow}</p>
-        <h1>
-          {headingLines.map((line) => (
-            <>
-              {line}
-              {line !== headingLines.at(-1) && <br />}
-            </>
-          ))}
-        </h1>
-        <p class="hero-lead">{hero.lead}</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href={hero.primaryHref}>{hero.primaryLabel}</a>
-          <a class="btn btn-ghost" href="https://github.com/yno9/digitalcommons.jp">ソースを見る</a>
-        </div>
-      </div>
+<Layout metadata={metadata}>
+  <!-- Hero -->
+  <Hero
+    tagline="Digital Commons Japan · Mock"
+    actions={[
+      { variant: 'primary', text: 'プロジェクトを見る', href: '#features', icon: 'tabler:rocket' },
+      { text: 'ソースを見る', href: 'https://codeberg.org/digico/digitalcommons.jp', target: '_blank', icon: 'tabler:code' },
+    ]}
+    image={{ src: '~/assets/images/hero-image.png', alt: 'Digital Commons Japan' }}
+  >
+    <Fragment slot="title">
+      デジタルコモンズを、<br />
+      <span class="text-accent dark:text-white">日本から</span>ひらく。
+    </Fragment>
 
-      <aside class="hero-panel" aria-label="ハイライト">
-        <div class="stat-row">
-          <div class="stat">
-            <strong>Open</strong>
-            <span>基盤とプロトコル</span>
-          </div>
-          <div class="stat">
-            <strong>Local</strong>
-            <span>日本の文脈から</span>
-          </div>
-          <div class="stat">
-            <strong>Common</strong>
-            <span>共有される知</span>
-          </div>
-        </div>
-        <p class="panel-note">
-          このページは Astro で組んだモックです。コンテンツはリポジトリで管理しています。
-        </p>
-      </aside>
-    </div>
-  </section>
+    <Fragment slot="subtitle">
+      オープンなデジタル基盤・共有される知・公共的なプロトコルを育てる実験的なハブ。
+      長く使える公共インフラを、日本語の文脈から組み立てます。
+    </Fragment>
+  </Hero>
 
-  <section id="about">
-    <div class="container">
-      <div class="section-head">
-        <h2>{about.heading}</h2>
-        <p>{about.lead}</p>
-      </div>
-      <div class="about-grid">
-        {about.cards.map((card) => (
-          <article class="card">
-            <h3>{card.title}</h3>
-            <p>{card.body}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
+  <!-- Note -->
+  <Note
+    title="Preview"
+    description="いまはサイトのモック公開中。コンテンツは Codeberg の Sveltia CMS または md 直接編集で更新できます。"
+  />
 
-  <section id="pillars">
-    <div class="container">
-      <div class="section-head">
-        <h2>Focus areas</h2>
-        <p>最初に据える三つの柱。すべて相互接続を前提にしています。</p>
-      </div>
-      <div class="pillars">
-        <article class="pillar">
-          <div class="pillar-index">01 / PROTOCOL</div>
-          <h3>プロトコルと相互運用</h3>
-          <p>
-            ActivityPub・DID・オープンな発行プロトコルなど、相互接続できる仕組みの実装と運用知を共有します。
-          </p>
-        </article>
-        <article class="pillar">
-          <div class="pillar-index">02 / ARCHIVE</div>
-          <h3>保存と再利用</h3>
-          <p>
-            長期保存できる形式、参照可能なメタデータ、再利用可能なAPI。
-            「読める」だけで終わらないアーカイブを目指します。
-          </p>
-        </article>
-        <article class="pillar">
-          <div class="pillar-index">03 / PRACTICE</div>
-          <h3>運用の民主化</h3>
-          <p>
-            self-host、分散インフラ、コミュニティ運営のプレイブックを開き、実践可能な形で残します。
-          </p>
-        </article>
-      </div>
-    </div>
-  </section>
+  <!-- Features -->
+  <Features
+    id="features"
+    tagline="Focus areas"
+    title="共有知のインフラをつくる"
+    subtitle="一過性のサービスではなく、検証でき fork でき次の仕事に接続できる基盤へ。"
+    items={[
+      {
+        title: 'プロトコルと相互運用',
+        description:
+          'ActivityPub・DID・オープンな発行プロトコルなど、相互接続できる仕組みの実装と運用知を共有します。',
+        icon: 'tabler:plug-connected',
+      },
+      {
+        title: '保存と再利用',
+        description:
+          '長期保存できる形式、参照可能なメタデータ、再利用可能な API。「読める」だけで終わらないアーカイブを目指します。',
+        icon: 'tabler:archive',
+      },
+      {
+        title: '運用の民主化',
+        description:
+          'self-host、分散インフラ、コミュニティ運営のプレイブックを開き、実践可能な形で残します。',
+        icon: 'tabler:users-group',
+      },
+    ]}
+  />
 
-  <section id="projects">
-    <div class="container">
-      <div class="section-head">
-        <h2>Projects</h2>
-        <p>いま動いている（動かしつつある）取り組みのスケッチです。</p>
-      </div>
-      <div class="project-list">
-        {projects.map((project) => (
-          <article class="project">
-            <div class="project-tag">{project.data.tag}</div>
-            <div>
-              <h3>{project.data.title}</h3>
-              <p>{project.data.summary}</p>
-            </div>
-            {project.data.linkHref && project.data.linkLabel ? (
-              <a class="project-link" href={project.data.linkHref}>{project.data.linkLabel}</a>
-            ) : (
-              <span class="project-link muted">—</span>
-            )}
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
+  <!-- Content -->
+  <Content
+    isReversed
+    tagline="Why Digital Commons"
+    title="情知の共有は、アーカイブではない"
+    items={[
+      {
+        title: '誰もが検証できる',
+        description: '標準・ツール・運用知をオープンに残し、次の担い手が足場にできるようにする。',
+        icon: 'tabler:circle-check',
+      },
+      {
+        title: '日本語の文脈から',
+        description: '研究・図書館・公文書・コミュニティメディア・公共 ICT の現場に馴染む形で積み上げる。',
+        icon: 'tabler:language',
+      },
+      {
+        title: '共同で維持する',
+        description: '「公開して終わり」ではなく、長く使える公共的なデジタル基盤として育てる。',
+        icon: 'tabler:refresh',
+      },
+    ]}
+    image={{
+      src: '~/assets/images/startup.png',
+      alt: 'Digital Commons Image',
+    }}
+  >
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Who it’s for</h3>
+      研究者、開発者、図書館・公文書、コミュニティメディア、公共 ICT の実務者。
+      <br /><br />
+      データ・アイデンティティ・出版・実験環境を、オープンな手順で組み立てます。
+    </Fragment>
+  </Content>
 
-  <section class="join" id="join">
-    <div class="container">
-      <div class="join-panel">
-        <h2>{join.heading}</h2>
-        <p>{join.body}</p>
-        <div class="join-actions">
-          <a class="btn btn-primary" href={join.buttonHref}>{join.buttonLabel}</a>
-          <a class="btn btn-ghost" href={`mailto:${site.contactEmail}`}>連絡する</a>
-        </div>
-      </div>
-    </div>
-  </section>
-</Base>
+  <!-- Stats -->
+  <Stats
+    title="3 pillars"
+    stats={[
+      { amount: 'Open', title: '基盤とプロトコル' },
+      { amount: 'Local', title: '日本の文脈から' },
+      { amount: 'Common', title: '共有される知' },
+    ]}
+  />
+
+  <!-- FAQs -->
+  <FAQs
+    id="faq"
+    tagline="FAQ"
+    title="よくある質問"
+    items={[
+      {
+        title: 'これは何ですか？',
+        description:
+          'Digital Commons Japan のサイトモックです。オープンなデジタル基盤と共有知のための取り組みの骨格を共有しています。',
+      },
+      {
+        title: 'コンテンツはどう更新しますか？',
+        description:
+          'Codeberg の Sveltia CMS（非公開パス）または、リポジトリ内の md をローカルで編集して build → push する方法があります。',
+      },
+      {
+        title: 'コードはどこにありますか？',
+        description:
+          'Codeberg の digico/digitalcommons.jp に公開しています。',
+      },
+    ]}
+  />
+
+  <!-- Blog -->
+  <BlogHighlightedPosts
+    id="blog"
+    title="Notes"
+    information="サイト更新やプロジェクトのメモ"
+  />
+
+  <!-- CallToAction -->
+  <CallToAction
+    id="join"
+    tagline="Join"
+    title="一緒に、公共的な基盤をつくる"
+    subtitle="フィードバック・共同開発・寄稿の相談は歓迎します。"
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Codeberg を開く',
+        href: 'https://codeberg.org/digico/digitalcommons.jp',
+        target: '_blank',
+        icon: 'tabler:code',
+      },
+    ]}
+  />
+</Layout>

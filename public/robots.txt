@@ -1,3 +1,2 @@
 User-agent: *
-Allow: /
-Disallow: /g7y3jf7ha/
+Disallow:

@@ -1,7 +1,6 @@
 # yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
 
-# Content is edited on Codeberg (Forgejo). Deploy is triggered when you push
-# the same commits to GitHub (Actions) or to the Codeberg `pages` branch.
+# Content is edited on Codeberg (Forgejo).
 backend:
   name: gitea
   repo: digico/digitalcommons.jp
@@ -12,93 +11,31 @@ backend:
   app_id: 2a48ad7c-a11f-4919-8b8f-92665f30904f
   branch: main
 
-media_folder: public/media
-public_folder: /digitalcommons.jp/media
+media_folder: src/assets/images
+public_folder: '~/assets/images'
 
-# Keep empty optional fields out of frontmatter so Astro schemas stay clean.
 output:
   omit_empty_optional_fields: true
 
 collections:
-  - name: settings
-    label: Settings
-    description: サイト全体の基本情報
-    files:
-      - name: site
-        label: Site
-        file: src/content/settings/site.json
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Tagline, name: tagline, widget: string }
-          - { label: Description, name: description, widget: text }
-          - { label: Primary CTA label, name: ctaLabel, widget: string }
-          - { label: Primary CTA href, name: ctaHref, widget: string }
-          - { label: Contact email, name: contactEmail, widget: string }
-
-  - name: home
-    label: Home
-    description: トップページのコピー
-    files:
-      - name: hero
-        label: Hero
-        file: src/content/home/hero.json
-        fields:
-          - { label: Eyebrow, name: eyebrow, widget: string }
-          - { label: Heading, name: heading, widget: text }
-          - { label: Lead, name: lead, widget: text }
-          - { label: Primary button, name: primaryLabel, widget: string }
-          - { label: Primary button href, name: primaryHref, widget: string }
-      - name: about
-        label: About
-        file: src/content/home/about.json
-        fields:
-          - { label: Heading, name: heading, widget: string }
-          - { label: Lead, name: lead, widget: text }
-          - label: Cards
-            name: cards
-            widget: list
-            fields:
-              - { label: Title, name: title, widget: string }
-              - { label: Body, name: body, widget: text }
-      - name: join
-        label: Join CTA
-        file: src/content/home/join.json
-        fields:
-          - { label: Heading, name: heading, widget: string }
-          - { label: Body, name: body, widget: text }
-          - { label: Button label, name: buttonLabel, widget: string }
-          - { label: Button href, name: buttonHref, widget: string }
-
-  - name: projects
-    label: Projects
-    label_singular: Project
-    description: トップに並ぶプロジェクト
-    folder: src/content/projects
-    create: true
-    delete: true
-    slug: "{{slug}}"
-    extension: md
-    fields:
-      - { label: Title, name: title, widget: string }
-      - { label: Tag, name: tag, widget: string }
-      - { label: Summary, name: summary, widget: text }
-      - { label: Order, name: order, widget: number, value_type: int, default: 0 }
-      - { label: Link label, name: linkLabel, widget: string, required: false }
-      - { label: Link href, name: linkHref, widget: string, required: false }
-      - { label: Body, name: body, widget: markdown, required: false }
-
-  - name: posts
+  - name: post
     label: Posts
     label_singular: Post
-    description: ニュース / ブログ（将来用）
-    folder: src/content/posts
+    description: ブログ記事（src/data/post）
+    folder: src/data/post
     create: true
     delete: true
-    slug: "{{slug}}"
+    slug: '{{slug}}'
     extension: md
     fields:
       - { label: Title, name: title, widget: string }
-      - { label: Date, name: date, widget: datetime, type: date }
-      - { label: Draft, name: draft, widget: boolean, default: false }
-      - { label: Summary, name: summary, widget: text, required: false }
+      - { label: Publish Date, name: publishDate, widget: datetime, type: date, required: false }
+      - { label: Update Date, name: updateDate, widget: datetime, type: date, required: false }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false }
+      - { label: Excerpt, name: excerpt, widget: text, required: false }
+      - { label: Image, name: image, widget: image, required: false }
+      - { label: Image Alt, name: imageAlt, widget: string, required: false }
+      - { label: Category, name: category, widget: string, required: false }
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Author, name: author, widget: string, required: false }
       - { label: Body, name: body, widget: markdown }
