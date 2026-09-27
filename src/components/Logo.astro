@@ -68,9 +68,6 @@ const line2 = 'commons';
     if (!natural) return;
 
     const current = parseFloat(getComputedStyle(el).fontSize);
-    // Reset any previous inline size so we measure from a clean base
-    // (previous fit already set inline fontSize — ratio still holds if we
-    // use relative measure from current computed size).
     const next = (current * target) / natural;
     el.style.fontSize = `${next}px`;
   }
@@ -100,4 +97,16 @@ const line2 = 'commons';
     window.clearTimeout(t);
     t = window.setTimeout(fitAll, 100);
   });
+
+  // Re-fit when the block width itself changes (dev tools, container queries, …)
+  const ro = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      fitLogo(entry.target as HTMLElement);
+    }
+  });
+  const observe = () => {
+    document.querySelectorAll<HTMLElement>('[data-logo-block]').forEach((el) => ro.observe(el));
+  };
+  observe();
+  document.addEventListener('astro:page-load', observe);
 </script>
