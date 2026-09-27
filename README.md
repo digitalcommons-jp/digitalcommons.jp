@@ -32,17 +32,30 @@ git push github main
 
 ## Sveltia CMS
 
-Admin UI: **`/admin/`** on the deployed site (e.g. https://yno9.github.io/digitalcommons.jp/admin/)
+Admin UI (unlisted path):
 
-- Config: [`public/admin/config.yml`](public/admin/config.yml)
-- Backend: GitHub `yno9/digitalcommons.jp`, branch `main`
-- Auth: “Sign In with Token” (classic `repo` scope, or fine-grained Contents R/W)
+**https://yno9.github.io/digitalcommons.jp/g7y3jf7ha/**
+
+- Config: [`public/g7y3jf7ha/config.yml`](public/g7y3jf7ha/config.yml)
+- Backend: **Codeberg / Gitea** `digico/digitalcommons.jp`, branch `main`
+- Auth:
+  1. **Sign In with Token** (recommended now) — Codeberg access token with repo write scope
+     ([create token](https://codeberg.org/user/settings/applications))
+  2. **PKCE (optional)** — register an OAuth2 application on Codeberg
+     (Settings → Applications → Generate OAuth2 Application)
+     - Redirect URI: `https://yno9.github.io/digitalcommons.jp/g7y3jf7ha/`
+     - Confidential: **unchecked**
+     - Then set `app_id:` in `config.yml`
 - Media: `public/media/` → URL `/digitalcommons.jp/media/`
 - Editable content:
-  - `src/content/settings/site.json` — site title / tagline / CTA
-  - `src/content/home/*.json` — homepage copy
-  - `src/content/projects/*.md` — project cards
-  - `src/content/posts/*.md` — posts (reserved)
+  - `src/content/settings/site.json`
+  - `src/content/home/*.json`
+  - `src/content/projects/*.md`
+  - `src/content/posts/*.md`
+
+> **Deploy note:** CMS writes go to **Codeberg**. GitHub Actions builds from **GitHub**.
+> After editing in CMS, sync/push the commit to GitHub (`git push github main`) to deploy,
+> and/or push `dist/` to the Codeberg `pages` branch.
 
 Local CMS workflow: https://sveltiacms.app/en/docs/workflows/local
 

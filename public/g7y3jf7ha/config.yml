@@ -1,14 +1,18 @@
 # yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
 
+# Content is edited on Codeberg (Forgejo). Deploy is triggered when you push
+# the same commits to GitHub (Actions) or to the Codeberg `pages` branch.
 backend:
-  name: github
-  repo: yno9/digitalcommons.jp
+  name: gitea
+  repo: digico/digitalcommons.jp
+  base_url: https://codeberg.org
+  api_root: https://codeberg.org/api/v1
+  # PKCE (optional): create an OAuth app on Codeberg
+  # (Settings → Applications → Generate OAuth2 Application)
+  # Redirect URI: https://yno9.github.io/digitalcommons.jp/g7y3jf7ha/
+  # Uncheck Confidential, paste Client ID here:
+  # app_id: YOUR_CLIENT_ID
   branch: main
-
-# Local development without GitHub auth (optional):
-# backend:
-#   name: test-repo
-#   branch: main
 
 media_folder: public/media
 public_folder: /digitalcommons.jp/media
