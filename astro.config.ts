@@ -46,6 +46,15 @@ export default defineConfig({
       subsets: ['latin'],
       fallbacks: ['sans-serif'],
     },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Fira Sans',
+      cssVariable: '--font-fira',
+      weights: ['400', '700', '800'],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['sans-serif'],
+    },
   ],
 
   integrations: [

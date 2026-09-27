@@ -1,38 +1,68 @@
 ---
-import { SITE } from 'astrowind:config';
+// Two-line logo block.
+// SVG `textLength` forces both lines to fill 100% of the block width.
+// Font size of line 1 scales with the block (screen); line 2 follows via ratio.
+const line1 = 'digital';
+const line2 = 'commons';
 
-// Two-line wordmark: "digital" / "commons".
-// Each line has its own class so designers can style them independently.
-const firstLine = 'digital';
-const secondLine = 'commons';
+// viewBox units: line 1 drives the scale; line 2 follows at LINE2_RATIO of line 1.
+const VB_W = 400;
+const VB_H = 168;
+const LINE1_SIZE = 112;
+const LINE2_RATIO = 0.68;
+const LINE2_SIZE = Math.round(LINE1_SIZE * LINE2_RATIO);
+const LINE1_BASELINE = 118;
+const LINE2_BASELINE = 164;
 ---
 
-<span class="logo wordmark self-center text-gray-900 dark:text-white" aria-label={SITE?.name ?? 'Digital Commons'}>
-  <span class="logo-line logo-line-1">{firstLine}</span>
-  <span class="logo-line logo-line-2">{secondLine}</span>
-</span>
+<svg
+  class="logo-block logo"
+  viewBox={`0 0 ${VB_W} ${VB_H}`}
+  role="img"
+  aria-label={`${line1} ${line2}`}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <text class="logo-line logo-line-1" x="0" y={LINE1_BASELINE} font-size={LINE1_SIZE} textLength={VB_W}
+    lengthAdjust="spacingAndGlyphs">{line1}</text
+  >
+  <text class="logo-line logo-line-2" x="0" y={LINE2_BASELINE} font-size={LINE2_SIZE} textLength={VB_W}
+    lengthAdjust="spacingAndGlyphs">{line2}</text
+  >
+</svg>
 
 <style>
-  /* Human-editable logo styles — feel free to change these. */
-  .wordmark {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    line-height: 1.05;
-    font-weight: 700;
+  /*
+   * Logo block — human-editable.
+   *
+   * Width tracks the viewport (screen size). Because the SVG scales as one
+   * unit, line 1 grows/shrinks with the screen and line 2 always keeps its
+   * size ratio to line 1. `textLength` keeps both lines at 100% block width.
+   */
+  .logo-block {
+    display: block;
+    width: clamp(7.5rem, 20vw, 14rem);
+    height: auto;
+    color: inherit;
+    overflow: visible;
+  }
+
+  .logo-line {
+    font-family:
+      'Fira Sans',
+      var(--font-fira),
+      sans-serif;
+    font-weight: 800;
+    fill: currentColor;
+    /* Optional letter-spacing fine-tune (SVG also stretches to 100%): */
     letter-spacing: -0.02em;
-    text-transform: lowercase;
-    white-space: nowrap;
   }
 
   .logo-line-1 {
-    /* line 1: "digital" */
-    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    /* line 1: "digital" — drives the scale */
   }
 
   .logo-line-2 {
-    /* line 2: "commons" */
-    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-    opacity: 0.85;
+    /* line 2: "commons" — size follows line 1 (see font-size on the element) */
+    opacity: 0.92;
   }
 </style>
