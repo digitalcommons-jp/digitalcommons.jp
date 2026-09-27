@@ -1,18 +1,15 @@
 ---
 import { SITE } from 'astrowind:config';
 
-// Two-line wordmark. Each line has its own class so designers can style
-// them independently (font-size, letter-spacing, color, …).
-const lines = (SITE?.name ?? 'Digital Commons Japan').split(/\s+/);
-const first = lines[0] ?? 'digital';
-const rest = lines.slice(1).join(' ') || 'commons';
-const second = rest.toLowerCase();
-const firstLine = first.toLowerCase();
+// Two-line wordmark: "digital" / "commons".
+// Each line has its own class so designers can style them independently.
+const firstLine = 'digital';
+const secondLine = 'commons';
 ---
 
-<span class="logo wordmark self-center text-gray-900 dark:text-white" aria-label={SITE?.name}>
+<span class="logo wordmark self-center text-gray-900 dark:text-white" aria-label={SITE?.name ?? 'Digital Commons'}>
   <span class="logo-line logo-line-1">{firstLine}</span>
-  <span class="logo-line logo-line-2">{second}</span>
+  <span class="logo-line logo-line-2">{secondLine}</span>
 </span>
 
 <style>
