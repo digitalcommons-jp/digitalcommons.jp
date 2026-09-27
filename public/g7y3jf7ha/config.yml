@@ -7,11 +7,9 @@ backend:
   repo: digico/digitalcommons.jp
   base_url: https://codeberg.org
   api_root: https://codeberg.org/api/v1
-  # PKCE (optional): create an OAuth app on Codeberg
-  # (Settings → Applications → Generate OAuth2 Application)
-  # Redirect URI: https://yno9.github.io/digitalcommons.jp/g7y3jf7ha/
-  # Uncheck Confidential, paste Client ID here:
-  # app_id: YOUR_CLIENT_ID
+  # PKCE OAuth (Codeberg OAuth2 app, non-confidential)
+  # Redirect URI: https://digico.codeberg.page/digitalcommons.jp/g7y3jf7ha/
+  app_id: 2a48ad7c-a11f-4919-8b8f-92665f30904f
   branch: main
 
 media_folder: public/media
