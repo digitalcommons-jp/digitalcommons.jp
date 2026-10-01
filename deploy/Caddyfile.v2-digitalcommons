@@ -1,0 +1,27 @@
+# Block added to /etc/caddy/Caddyfile on v2 (shared Caddy). Static site only for now:
+# no GoToSocial for this domain yet, no Cloudflare. TLS: Caddy's default (HTTP-01), so the
+# A/AAAA records must point at v2 before Caddy can get a certificate.
+# `compress` is the (compress) snippet already defined at the top of that file.
+digitalcommons.jp {
+	import compress
+
+	root * /opt/dc/dist
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		-Server
+	}
+	header /_astro/* Cache-Control "public, max-age=31536000, immutable"
+
+	@pub path /.well-known/site.standard.publication
+	header @pub Content-Type "text/plain; charset=utf-8"
+
+	try_files {path} {path}/index.html
+	file_server
+
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+}
