@@ -18,7 +18,7 @@ extra=()
 [ "${1:-}" = "--dry-run" ] && extra+=(--dry-run --itemize-changes)
 
 npm run build
-rsync -az --delete \
+rsync -rlptz --chown=root:root --delete \
   --exclude '.well-known/did.json' --exclude '.well-known/did.jsonl' --exclude '.well-known/did-witness.json' \
   "${extra[@]}" dist/ "$host:$dir/"
 if [ "${1:-}" = "--dry-run" ]; then echo "dry run: nothing was changed on $host"; else echo "deployed dist/ -> $host:$dir"; fi
