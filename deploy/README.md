@@ -12,7 +12,24 @@ deploy/
 scripts/publish.sh       冪等な公開スクリプト（1本）
 ```
 
-## 1. 当面の構成（VPS 配信）
+## 1. 配信の構成（v2）
+
+**ビルドは手元で行い、`dist/` を v2 に送るだけ。サーバーではビルドしない。**
+
+```bash
+scripts/deploy.sh --dry-run   # 何が変わるかだけ確認
+scripts/deploy.sh             # ビルドして /opt/dc/dist に rsync
+```
+
+- サイト本体: `/opt/dc/dist`（Caddy が配信。`deploy/Caddyfile.v2-digitalcommons`）。
+- **ID ドキュメント（`.well-known/did.json`、`did.jsonl`、`did-witness.json`）は、サイトとは別の場所**: `/var/lib/dc-host/root/.well-known/`。`dc-host.service`（`byo-host`、`127.0.0.1:8796`）が唯一の書き手で、Caddy は `root @identity` でそこから読み取りだけを配信する。書き込み（`PUT/POST/DELETE/OPTIONS`）は byo-host に転送される。
+- そのため、サイトを再デプロイしても、ID のファイルは上書きも削除もされない（`scripts/deploy.sh` は念のため、これらも `--exclude` している）。
+- リポジトリの `public/.well-known/` には、`atproto-did`（固定の文字列）だけを置く。ID ドキュメントは、リポジトリで管理しない。
+
+以下は、将来、サーバー側でビルドして公開（Sequoia・GoToSocial 投稿を含む）する場合の手順。今は使っていない。
+
+## 1b. サーバーでビルドする構成（未使用）
+
 
 1. VPS に `deploy` ユーザーを作り、リポジトリを `/opt/digitalcommons` に clone する（読み取り専用 deploy key で足りる）。
 2. 必要なもの: Node 22 以上、rsync、Caddy、[adnanh/webhook](https://github.com/adnanh/webhook)。
