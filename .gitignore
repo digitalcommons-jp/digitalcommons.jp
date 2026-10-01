@@ -30,3 +30,6 @@ pnpm-workspace.yaml
 .sequoia-state.json
 .social-state.json
 .publish.lock
+
+PLAN.md
+CCD.md

@@ -129,7 +129,7 @@ h3 {
 .logo-horizon,
 .logo-block .logo-line {
   font-family: var(--font-fira), 'Fira Sans', sans-serif;
-  font-weight: 800;
+  font-weight: 600;
   text-transform: lowercase;
   white-space: nowrap;
   letter-spacing: normal;
