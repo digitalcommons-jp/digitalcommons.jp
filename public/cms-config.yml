@@ -1,0 +1,105 @@
+# Sveltia CMS config. This file is public: no secrets here.
+# Local editing: open /admin/ in Chrome/Edge and choose "Work with Local Repository".
+backend:
+  name: gitea
+  repo: digico/digitalcommons.jp
+  branch: main
+  base_url: https://codeberg.org
+  api_root: https://codeberg.org/api/v1
+  # TODO(human): register an OAuth app on Codeberg (public client, PKCE) with redirect URI
+  # https://digitalcommons.jp/admin/ and put its Client ID here. Without it, editors sign in
+  # with a personal access token.
+  # app_id: <Client ID>
+
+site_url: https://digitalcommons.jp
+app_title: digital commons
+
+media_folder: /public/uploads
+public_folder: /uploads
+
+collections:
+  - name: posts
+    label: 記事
+    label_singular: 記事
+    folder: src/content/posts
+    extension: md
+    format: frontmatter
+    create: true
+    slug: '{{slug}}'
+    # Images live next to the posts so Astro can optimize them (image: ./images/cover.jpg).
+    media_folder: /src/content/posts/images
+    public_folder: ./images
+    summary: '{{title}} ({{date | date("YYYY-MM-DD")}})'
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: タイトル, widget: string }
+      - { name: description, label: 要約, widget: text, hint: 一覧カード・RSS・SNS 投稿に使います }
+      - { name: date, label: 公開日, widget: datetime, type: date, format: 'YYYY-MM-DD' }
+      - { name: updated, label: 更新日, widget: datetime, type: date, format: 'YYYY-MM-DD', required: false }
+      - name: tags
+        label: タグ
+        widget: list
+        required: false
+        hint: イベントの記事には「event」を付けます
+      - { name: image, label: カバー画像, widget: image, required: false }
+      - { name: draft, label: 下書き, widget: boolean, default: false, hint: オンにするとサイトに出ません }
+      - { name: social, label: 配信する, widget: boolean, default: false, hint: RSS・standard.site・Fediverse に配信します }
+      - { name: event, label: イベント情報, widget: object, required: false, hint: 'タグに「event」を付けた記事のみ',
+          fields: [
+            { name: start, label: 開始, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ' },
+            { name: end, label: 終了, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ', required: false },
+            { name: mode, label: 開催形態, widget: select, options: [offline, online, hybrid], default: offline },
+            { name: venue, label: 会場, widget: string, required: false },
+            { name: address, label: 住所, widget: string, required: false },
+            { name: onlineUrl, label: オンライン URL, widget: string, required: false },
+            { name: contact, label: 申込・問い合わせ先, widget: string, required: false, hint: 'mailto:info@digitalcommons.jp' },
+            { name: status, label: 状態, widget: select, options: [scheduled, cancelled, done], default: scheduled },
+          ] }
+      - { name: body, label: 本文, widget: markdown }
+
+  - name: pages
+    label: 固定ページ
+    label_singular: 固定ページ
+    folder: src/content/pages/ja
+    extension: md
+    format: frontmatter
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    fields:
+      - { name: title, label: タイトル, widget: string }
+      - { name: description, label: 説明, widget: text }
+      - { name: slug, label: スラッグ, widget: string, readonly: true }
+      - { name: lang, label: 言語, widget: hidden, default: ja }
+      - { name: body, label: 本文, widget: markdown }
+
+  - name: settings
+    label: 設定
+    files:
+      - name: home
+        label: ランディング構成
+        file: src/content/settings/home.yml
+        fields:
+          - name: sections
+            label: セクション（上から順に表示）
+            widget: list
+            fields:
+              - name: type
+                label: 種類
+                widget: select
+                options: [hero, pickup, intro, upcoming-event, latest-posts, custom, join-cta]
+              - { name: enabled, label: 表示する, widget: boolean, default: true }
+              - { name: slug, label: 記事スラッグ（pickup）, widget: string, required: false }
+              - { name: count, label: 件数（latest-posts）, widget: number, required: false }
+              - { name: component, label: コンポーネント名（custom）, widget: string, required: false }
+              - { name: props, label: props（custom）, widget: keyvalue, required: false }
+      - name: site
+        label: サイト情報
+        file: src/content/settings/site.yml
+        fields:
+          - { name: name, label: サイト名, widget: string }
+          - { name: legalName, label: 法人名, widget: string }
+          - { name: tagline, label: キャッチコピー, widget: string }
+          - { name: email, label: 連絡先メール, widget: string }
+          - { name: fediverse, label: Fediverse アカウント, widget: string }
+          - { name: bluesky, label: Bluesky ハンドル, widget: string }

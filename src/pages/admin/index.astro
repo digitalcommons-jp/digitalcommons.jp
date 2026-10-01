@@ -1,0 +1,21 @@
+---
+// Sveltia CMS entry. The CMS script is bundled from node_modules (self-hosted:
+// no CDN, per PLAN §1). Config: public/admin/config.yml.
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Content Manager</title>
+    <link rel="cms-config-url" type="text/yaml" href="/cms-config.yml" />
+  </head>
+  <body>
+    <script>
+      import { init } from '@sveltia/cms';
+      init();
+    </script>
+  </body>
+</html>
