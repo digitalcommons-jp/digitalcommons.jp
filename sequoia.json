@@ -1,11 +1,17 @@
 {
+  "$schema": "https://tangled.org/stevedylan.dev/sequoia/raw/main/sequoia.schema.json",
   "siteUrl": "https://digitalcommons.jp",
   "contentDir": "./.publish/content",
   "publicDir": "./public",
   "outputDir": "./dist",
   "pathPrefix": "/posts",
-  "publicationUri": "at://TODO-run-sequoia-init",
-  "frontmatter": { "updatedAt": "updated" },
+  "publicationUri": "at://did:web:digitalcommons.jp/site.standard.publication/3mwssjvfq3s2g",
+  "pdsUrl": "https://pds.did.md",
+  "frontmatter": {
+    "updatedAt": "updated"
+  },
   "publishContent": true,
-  "bluesky": { "enabled": false }
+  "bluesky": {
+    "enabled": false
+  }
 }
