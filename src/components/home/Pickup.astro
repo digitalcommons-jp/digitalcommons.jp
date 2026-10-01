@@ -1,0 +1,23 @@
+---
+import PostCard from '~/components/PostCard.astro';
+import { useT, type Lang } from '~/i18n';
+import { getPosts } from '~/lib/content';
+
+interface Props {
+  slug: string;
+  lang?: Lang;
+}
+
+const { slug, lang = 'ja' } = Astro.props;
+const t = useT(lang);
+const post = (await getPosts()).find((p) => p.id === slug);
+---
+
+{
+  post && (
+    <section class="container-cc section">
+      <h2 class="sr-only">{t('home.pickup')}</h2>
+      <PostCard post={post} large lang={lang} />
+    </section>
+  )
+}

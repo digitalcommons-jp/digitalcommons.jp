@@ -1,166 +1,44 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
+import Layout from '~/layouts/Layout.astro';
+import Hero from '~/components/home/Hero.astro';
+import Pickup from '~/components/home/Pickup.astro';
+import Intro from '~/components/home/Intro.astro';
+import UpcomingEvent from '~/components/home/UpcomingEvent.astro';
+import LatestPosts from '~/components/home/LatestPosts.astro';
+import JoinCta from '~/components/home/JoinCta.astro';
+import { customComponents } from '~/components/custom';
+import { getSetting } from '~/lib/content';
 
-import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
-import Features from '~/components/widgets/Features.astro';
-import Content from '~/components/widgets/Content.astro';
-import BlogHighlightedPosts from '~/components/widgets/BlogHighlightedPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+const home = await getSetting('home');
+const site = await getSetting('site');
+const sections = (home.sections ?? []).filter((s) => s.enabled);
 
-const metadata = {
-  title: 'Digital Commons Japan — デジタルコモンズを、日本からひらく。',
-  ignoreTitleTemplate: true,
-};
+const metadata = { title: site.legalName, ignoreTitleTemplate: true };
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero -->
-  <Hero
-    tagline="Digital Commons Japan · Mock"
-    actions={[
-      { variant: 'primary', text: 'プロジェクトを見る', href: '#features', icon: 'tabler:rocket' },
-      { text: 'ソースを見る', href: 'https://codeberg.org/digico/digitalcommons.jp', target: '_blank', icon: 'tabler:code' },
-    ]}
-    image={{ src: '~/assets/images/hero-image.png', alt: 'Digital Commons Japan' }}
-  >
-    <Fragment slot="title">
-      デジタルコモンズを、<br />
-      <span class="text-accent dark:text-white">日本から</span>ひらく。
-    </Fragment>
-
-    <Fragment slot="subtitle">
-      オープンなデジタル基盤・共有される知・公共的なプロトコルを育てる実験的なハブ。
-      長く使える公共インフラを、日本語の文脈から組み立てます。
-    </Fragment>
-  </Hero>
-
-  <!-- Note -->
-  <Note
-    title="Preview"
-    description="いまはサイトのモック公開中。コンテンツは Codeberg の Sveltia CMS または md 直接編集で更新できます。"
-  />
-
-  <!-- Features -->
-  <Features
-    id="features"
-    tagline="Focus areas"
-    title="共有知のインフラをつくる"
-    subtitle="一過性のサービスではなく、検証でき fork でき次の仕事に接続できる基盤へ。"
-    items={[
-      {
-        title: 'プロトコルと相互運用',
-        description:
-          'ActivityPub・DID・オープンな発行プロトコルなど、相互接続できる仕組みの実装と運用知を共有します。',
-        icon: 'tabler:plug-connected',
-      },
-      {
-        title: '保存と再利用',
-        description:
-          '長期保存できる形式、参照可能なメタデータ、再利用可能な API。「読める」だけで終わらないアーカイブを目指します。',
-        icon: 'tabler:archive',
-      },
-      {
-        title: '運用の民主化',
-        description:
-          'self-host、分散インフラ、コミュニティ運営のプレイブックを開き、実践可能な形で残します。',
-        icon: 'tabler:users-group',
-      },
-    ]}
-  />
-
-  <!-- Content -->
-  <Content
-    isReversed
-    tagline="Why Digital Commons"
-    title="情知の共有は、アーカイブではない"
-    items={[
-      {
-        title: '誰もが検証できる',
-        description: '標準・ツール・運用知をオープンに残し、次の担い手が足場にできるようにする。',
-        icon: 'tabler:circle-check',
-      },
-      {
-        title: '日本語の文脈から',
-        description: '研究・図書館・公文書・コミュニティメディア・公共 ICT の現場に馴染む形で積み上げる。',
-        icon: 'tabler:language',
-      },
-      {
-        title: '共同で維持する',
-        description: '「公開して終わり」ではなく、長く使える公共的なデジタル基盤として育てる。',
-        icon: 'tabler:refresh',
-      },
-    ]}
-    image={{
-      src: '~/assets/images/startup.png',
-      alt: 'Digital Commons Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Who it’s for</h3>
-      研究者、開発者、図書館・公文書、コミュニティメディア、公共 ICT の実務者。
-      <br /><br />
-      データ・アイデンティティ・出版・実験環境を、オープンな手順で組み立てます。
-    </Fragment>
-  </Content>
-
-  <!-- Stats -->
-  <Stats
-    title="3 pillars"
-    stats={[
-      { amount: 'Open', title: '基盤とプロトコル' },
-      { amount: 'Local', title: '日本の文脈から' },
-      { amount: 'Common', title: '共有される知' },
-    ]}
-  />
-
-  <!-- FAQs -->
-  <FAQs
-    id="faq"
-    tagline="FAQ"
-    title="よくある質問"
-    items={[
-      {
-        title: 'これは何ですか？',
-        description:
-          'Digital Commons Japan のサイトモックです。オープンなデジタル基盤と共有知のための取り組みの骨格を共有しています。',
-      },
-      {
-        title: 'コンテンツはどう更新しますか？',
-        description:
-          'Codeberg の Sveltia CMS（非公開パス）または、リポジトリ内の md をローカルで編集して build → push する方法があります。',
-      },
-      {
-        title: 'コードはどこにありますか？',
-        description:
-          'Codeberg の digico/digitalcommons.jp に公開しています。',
-      },
-    ]}
-  />
-
-  <!-- Blog -->
-  <BlogHighlightedPosts
-    id="blog"
-    title="Notes"
-    information="サイト更新やプロジェクトのメモ"
-  />
-
-  <!-- CallToAction -->
-  <CallToAction
-    id="join"
-    tagline="Join"
-    title="一緒に、公共的な基盤をつくる"
-    subtitle="フィードバック・共同開発・寄稿の相談は歓迎します。"
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Codeberg を開く',
-        href: 'https://codeberg.org/digico/digitalcommons.jp',
-        target: '_blank',
-        icon: 'tabler:code',
-      },
-    ]}
-  />
+  {
+    sections.map((s) => {
+      switch (s.type) {
+        case 'hero':
+          return <Hero tagline={site.tagline} />;
+        case 'pickup':
+          return <Pickup slug={s.slug ?? ''} />;
+        case 'intro':
+          return <Intro tagline={site.tagline} />;
+        case 'upcoming-event':
+          return <UpcomingEvent />;
+        case 'latest-posts':
+          return <LatestPosts count={s.count} />;
+        case 'custom': {
+          const Component = customComponents[s.component ?? ''];
+          return Component ? <Component {...(s.props ?? {})} /> : null;
+        }
+        case 'join-cta':
+          return <JoinCta />;
+        default:
+          return null;
+      }
+    })
+  }
 </Layout>

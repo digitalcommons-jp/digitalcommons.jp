@@ -1,0 +1,102 @@
+---
+import LogoHorizon from '~/components/LogoHorizon.astro';
+import { useT, localePath, type Lang } from '~/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'ja' } = Astro.props;
+const t = useT(lang);
+
+const links = [
+  { text: t('nav.about'), href: localePath('/about', lang) },
+  { text: t('nav.events'), href: localePath('/events', lang) },
+];
+const actions = [
+  { text: t('nav.follow'), href: localePath('/follow', lang), class: 'btn-secondary' },
+  { text: t('nav.join'), href: localePath('/join', lang), class: 'btn-primary' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
+---
+
+<div class="site-header-spacer" aria-hidden="true"></div>
+<header class="site-header" data-site-header>
+  <div class="container-cc header-inner">
+    <a href={localePath('/', lang)} aria-label={t('site.name')}>
+      <LogoHorizon />
+    </a>
+
+    <!-- Desktop -->
+    <nav class="nav-desktop" aria-label={t('nav.main')}>
+      <ul class="nav-links">
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                {l.text}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="nav-actions">
+        {
+          actions.map((a) => (
+            <a href={a.href} class={a.class}>
+              {a.text}
+            </a>
+          ))
+        }
+      </div>
+    </nav>
+
+    <!-- Mobile: no-JS disclosure menu -->
+    <details class="mobile-menu">
+      <summary aria-label={t('nav.menu')}>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </summary>
+      <nav class="mobile-menu-panel" aria-label={t('nav.main')}>
+        <ul>
+          {
+            links.map((l) => (
+              <li>
+                <a href={l.href}>{l.text}</a>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mobile-menu-actions">
+          {
+            actions.map((a) => (
+              <a href={a.href} class={a.class}>
+                {a.text}
+              </a>
+            ))
+          }
+        </div>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Compact the header once the page is scrolled.
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const update = () => header?.classList.toggle('is-compact', window.scrollY > 16);
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+</script>

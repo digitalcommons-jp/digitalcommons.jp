@@ -1,0 +1,22 @@
+---
+import { useT, localePath, type Lang } from '~/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'ja' } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="join-cta">
+  <div class="container-cc join-cta-inner">
+    <div>
+      <h2 class="join-cta-title">{t('home.joinTitle')}</h2>
+      <p class="join-cta-text">{t('home.joinBody')}</p>
+    </div>
+    <a href={localePath('/join', lang)} class="btn-inverse">
+      {t('home.joinButton')}
+    </a>
+  </div>
+</section>

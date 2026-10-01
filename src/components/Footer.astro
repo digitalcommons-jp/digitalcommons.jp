@@ -1,0 +1,22 @@
+---
+import { useT, localePath, type Lang } from '~/i18n';
+
+interface Props {
+  lang?: Lang;
+  email: string;
+}
+
+const { lang = 'ja', email } = Astro.props;
+const t = useT(lang);
+---
+
+<footer class="site-footer">
+  <div class="container-cc footer-inner">
+    <p>© {new Date().getFullYear()} {t('site.legalName')}</p>
+    <ul class="footer-links">
+      <li><a href={localePath('/privacy', lang)}>{t('footer.privacy')}</a></li>
+      <li><a href={localePath('/disclosure', lang)}>{t('footer.disclosure')}</a></li>
+      <li><a href={`mailto:${email}`}>{t('footer.contact')}</a></li>
+    </ul>
+  </div>
+</footer>

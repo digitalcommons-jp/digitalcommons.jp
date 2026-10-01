@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import { formatDate, useT, localePath, type Lang } from '~/i18n';
+import type { Post } from '~/lib/content';
+
+interface Props {
+  post: Post;
+  large?: boolean;
+  lang?: Lang;
+}
+
+const { post, large = false, lang = 'ja' } = Astro.props;
+const t = useT(lang);
+const { title, description, date, tags, image, event } = post.data;
+const href = localePath(`/posts/${post.id}`, lang);
+---
+
+<article class:list={['card', { 'card-large': large }]}>
+  {
+    image && (
+      <a href={href} tabindex="-1" aria-hidden="true" class="card-image">
+        <Image src={image} alt="" widths={[480, 960]} sizes="(min-width: 48rem) 30rem, 100vw" />
+      </a>
+    )
+  }
+  <div class="card-body">
+    <div class="card-meta">
+      <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+      {
+        tags.map((tag) => (
+          <a href={localePath(`/tags/${tag}`, lang)} class="tag">
+            {tag}
+          </a>
+        ))
+      }
+    </div>
+    <h3 class="card-title">
+      <a href={href}>{title}</a>
+    </h3>
+    <p class="card-text">{description}</p>
+    {
+      event && (
+        <p class="card-event">
+          {t('event.start')}：{formatDate(event.start, lang, true)}
+        </p>
+      )
+    }
+  </div>
+</article>

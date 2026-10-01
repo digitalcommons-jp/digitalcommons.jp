@@ -2,72 +2,48 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
-const metadataDefinition = () =>
-  z
-    .object({
-      title: z.string().optional(),
-      ignoreTitleTemplate: z.boolean().optional(),
+const eventSchema = z.object({
+  start: z.coerce.date(),
+  end: z.coerce.date().optional(),
+  mode: z.enum(['offline', 'online', 'hybrid']).default('offline'),
+  venue: z.string().optional(),
+  address: z.string().optional(),
+  onlineUrl: z.string().optional(),
+  contact: z.string().optional(),
+  status: z.enum(['scheduled', 'cancelled', 'done']).default('scheduled'),
+});
 
-      canonical: z.url().optional(),
+const posts = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/content/posts' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      date: z.coerce.date(),
+      updated: z.coerce.date().optional(),
+      tags: z.array(z.string()).default([]),
+      image: image().optional(),
+      draft: z.boolean().default(false),
+      social: z.boolean().default(false),
+      socialText: z.string().optional(),
+      atUri: z.string().optional(),
+      event: eventSchema.optional(),
+    }),
+});
 
-      robots: z
-        .object({
-          index: z.boolean().optional(),
-          follow: z.boolean().optional(),
-        })
-        .optional(),
-
-      description: z.string().optional(),
-
-      openGraph: z
-        .object({
-          url: z.string().optional(),
-          siteName: z.string().optional(),
-          images: z
-            .array(
-              z.object({
-                url: z.string(),
-                width: z.number().optional(),
-                height: z.number().optional(),
-              })
-            )
-            .optional(),
-          locale: z.string().optional(),
-          type: z.string().optional(),
-        })
-        .optional(),
-
-      twitter: z
-        .object({
-          handle: z.string().optional(),
-          site: z.string().optional(),
-          cardType: z.string().optional(),
-        })
-        .optional(),
-    })
-    .optional();
-
-const postCollection = defineCollection({
-  loader: glob({ pattern: ['*.md', '*.mdx'], base: 'src/data/post' }),
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: 'src/content/pages' }),
   schema: z.object({
-    publishDate: z.date().optional(),
-    updateDate: z.date().optional(),
-    draft: z.boolean().optional(),
-
     title: z.string(),
-    excerpt: z.string().optional(),
-    image: z.string().optional(),
-    /** Alternative text for the cover image. Leave empty for decorative stock photos. */
-    imageAlt: z.string().optional(),
-
-    category: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    author: z.string().optional(),
-
-    metadata: metadataDefinition(),
+    description: z.string(),
+    slug: z.string(),
+    lang: z.enum(['ja', 'en']).default('ja'),
   }),
 });
 
-export const collections = {
-  post: postCollection,
-};
+const settings = defineCollection({
+  loader: glob({ pattern: '*.yml', base: 'src/content/settings' }),
+  schema: z.any(),
+});
+
+export const collections = { posts, pages, settings };

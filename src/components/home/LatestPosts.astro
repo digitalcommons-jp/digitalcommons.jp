@@ -1,0 +1,31 @@
+---
+import PostCard from '~/components/PostCard.astro';
+import { useT, type Lang } from '~/i18n';
+import { getPosts } from '~/lib/content';
+
+interface Props {
+  count?: number;
+  lang?: Lang;
+}
+
+const { count = 6, lang = 'ja' } = Astro.props;
+const t = useT(lang);
+const posts = (await getPosts()).slice(0, count);
+---
+
+<section class="container-cc section">
+  <h2 class="heading-2">{t('home.latestPosts')}</h2>
+  {
+    posts.length ? (
+      <ul class="card-grid">
+        {posts.map((post) => (
+          <li>
+            <PostCard post={post} lang={lang} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-muted">{t('posts.empty')}</p>
+    )
+  }
+</section>

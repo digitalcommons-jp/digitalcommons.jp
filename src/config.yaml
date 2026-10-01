@@ -1,7 +1,7 @@
 site:
-  name: Digital Commons Japan
-  site: 'https://digico.codeberg.page'
-  base: '/digitalcommons.jp'
+  name: digital commons
+  site: 'https://digitalcommons.jp'
+  base: '/'
   trailingSlash: false
 
   googleSiteVerificationId: false
@@ -9,59 +9,28 @@ site:
 # Default SEO metadata
 metadata:
   title:
-    default: Digital Commons Japan
-    template: '%s — Digital Commons Japan'
-  description: 'オープンなデジタル基盤と共有される知を育てるコミュニティ。デジタルコモンズを、日本からひらく。'
+    default: 一般社団法人 digital commons
+    template: '%s — digital commons'
+  description: 'みんなのインターネットをつくる。オープンソース文化の醸成とデジタルライツの擁護に取り組む一般社団法人 digital commons。'
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: Digital Commons Japan
-    images:
-      - url: '~/assets/images/default.png'
-        width: 1200
-        height: 628
+    site_name: digital commons
     type: website
   twitter:
     handle: ''
     site: ''
-    cardType: summary_large_image
+    cardType: summary
 
 i18n:
   language: ja
   textDirection: ltr
 
+# Blog routes of the AstroWind template are unused: posts are served by src/pages/posts.
 apps:
   blog:
-    isEnabled: true
-    postsPerPage: 8
-
-    post:
-      isEnabled: true
-      permalink: '/blog/%slug%'
-      robots:
-        index: true
-
-    list:
-      isEnabled: true
-      pathname: 'blog'
-      robots:
-        index: true
-
-    category:
-      isEnabled: true
-      pathname: 'category'
-      robots:
-        index: true
-
-    tag:
-      isEnabled: true
-      pathname: 'tag'
-      robots:
-        index: false
-
-    isRelatedPostsEnabled: true
-    relatedPostsCount: 4
+    isEnabled: false
 
 analytics:
   vendors:
@@ -69,4 +38,4 @@ analytics:
       id: null
 
 ui:
-  theme: 'system'
+  theme: 'light'

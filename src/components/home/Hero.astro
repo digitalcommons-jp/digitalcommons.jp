@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import heroImage from '~/assets/images/hero-placeholder.svg';
+import { useT, localePath, type Lang } from '~/i18n';
+
+interface Props {
+  tagline: string;
+  lang?: Lang;
+}
+
+const { tagline, lang = 'ja' } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="hero">
+  <div class="hero-text">
+    <h1 class="hero-title">{tagline}</h1>
+    <p class="text-muted">
+      オープンソース文化の醸成と、プライバシーをはじめとするデジタルライツの擁護に取り組む一般社団法人です。
+    </p>
+    <p class="hero-actions">
+      <a href={localePath('/join', lang)} class="btn-primary">{t('nav.join')}</a>
+      <a href={localePath('/about', lang)} class="btn-secondary">{t('home.moreAbout')}</a>
+    </p>
+  </div>
+  <div class="hero-media">
+    <!-- Placeholder photo: replace src/assets/images/hero-placeholder.svg -->
+    <Image src={heroImage} alt="" width={1200} height={1000} />
+  </div>
+</section>

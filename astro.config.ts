@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import { randomUUID } from 'node:crypto';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -6,12 +8,9 @@ import { defineConfig, fontProviders } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 
 import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
-import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
 import compress from 'astro-compress';
-import type { AstroIntegration } from 'astro';
 
 import astrowind from './vendor/integration';
 
@@ -19,33 +18,40 @@ import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/uti
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const hasExternalScripts = false;
-const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroIntegration)[] = []) =>
-  hasExternalScripts ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
+// Dev only: serves /.well-known/appspecific/com.chrome.devtools.json so Chrome DevTools
+// auto-connects this folder as a Workspace (edits in the Styles pane are saved to the file).
+const devtoolsWorkspace = {
+  name: 'devtools-workspace',
+  hooks: {
+    'astro:server:setup': ({ server }: { server: import('vite').ViteDevServer }) => {
+      const root = path.resolve(__dirname);
+      const uuidFile = path.join(root, '.astro', 'devtools-uuid');
+      server.middlewares.use('/.well-known/appspecific/com.chrome.devtools.json', (_req, res) => {
+        let uuid = fs.existsSync(uuidFile) ? fs.readFileSync(uuidFile, 'utf-8') : '';
+        if (!uuid) {
+          uuid = randomUUID();
+          fs.mkdirSync(path.dirname(uuidFile), { recursive: true });
+          fs.writeFileSync(uuidFile, uuid);
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ workspace: { root, uuid } }));
+      });
+    },
+  },
+};
 
 export default defineConfig({
   output: 'static',
 
-  // Prefetch links as they enter the viewport for snappier navigations
-  // (works together with <ClientRouter />, which enables prefetch by default).
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: 'viewport',
+  i18n: {
+    defaultLocale: 'ja',
+    locales: ['ja', 'en'],
+    routing: { prefixDefaultLocale: false },
   },
 
-  // Native Fonts API: self-hosts + subsets + preloads Inter and generates
-  // metric-adjusted fallbacks. Injected via <Font /> in Layout.astro and
-  // consumed through the `--font-inter` CSS variable in CustomStyles.astro.
+  // Native Fonts API: Astro downloads Fira Sans at build time and self-hosts it
+  // (no request to a font CDN from the browser). Consumed via `--font-fira`.
   fonts: [
-    {
-      provider: fontProviders.fontsource(),
-      name: 'Inter',
-      cssVariable: '--font-inter',
-      weights: ['100 900'],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['sans-serif'],
-    },
     {
       provider: fontProviders.fontsource(),
       name: 'Fira Sans',
@@ -58,7 +64,8 @@ export default defineConfig({
   ],
 
   integrations: [
-    sitemap(),
+    devtoolsWorkspace,
+    sitemap({ filter: (page) => !page.includes('/admin') }),
     mdx(),
     icon({
       // Local SVG icons (used as <Icon name="file-name" />) live next to the other assets.
@@ -78,12 +85,6 @@ export default defineConfig({
         ],
       },
     }),
-
-    ...whenExternalScripts(() =>
-      partytown({
-        config: { forward: ['dataLayer.push'] },
-      })
-    ),
 
     compress({
       // csso off on purpose: its parser doesn't understand the media range
@@ -119,7 +120,6 @@ export default defineConfig({
     // native <Image /> (i.e. providers Unpic can't detect, like Pixabay).
     // Listed entries are authorized to be processed by Sharp.
     // Unsplash is listed so post covers can be rendered as real 1200×626 Open Graph images.
-    domains: ['cdn.pixabay.com', 'images.unsplash.com'],
 
     // Emit responsive styles for the native <Image layout=…> used by
     // src/components/common/Image.astro (local images). Utility classes on
@@ -133,13 +133,18 @@ export default defineConfig({
       rehypePlugins: [responsiveTablesRehypePlugin],
     }),
     shikiConfig: {
-      // Code blocks follow the site theme; see the `.astro-code` rules in tailwind.css.
+      // Code blocks follow the site theme;
       themes: { light: 'github-light', dark: 'github-dark' },
     },
   },
 
   vite: {
-    plugins: [tailwindcss()],
+    // Dev only: source maps so DevTools shows `style.css:<line>` (needed for Workspace saving).
+    css: {
+      devSourcemap: true,
+      transformer: 'lightningcss',
+      lightningcss: { drafts: { customMedia: true } },
+    },
     resolve: {
       alias: {
         '~': path.resolve(__dirname, './src'),
