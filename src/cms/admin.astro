@@ -1,6 +1,8 @@
 ---
 // Sveltia CMS entry. The CMS script is bundled from node_modules (self-hosted:
-// no CDN, per PLAN §1). Config: public/admin/config.yml.
+// no CDN, per PLAN §1). Config: src/cms/config.yml, served beside this page.
+// Served at a secret path (CMS_PATH, see astro.config.ts) -- never at a guessable one.
+const configUrl = `${Astro.url.pathname.replace(/\/$/, '')}/config.yml`;
 ---
 
 <!doctype html>
@@ -10,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Content Manager</title>
-    <link rel="cms-config-url" type="text/yaml" href="/cms-config.yml" />
+    <link rel="cms-config-url" type="text/yaml" href={configUrl} />
   </head>
   <body>
     <script>

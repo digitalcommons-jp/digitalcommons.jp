@@ -24,6 +24,7 @@ scripts/deploy.sh             # ビルドして /opt/dc/dist に rsync
 - サイト本体: `/opt/dc/dist`（Caddy が配信。`deploy/Caddyfile.v2-digitalcommons`）。
 - **ID ドキュメント（`.well-known/did.json`、`did.jsonl`、`did-witness.json`）は、サイトとは別の場所**: `/var/lib/dc-host/root/.well-known/`。`dc-host.service`（`byo-host`、`127.0.0.1:8796`）が唯一の書き手で、Caddy は `root @identity` でそこから読み取りだけを配信する。書き込み（`PUT/POST/DELETE/OPTIONS`）は byo-host に転送される。
 - そのため、サイトを再デプロイしても、ID のファイルは上書きも削除もされない（`scripts/deploy.sh` は念のため、これらも `--exclude` している）。
+- **CMS は `/admin` ではなく、推測できない秘密のパスに置く。** パスは `.env` の `CMS_PATH`（コミットしない。雛形は `.env.example`、生成は `openssl rand -hex 12`）。ビルド時にだけ使われ、`CMS_PATH` が無いビルドには CMS が含まれない。そのため、**CMS を載せるビルドは手元（`.env` のある場所）で行う**（サーバーでのビルドには含まれない）。Codeberg の OAuth アプリのリダイレクト URI も、この秘密のパスになる。
 - リポジトリの `public/.well-known/` には、`atproto-did`（固定の文字列）だけを置く。ID ドキュメントは、リポジトリで管理しない。
 
 以下は、将来、サーバー側でビルドして公開（Sequoia・GoToSocial 投稿を含む）する場合の手順。今は使っていない。

@@ -1,5 +1,5 @@
 # Sveltia CMS config. This file is public: no secrets here.
-# Local editing: open /admin/ in Chrome/Edge and choose "Work with Local Repository".
+# Local editing: open the CMS (secret path: CMS_PATH in .env) in Chrome/Edge and choose "Work with Local Repository".
 backend:
   name: gitea
   repo: digico/digitalcommons.jp
@@ -43,18 +43,37 @@ collections:
         hint: イベントの記事には「event」を付けます
       - { name: image, label: カバー画像, widget: image, required: false }
       - { name: draft, label: 下書き, widget: boolean, default: false, hint: オンにするとサイトに出ません }
-      - { name: social, label: 配信する, widget: boolean, default: false, hint: RSS・standard.site・Fediverse に配信します }
-      - { name: event, label: イベント情報, widget: object, required: false, hint: 'タグに「event」を付けた記事のみ',
-          fields: [
-            { name: start, label: 開始, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ' },
-            { name: end, label: 終了, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ', required: false },
-            { name: mode, label: 開催形態, widget: select, options: [offline, online, hybrid], default: offline },
-            { name: venue, label: 会場, widget: string, required: false },
-            { name: address, label: 住所, widget: string, required: false },
-            { name: onlineUrl, label: オンライン URL, widget: string, required: false },
-            { name: contact, label: 申込・問い合わせ先, widget: string, required: false, hint: 'mailto:info@digitalcommons.jp' },
-            { name: status, label: 状態, widget: select, options: [scheduled, cancelled, done], default: scheduled },
-          ] }
+      - {
+          name: social,
+          label: 配信する,
+          widget: boolean,
+          default: false,
+          hint: RSS・standard.site・Fediverse に配信します,
+        }
+      - {
+          name: event,
+          label: イベント情報,
+          widget: object,
+          required: false,
+          hint: 'タグに「event」を付けた記事のみ',
+          fields:
+            [
+              { name: start, label: 開始, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ' },
+              { name: end, label: 終了, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ', required: false },
+              { name: mode, label: 開催形態, widget: select, options: [offline, online, hybrid], default: offline },
+              { name: venue, label: 会場, widget: string, required: false },
+              { name: address, label: 住所, widget: string, required: false },
+              { name: onlineUrl, label: オンライン URL, widget: string, required: false },
+              {
+                name: contact,
+                label: 申込・問い合わせ先,
+                widget: string,
+                required: false,
+                hint: 'mailto:info@digitalcommons.jp',
+              },
+              { name: status, label: 状態, widget: select, options: [scheduled, cancelled, done], default: scheduled },
+            ],
+        }
       - { name: body, label: 本文, widget: markdown }
 
   - name: pages
