@@ -2,9 +2,14 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
+// Sveltia CMS writes an empty optional field as '' (or null for an empty object). Treat those as
+// "not set" so a post saved with blank optional fields still builds.
+const blank = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess((v) => (v === '' || v === null ? undefined : v), schema);
+
 const eventSchema = z.object({
   start: z.coerce.date(),
-  end: z.coerce.date().optional(),
+  end: blank(z.coerce.date().optional()),
   mode: z.enum(['offline', 'online', 'hybrid']).default('offline'),
   venue: z.string().optional(),
   address: z.string().optional(),
@@ -20,14 +25,14 @@ const posts = defineCollection({
       title: z.string(),
       description: z.string(),
       date: z.coerce.date(),
-      updated: z.coerce.date().optional(),
+      updated: blank(z.coerce.date().optional()),
       tags: z.array(z.string()).default([]),
-      image: image().optional(),
+      image: blank(image().optional()),
       draft: z.boolean().default(false),
       social: z.boolean().default(false),
-      socialText: z.string().optional(),
-      atUri: z.string().optional(),
-      event: eventSchema.optional(),
+      socialText: blank(z.string().optional()),
+      atUri: blank(z.string().optional()),
+      event: blank(eventSchema.optional()),
     }),
 });
 
