@@ -2,7 +2,8 @@
 # Build locally and ship dist/ to the server. Nothing is built on the server.
 #
 #   scripts/deploy.sh              # build + rsync
-#   scripts/deploy.sh --dry-run    # build + show what rsync would change
+#   scripts/deploy.sh --dry-run    # build + show what rsync would change (Sequoia: dry-run too)
+#   SEQUOIA=1 scripts/deploy.sh    # also publish `social: true` posts to standard.site first
 #
 #   DEPLOY_HOST (default v2)   DEPLOY_DIR (default /opt/dc/dist)
 #
@@ -19,6 +20,21 @@ extra=()
 [ "${1:-}" = "--dry-run" ] && extra+=(--dry-run --itemize-changes)
 
 npm run build
+
+# standard.site (PLAN §6.2): publish on a throw-away copy of the posts (prepare:sequoia), then put
+# the verification <link> tags into the built pages. Needs `sequoia auth` done as this user.
+# State lives in .sequoia-state.json (gitignored) -- keep it: losing it makes the next run
+# publish the same posts again.
+if [ "${SEQUOIA:-0}" = 1 ]; then
+  npm run --silent prepare:sequoia
+  if [ "${1:-}" = "--dry-run" ]; then
+    npx sequoia-cli publish --dry-run
+    npx sequoia-cli inject --dry-run
+  else
+    npx sequoia-cli publish
+    npx sequoia-cli inject
+  fi
+fi
 rsync -rlptz --delete \
   --exclude '.well-known/did.json' --exclude '.well-known/did.jsonl' --exclude '.well-known/did-witness.json' \
   "${extra[@]}" dist/ "$host:$dir/"
