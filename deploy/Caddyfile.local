@@ -6,7 +6,7 @@
 	auto_https off
 }
 
-http://127.0.0.1:4400 {
+http://:4400 {
 	bind 127.0.0.1
 	encode zstd gzip
 	root * /opt/dc/dist
