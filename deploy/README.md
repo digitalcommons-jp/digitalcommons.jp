@@ -24,6 +24,7 @@ scripts/deploy.sh             # ビルドして /opt/dc/dist に rsync
 - サイト本体: `/opt/dc/dist`（Caddy が配信。`deploy/Caddyfile.v2-digitalcommons`）。
 - **ID ドキュメント（`.well-known/did.json`、`did.jsonl`、`did-witness.json`）は、サイトとは別の場所**: `/var/lib/dc-host/root/.well-known/`。`dc-host.service`（`byo-host`、`127.0.0.1:8796`）が唯一の書き手で、Caddy は `root @identity` でそこから読み取りだけを配信する。書き込み（`PUT/POST/DELETE/OPTIONS`）は byo-host に転送される。
 - そのため、サイトを再デプロイしても、ID のファイルは上書きも削除もされない（`scripts/deploy.sh` は念のため、これらも `--exclude` している）。
+- **standard.site の公開と取り下げ**: `SEQUOIA=1 scripts/deploy.sh` で、`social: true` の記事を公開する。Sequoia は削除をしないので、記事を消した・下書きにした・`social: false` にしたときは、`scripts/sequoia-prune.mjs` が、PDS 上の `site.standard.document` を消す（通常は一覧表示だけ。実際に消すのは `PRUNE=1 SEQUOIA=1 scripts/deploy.sh`）。自分のリポジトリの `site.standard.document` 以外は、決して消さない。
 - **CMS は `/admin` ではなく、推測できない秘密のパスに置く。** パスは `.env` の `CMS_PATH`（コミットしない。雛形は `.env.example`、生成は `openssl rand -hex 12`）。ビルド時にだけ使われ、`CMS_PATH` が無いビルドには CMS が含まれない。そのため、**CMS を載せるビルドは手元（`.env` のある場所）で行う**（サーバーでのビルドには含まれない）。Codeberg の OAuth アプリのリダイレクト URI も、この秘密のパスになる。
 - **Caddyfile の注意**: v2 の `/etc/caddy/Caddyfile` は、`~/did.md/deploy.sh client`（ウォレットの配信）が、`~/did.md/Caddyfile` で丸ごと上書きする。`digitalcommons.jp` のブロックの正本は `~/did.md/Caddyfile` にある。サーバー上だけで直しても、次のウォレット配信で消える。
 - リポジトリの `public/.well-known/` には、`atproto-did`（固定の文字列）だけを置く。ID ドキュメントは、リポジトリで管理しない。

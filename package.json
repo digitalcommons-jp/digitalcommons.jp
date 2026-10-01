@@ -21,7 +21,8 @@
     "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier -w .",
     "prepare:sequoia": "node scripts/prepare-sequoia.mjs",
-    "social:post": "node scripts/social-post.mjs"
+    "social:post": "node scripts/social-post.mjs",
+    "prune:sequoia": "node scripts/sequoia-prune.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
