@@ -1,0 +1,12 @@
+[Unit]
+Description=digitalcommons.jp publish webhook
+After=network.target
+
+[Service]
+User=deploy
+EnvironmentFile=/etc/digitalcommons/env
+ExecStart=/usr/bin/webhook -hooks /opt/digitalcommons/deploy/webhook/hooks.json -template -ip 127.0.0.1 -port 9000
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

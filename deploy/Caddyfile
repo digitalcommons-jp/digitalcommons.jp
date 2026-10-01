@@ -1,0 +1,84 @@
+# digitalcommons.jp — reverse proxy on the VPS (PLAN §2.2 / §2.3).
+# GoToSocial gets only the paths listed below (allowlist); everything else is the Astro site.
+# NOT validated with `caddy validate` yet (caddy is not installed on the dev machine).
+#
+# Phase now : Astro static files served from disk  -> keep `import site_static`
+# Final form: Astro served from Codeberg Pages     -> switch to `import site_pages`
+
+(site_static) {
+	root * /var/www/digitalcommons.jp/current
+	try_files {path} {path}/index.html
+	file_server
+	handle_errors {
+		@404 expression {err.status_code} == 404
+		handle @404 {
+			rewrite * /404.html
+			file_server
+		}
+	}
+}
+
+# Codeberg Pages (git-pages) serves https://digico.codeberg.page/digitalcommons.jp/…
+# Verified 2026-10-01: it 302-redirects /about -> /about/ (Location carries the
+# /digitalcommons.jp prefix), returns its 404 page with status 404, and 404s unknown paths.
+# So: send directory-like paths with a trailing slash (keeps our /about canonical, no redirect),
+# add the prefix, and strip it from any Location header that still comes back.
+(site_pages) {
+	@dir {
+		not path */
+		not path_regexp \.[A-Za-z0-9]+$
+	}
+	rewrite @dir {path}/
+	rewrite * /digitalcommons.jp{path}
+	reverse_proxy https://digico.codeberg.page {
+		header_up Host digico.codeberg.page
+		header_down Location ^(https://digico\.codeberg\.page)?/digitalcommons\.jp/ /
+		transport http {
+			tls_server_name digico.codeberg.page
+		}
+	}
+}
+
+digitalcommons.jp {
+	encode zstd gzip
+
+	# --- publish trigger (Forgejo push webhook -> adnanh/webhook on localhost) ---
+	handle /hooks/* {
+		reverse_proxy 127.0.0.1:9000
+	}
+
+	# --- GoToSocial (host = digitalcommons.jp, listening on 127.0.0.1:8080) ---
+	# Checked 2026-10-01 against a live GoToSocial instance:
+	#   /about, /tags/<x>, /robots.txt  exist on GoToSocial too -> NOT listed, Astro owns them.
+	#   /admin redirects to /settings/admin on GoToSocial      -> NOT listed, /admin is our CMS.
+	@gotosocial {
+		path /.well-known/webfinger
+		path /.well-known/host-meta
+		path /.well-known/nodeinfo
+		path /nodeinfo/*
+		path /@*
+		path /users/*
+		path /api/*
+		path /oauth/*
+		path /auth/*
+		path /fileserver/*
+		path /settings/*
+		path /login
+		path /assets/*
+	}
+	handle @gotosocial {
+		reverse_proxy 127.0.0.1:8080
+	}
+
+	# --- standard.site verification: served as plain text ---
+	handle /.well-known/site.standard.publication {
+		header Content-Type "text/plain; charset=utf-8"
+		import site_static
+	}
+
+	# --- Astro ---
+	handle {
+		header /_astro/* Cache-Control "public, max-age=31536000, immutable"
+		import site_static
+	}
+}

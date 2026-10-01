@@ -29,3 +29,4 @@ pnpm-workspace.yaml
 .publish/
 .sequoia-state.json
 .social-state.json
+.publish.lock
