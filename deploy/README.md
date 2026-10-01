@@ -25,6 +25,17 @@ scripts/publish.sh       冪等な公開スクリプト（1本）
 
 `publish.sh` は同時に1つしか動かない（`flock`）。2回目は待ってから動くので、最新の push が取りこぼされない。
 
+### 試運転（本番ビルドを localhost だけで動かす）
+
+既存サイトに影響を与えずに確認する方法。`deploy/Caddyfile.local` は `127.0.0.1:4400` だけで待ち受ける（TLS・GoToSocial なし）。
+
+```bash
+rsync -az --delete --exclude node_modules --exclude dist --exclude .git --exclude .astro ./ v2:/opt/dc/
+ssh v2 'cd /opt/dc && npm ci && npm run build'
+ssh v2 'cd /opt/dc && setsid nohup caddy run --config deploy/Caddyfile.local --adapter caddyfile > caddy-local.log 2>&1 < /dev/null &'
+ssh -L 4400:127.0.0.1:4400 v2    # 手元の http://localhost:4400 で見る
+```
+
 ## 2. パス振り分け（調査結果）
 
 稼働中の GoToSocial（gts.superseriousbusiness.org）で 2026-10-01 に確認した結果。
