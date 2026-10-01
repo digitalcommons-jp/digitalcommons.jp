@@ -1,0 +1,11 @@
+{
+  "siteUrl": "https://digitalcommons.jp",
+  "contentDir": "./.publish/content",
+  "publicDir": "./public",
+  "outputDir": "./dist",
+  "pathPrefix": "/posts",
+  "publicationUri": "at://TODO-run-sequoia-init",
+  "frontmatter": { "updatedAt": "updated" },
+  "publishContent": true,
+  "bluesky": { "enabled": false }
+}

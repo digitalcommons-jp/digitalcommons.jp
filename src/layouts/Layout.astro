@@ -31,6 +31,7 @@ const site = await getSetting('site');
     <Font cssVariable="--font-fira" preload />
     <CustomStyles />
     <Metadata {...metadata} />
+    <link rel="alternate" type="application/rss+xml" title={site.legalName} href="/feed.xml" />
     <meta name="fediverse:creator" content={site.fediverse} />
     <slot name="head" />
   </head>

@@ -19,7 +19,9 @@
     "check:prettier": "prettier --check .",
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier -w ."
+    "fix:prettier": "prettier -w .",
+    "prepare:sequoia": "node scripts/prepare-sequoia.mjs",
+    "social:post": "node scripts/social-post.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
@@ -27,7 +29,6 @@
     "@sveltia/cms": "^0.227.0",
     "astro": "^7.3.1",
     "astro-icon": "^1.1.5",
-    "astro-seo": "^1.2.0",
     "limax": "4.2.3",
     "lodash.merge": "^4.6.2"
   },

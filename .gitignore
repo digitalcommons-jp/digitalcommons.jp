@@ -26,3 +26,6 @@ pnpm-lock.yaml
 pnpm-workspace.yaml
 
 .astro
+.publish/
+.sequoia-state.json
+.social-state.json

@@ -15,7 +15,19 @@ const { Content } = await render(post);
 const { title, description, date, updated, tags, event } = post.data;
 ---
 
-<Layout metadata={{ title, description, openGraph: { type: 'article' } }}>
+<Layout
+  metadata={{
+    title,
+    description,
+    openGraph: {
+      type: 'article',
+      article: { publishedTime: date.toISOString(), modifiedTime: updated?.toISOString() },
+      images: post.data.image
+        ? [{ url: post.data.image.src, width: post.data.image.width, height: post.data.image.height }]
+        : [],
+    },
+  }}
+>
   <article class="container-cc container-cc-narrow section-lg">
     <header>
       <div class="post-meta">
