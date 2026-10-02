@@ -9,13 +9,13 @@ interface Props {
 const { lang = 'ja' } = Astro.props;
 const t = useT(lang);
 
-const links = [
+// One flat list. Order = display order. `btn` items render as buttons in the
+// header bar and as plain links inside the hamburger panel.
+const items = [
   { text: t('nav.about'), href: localePath('/about', lang) },
   { text: t('nav.events'), href: localePath('/events', lang) },
-];
-const actions = [
-  { text: t('nav.follow'), href: localePath('/follow', lang), class: 'btn-secondary' },
-  { text: t('nav.join'), href: localePath('/join', lang), class: 'btn-primary' },
+  { text: t('nav.follow'), href: localePath('/follow', lang), btn: 'btn-secondary' },
+  { text: t('nav.join'), href: localePath('/join', lang), btn: 'btn-primary' },
 ];
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -29,32 +29,22 @@ const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
       <LogoHorizon />
     </a>
 
-    <!-- Desktop -->
-    <nav class="nav-desktop" aria-label={t('nav.main')}>
-      <ul class="nav-links">
+    <!-- Items overflow into the hamburger from the left (see script). Without JS all items stay in the bar. -->
+    <nav class="nav-bar" aria-label={t('nav.main')} data-nav-bar>
+      <ul class="nav-items" data-nav-items>
         {
-          links.map((l) => (
-            <li>
-              <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
-                {l.text}
+          items.map((i) => (
+            <li class:list={['nav-item', i.btn && 'nav-item-action']} data-btn={i.btn}>
+              <a href={i.href} class={i.btn} aria-current={!i.btn && isCurrent(i.href) ? 'page' : undefined}>
+                {i.text}
               </a>
             </li>
           ))
         }
       </ul>
-      <div class="nav-actions">
-        {
-          actions.map((a) => (
-            <a href={a.href} class={a.class}>
-              {a.text}
-            </a>
-          ))
-        }
-      </div>
     </nav>
 
-    <!-- Mobile: no-JS disclosure menu -->
-    <details class="mobile-menu">
+    <details class="mobile-menu" data-nav-menu hidden>
       <summary aria-label={t('nav.menu')}>
         <svg
           width="24"
@@ -70,24 +60,7 @@ const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
         </svg>
       </summary>
       <nav class="mobile-menu-panel" aria-label={t('nav.main')}>
-        <ul>
-          {
-            links.map((l) => (
-              <li>
-                <a href={l.href}>{l.text}</a>
-              </li>
-            ))
-          }
-        </ul>
-        <div class="mobile-menu-actions">
-          {
-            actions.map((a) => (
-              <a href={a.href} class={a.class}>
-                {a.text}
-              </a>
-            ))
-          }
-        </div>
+        <ul data-nav-panel></ul>
       </nav>
     </details>
   </div>
@@ -99,4 +72,51 @@ const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
   const update = () => header?.classList.toggle('is-compact', window.scrollY > 16);
   update();
   window.addEventListener('scroll', update, { passive: true });
+
+  // Fit the nav items into the bar; whatever does not fit moves, leftmost first,
+  // into the hamburger panel. Opening the hamburger moves every item into it.
+  const inner = header?.querySelector<HTMLElement>('.header-inner');
+  const list = header?.querySelector<HTMLElement>('[data-nav-items]');
+  const menu = header?.querySelector<HTMLDetailsElement>('[data-nav-menu]');
+  const panel = header?.querySelector<HTMLElement>('[data-nav-panel]');
+
+  if (inner && list && menu && panel) {
+    const items = Array.from(list.children) as HTMLElement[];
+
+    const place = (li: HTMLElement, inPanel: boolean) => {
+      const a = li.querySelector('a');
+      if (a) a.className = inPanel ? '' : (li.dataset.btn ?? '');
+      (inPanel ? panel : list).append(li);
+    };
+
+    const fits = () => {
+      const cs = getComputedStyle(inner);
+      const avail = inner.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const widths = Array.from(inner.children)
+        .map((el) => el.getBoundingClientRect().width)
+        .filter((w) => w > 0);
+      const gap = parseFloat(cs.columnGap) || 0;
+      return widths.reduce((x, w) => x + w, 0) + gap * (widths.length - 1) <= avail + 0.5;
+    };
+
+    const layout = () => {
+      if (menu.open) return;
+      items.forEach((li) => place(li, false));
+      menu.hidden = true;
+      if (fits()) return;
+      menu.hidden = false;
+      for (const li of items) {
+        if (fits()) break;
+        place(li, true);
+      }
+    };
+
+    menu.addEventListener('toggle', () => {
+      if (menu.open) items.forEach((li) => place(li, true));
+      else layout();
+    });
+    new ResizeObserver(layout).observe(inner);
+    document.fonts?.ready.then(layout);
+    layout();
+  }
 </script>

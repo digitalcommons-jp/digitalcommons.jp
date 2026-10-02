@@ -3,7 +3,7 @@
 // astro.config.ts and <Font /> in Layout.astro), exposed as `--font-fira`.
 // Japanese glyphs fall back to the system sans-serif (no external font).
 //
-// Accent color: one color only. Change --aw-color-primary to re-theme the site.
+// Colors live in the palette at the top of src/assets/styles/style.css.
 ---
 
 <style is:inline>
@@ -11,22 +11,5 @@
     --aw-font-sans: var(--font-fira), 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', Meiryo;
     --aw-font-serif: var(--aw-font-sans);
     --aw-font-heading: var(--aw-font-sans);
-
-    --aw-color-primary: rgb(15 118 110);
-    --aw-color-secondary: rgb(17 94 89);
-    --aw-color-accent: rgb(15 118 110);
-
-    --aw-color-text-heading: rgb(0 0 0);
-    --aw-color-text-default: rgb(16 16 16);
-    --aw-color-text-muted: rgb(16 16 16 / 66%);
-    --aw-color-bg-page: rgb(255 255 255);
-
-    --aw-color-bg-page-dark: rgb(255 255 255);
-    --aw-color-line: rgb(16 16 16 / 12%);
-    --aw-color-line-strong: rgb(16 16 16 / 30%);
-  }
-
-  ::selection {
-    background-color: rgb(15 118 110 / 20%);
   }
 </style>
