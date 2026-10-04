@@ -2,7 +2,6 @@
 title: 私たちについて
 description: 一般社団法人 digital commons のミッションと活動の柱、団体概要。
 slug: about
-lang: ja
 ---
 
 ## ミッション

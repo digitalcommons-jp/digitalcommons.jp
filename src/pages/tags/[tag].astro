@@ -1,7 +1,7 @@
 ---
 import Layout from '~/components/frame/Layout.astro';
 import List from '~/components/03_tag/01_list.astro';
-import { useT } from '~/i18n';
+import { t } from '~/i18n';
 import { getTags } from '~/lib/content';
 
 export async function getStaticPaths() {
@@ -9,7 +9,6 @@ export async function getStaticPaths() {
   return [...tags].map(([tag, posts]) => ({ params: { tag }, props: { tag, posts } }));
 }
 
-const t = useT('ja');
 const { tag, posts } = Astro.props;
 ---
 

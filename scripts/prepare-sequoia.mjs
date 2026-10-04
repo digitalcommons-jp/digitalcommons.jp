@@ -1,5 +1,5 @@
 // Copies the posts that should go to standard.site (`social: true`, not draft) into
-// .publish/content, so `sequoia publish` runs on a throw-away copy (PLAN §8.3, option 1):
+// .publish/content, so `sequoia publish` runs on a throw-away copy:
 // Sequoia's write-back of `atUri` never touches the files editors work on.
 import fs from 'node:fs';
 import path from 'node:path';

@@ -37,12 +37,11 @@ const posts = defineCollection({
 });
 
 const pages = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: 'src/content/pages' }),
+  loader: glob({ pattern: '*.md', base: 'src/content/pages' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
     slug: z.string(),
-    lang: z.enum(['ja', 'en']).default('ja'),
   }),
 });
 

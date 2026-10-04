@@ -1,4 +1,4 @@
-// UI strings (Japanese). Add the same keys to en.ts when the English site is built.
+// UI strings (Japanese).
 export const ja = {
   'site.name': 'digital commons',
   'site.legalName': '一般社団法人 digital commons',

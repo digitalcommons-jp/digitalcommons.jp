@@ -2,11 +2,9 @@
 import Layout from '~/components/frame/Layout.astro';
 import Hero from '~/components/00_home/01_hero.astro';
 import Pickup from '~/components/00_home/03_pickup.astro';
-import Intro from '~/components/00_home/05_intro.astro';
-import UpcomingEvent from '~/components/00_home/07_upcoming-event.astro';
-import LatestPosts from '~/components/00_home/09_latest-posts.astro';
-import JoinCta from '~/components/00_home/11_join-cta.astro';
-import { customComponents } from '~/components/00_home/custom';
+import UpcomingEvent from '~/components/00_home/05_upcoming-event.astro';
+import LatestPosts from '~/components/00_home/07_latest-posts.astro';
+import JoinCta from '~/components/00_home/09_join-cta.astro';
 import { getSetting } from '~/lib/content';
 
 const home = await getSetting('home');
@@ -24,16 +22,10 @@ const metadata = { title: site.legalName, ignoreTitleTemplate: true };
           return <Hero tagline={site.tagline} />;
         case 'pickup':
           return <Pickup slug={s.slug ?? ''} />;
-        case 'intro':
-          return <Intro tagline={site.tagline} />;
         case 'upcoming-event':
           return <UpcomingEvent />;
         case 'latest-posts':
           return <LatestPosts count={s.count} />;
-        case 'custom': {
-          const Component = customComponents[s.component ?? ''];
-          return Component ? <Component {...(s.props ?? {})} /> : null;
-        }
         case 'join-cta':
           return <JoinCta />;
         default:

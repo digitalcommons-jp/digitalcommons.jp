@@ -24,7 +24,7 @@ extra=()
 
 npm run build
 
-# standard.site (PLAN §6.2): publish on a throw-away copy of the posts (prepare:sequoia), then put
+# standard.site: publish on a throw-away copy of the posts (prepare:sequoia), then put
 # the verification <link> tags into the built pages. Needs `sequoia auth` done as this user.
 # State lives in .sequoia-state.json (gitignored) -- keep it: losing it makes the next run
 # publish the same posts again.

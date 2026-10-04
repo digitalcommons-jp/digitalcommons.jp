@@ -1,9 +1,8 @@
 ---
 import PostCard from '~/components/shared/PostCard.astro';
-import { useT } from '~/i18n';
+import { t } from '~/i18n';
 import { getEvents } from '~/lib/content';
 
-const t = useT('ja');
 const { past } = await getEvents();
 ---
 

@@ -1,5 +1,4 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
-import type { Lang } from '~/i18n';
 
 export type Post = CollectionEntry<'posts'>;
 
@@ -33,26 +32,21 @@ export async function getTags(): Promise<Map<string, Post[]>> {
   return map;
 }
 
-export async function getPage(slug: string, lang: Lang = 'ja') {
-  return getEntry('pages', `${lang}/${slug}`);
-}
-
 export interface SiteSettings {
   name: string;
   legalName: string;
   tagline: string;
+  description: string;
   email: string;
   fediverse: string;
   bluesky: string;
 }
 
 export interface HomeSection {
-  type: 'hero' | 'pickup' | 'intro' | 'upcoming-event' | 'latest-posts' | 'custom' | 'join-cta';
+  type: 'hero' | 'pickup' | 'upcoming-event' | 'latest-posts' | 'join-cta';
   enabled: boolean;
   slug?: string;
   count?: number;
-  component?: string;
-  props?: Record<string, unknown>;
 }
 
 export interface HomeSettings {

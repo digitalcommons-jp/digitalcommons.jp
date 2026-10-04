@@ -1,6 +1,6 @@
 # digitalcommons.jp
 
-Digital Commons Japan のサイト。テーマは [AstroWind](https://github.com/arthelokyo/astrowind)（Astro + 素の CSS。Tailwind は使っていない）、公開は **Codeberg Pages**。
+Digital Commons Japan のサイト。Astro + 素の CSS（Tailwind は使っていない。もとは AstroWind テンプレート）、公開は **Codeberg Pages**。
 
 ## 開発
 
@@ -38,11 +38,11 @@ npm run build
 - 設定: `public/g7y3jf7ha/config.yml`
 - バックエンド: Codeberg `digico/digitalcommons.jp`
 - ログイン: Codeberg OAuth（`app_id` 設定済み）または Access Token
-- 記事: `src/data/post/*.md`（AstroWind のコンテンツコレクション）
+- 記事: `src/content/posts/*.md`
 
 ## カスタマイズ
 
-- サイト設定: `src/config.yaml`（base は `/digitalcommons.jp`）
+- サイト設定: `astro.config.ts`（`site`）と `src/content/settings/site.yml`
 - トップ: `src/pages/index.astro`
 - フロントエンド（HTML / CSS）の編集: 下の「admins 向けマニュアル」を参照
 
@@ -54,7 +54,7 @@ npm run build
 | `@`                                       | AAAA | `2a0a:4580:103f:c0de::2`                            |
 | `_git-pages-repository.digitalcommons.jp` | TXT  | `https://codeberg.org/digico/digitalcommons.jp.git` |
 
-apex 配信時は `src/config.yaml` の `base` を `/` に変更。
+apex 配信時は `base` を `/`（既定）のままにする。
 
 ---
 
@@ -81,13 +81,13 @@ npm run build      # 本番ビルド（dist/）。エラーが出ないことを
 | ブレークポイント                             | `style.css` の先頭 `@custom-media`                                                 |
 | 全ページ共通の枠（`<head>`・ヘッダ・フッタ） | `src/components/frame/Layout.astro`                                                |
 | ヘッダ / フッタ / ロゴ                       | `src/components/frame/`（`01_header` `03_main` `05_footer`）, `shared/Logo*.astro` |
-| トップページの各セクションの HTML            | `src/components/00_home/*.astro`（01_hero … 11_join-cta）                          |
+| トップページの各セクションの HTML            | `src/components/00_home/*.astro`（01_hero … 09_join-cta）                          |
 | トップのセクションの並び・表示 ON/OFF        | `src/content/settings/home.yml`                                                    |
 | 記事カード                                   | `src/components/shared/PostCard.astro`                                             |
-| 固定ページ（about, join など）の本文         | `src/content/pages/ja/*.md`（Markdown）                                            |
+| 固定ページ（about, join など）の本文         | `src/content/pages/*.md`（Markdown）                                               |
 | ブログ記事                                   | `src/content/posts/*.md`                                                           |
 | サイト名・メール・タグライン                 | `src/content/settings/site.yml`                                                    |
-| ナビ等の UI 文言                             | `src/i18n/ja.ts`（英語は `en.ts`）                                                 |
+| ナビ等の UI 文言                             | `src/i18n/ja.ts`                                                                   |
 | フォント設定                                 | `astro.config.ts` の `fonts`                                                       |
 | 画像                                         | `src/assets/images/`                                                               |
 | favicon・そのまま配信するファイル            | `public/`                                                                          |
@@ -129,7 +129,7 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 
 ## 3. このサイトの CSS ルール（CCD）
 
-[CCD.md](./CCD.md) に詳細がある。文字セル（Character-Cell）の整数倍で寸法を揃える設計。実作業で守ること:
+[ARC.md](./ARC.md) の「CCD」に詳細がある。文字セル（Character-Cell）の整数倍で寸法を揃える設計。実作業で守ること:
 
 - **単位は `rem` のみ。`px` を書かない。**（576px は `36rem`）
 - 横方向の寸法は `calc(N * var(--cc-w))`。`--cc-w` は 1 文字幅 = `0.5rem`（全角 1 字 = 2 セル）。
@@ -144,7 +144,7 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 - ページの部品は `src/components/NN_<page>/` に置く（構成は `ARC.md`）。ファイル名の番号は上から下の表示順。
 - トップの各セクション: `src/components/00_home/` の該当ファイルを編集。
 - 共通の枠・ヘッダ・フッタ: `components/frame/Layout.astro` / `01_header.astro` / `05_footer.astro`。
-- 文言は `.astro` に直書きするより `src/i18n/ja.ts` のキー（`t('nav.join')`）を使う。英語版に備えて `en.ts` にも同じキーを足す。
+- 文言は `.astro` に直書きするより `src/i18n/ja.ts` のキー（`t('nav.join')`）を使う。
 - 画像は `import` して `<Image>` で表示する（最適化される）。例は `00_home/01_hero.astro`。
 - 新しい class を足したら、`style.css` に対応するスタイルを書く。
 
@@ -152,15 +152,9 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 
 `src/content/settings/home.yml` の `sections` を編集する。上から順に表示され、`enabled: false` で非表示。HTML は触らなくてよい。
 
-### 自由枠（custom）にコンポーネントを足す
-
-1. `src/components/00_home/custom/` に `.astro` を作る（`ExampleBlock.astro` を雛形にする）。
-2. `src/components/00_home/custom/index.ts` の `customComponents` に登録する。
-3. `home.yml` に `type: custom` / `component: <名前>` / `props:` を書く。
-
 ### 新しい固定ページ
 
-`src/content/pages/ja/` に Markdown を追加し、`[slug].astro` が表示する。本文のスタイルは `style.css` の「Prose」セクション。
+`src/content/pages/` に Markdown を追加し、`[slug].astro` が表示する。本文のスタイルは `style.css` の「Prose」セクション。
 
 ## 5. 確認すること
 
@@ -172,5 +166,4 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 ## 6. 注意
 
 - `style.css` は PostCSS / Tailwind を使わない。`@apply` や Tailwind の class（`md:flex` など）は動かない。
-- `AGENTS.md` と `.agents/skills/` には、AstroWind テンプレート時代の古い記述（Tailwind 前提）が残っている。このマニュアルと実コードを優先すること。
 - 記事の追加・編集は CMS（上の「Sveltia CMS」）からもできる。HTML / CSS の変更だけがコード編集の対象。

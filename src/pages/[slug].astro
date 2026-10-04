@@ -4,13 +4,13 @@ import Layout from '~/components/frame/Layout.astro';
 import Article from '~/components/04_page/01_article.astro';
 
 export async function getStaticPaths() {
-  const pages = await getCollection('pages', ({ data }) => data.lang === 'ja');
+  const pages = await getCollection('pages');
   return pages.map((page) => ({ params: { slug: page.data.slug }, props: { page } }));
 }
 
 const { page } = Astro.props;
 ---
 
-<Layout metadata={{ title: page.data.title, description: page.data.description }} lang={page.data.lang}>
+<Layout metadata={{ title: page.data.title, description: page.data.description }}>
   <Article page={page} />
 </Layout>

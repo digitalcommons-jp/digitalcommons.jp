@@ -1,12 +1,11 @@
 ---
 import { isEvent, type Post } from '~/lib/content';
-import { formatDate, useT } from '~/i18n';
+import { formatDate, t } from '~/i18n';
 
 interface Props {
   post: Post;
 }
 
-const t = useT('ja');
 const { post } = Astro.props;
 const { event } = post.data;
 ---
@@ -16,8 +15,8 @@ const { event } = post.data;
     <dl class="event-details">
       <dt>{t('event.start')}</dt>
       <dd>
-        {formatDate(event.start, 'ja', true)}
-        {event.end && ` 〜 ${formatDate(event.end, 'ja', true)}`}
+        {formatDate(event.start, true)}
+        {event.end && ` 〜 ${formatDate(event.end, true)}`}
         {event.status !== 'scheduled' && `（${t(`event.status.${event.status}`)}）`}
       </dd>
       <dt>{t(`event.mode.${event.mode}`)}</dt>

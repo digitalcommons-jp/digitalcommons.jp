@@ -1,15 +1,13 @@
 ---
 import { Image } from 'astro:assets';
 import heroImage from '~/assets/images/hero-placeholder.svg';
-import { useT, localePath, type Lang } from '~/i18n';
+import { t } from '~/i18n';
 
 interface Props {
   tagline: string;
-  lang?: Lang;
 }
 
-const { tagline, lang = 'ja' } = Astro.props;
-const t = useT(lang);
+const { tagline } = Astro.props;
 ---
 
 <section class="hero">
@@ -19,8 +17,8 @@ const t = useT(lang);
       オープンソース文化の醸成と、プライバシーをはじめとするデジタルライツの擁護に取り組む一般社団法人です。
     </p>
     <p class="hero-actions">
-      <a href={localePath('/join', lang)} class="btn-primary">{t('nav.join')}</a>
-      <a href={localePath('/about', lang)} class="btn-secondary">{t('home.moreAbout')}</a>
+      <a href="/join" class="btn-primary">{t('nav.join')}</a>
+      <a href="/about" class="btn-secondary">{t('home.moreAbout')}</a>
     </p>
   </div>
   <div class="hero-media">

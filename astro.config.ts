@@ -9,11 +9,7 @@ import { loadEnv } from 'vite';
 import { unified } from '@astrojs/markdown-remark';
 
 import sitemap from '@astrojs/sitemap';
-import mdx from '@astrojs/mdx';
-import icon from 'astro-icon';
 import compress from 'astro-compress';
-
-import astrowind from './vendor/integration';
 
 import { responsiveTablesRehypePlugin } from './src/lib/markdown';
 
@@ -63,13 +59,9 @@ const cms = {
 };
 
 export default defineConfig({
+  site: 'https://digitalcommons.jp',
   output: 'static',
-
-  i18n: {
-    defaultLocale: 'ja',
-    locales: ['ja', 'en'],
-    routing: { prefixDefaultLocale: false },
-  },
+  trailingSlash: 'never',
 
   // Native Fonts API: Astro downloads Fira Sans at build time and self-hosts it
   // (no request to a font CDN from the browser). Consumed via `--font-fira`.
@@ -89,26 +81,6 @@ export default defineConfig({
     devtoolsWorkspace,
     sitemap({ filter: (page) => !CMS_PATH || !page.includes(CMS_PATH) }),
     cms,
-    mdx(),
-    icon({
-      // Local SVG icons (used as <Icon name="file-name" />) live next to the other assets.
-      iconDir: 'src/assets/icons',
-      include: {
-        tabler: ['*'],
-        'flat-color-icons': [
-          'template',
-          'gallery',
-          'approval',
-          'document',
-          'advertising',
-          'currency-exchange',
-          'voice-presentation',
-          'business-contact',
-          'database',
-        ],
-      },
-    }),
-
     compress({
       // csso off on purpose: its parser doesn't understand the media range
       // syntax Tailwind v4 emits for breakpoints (`@media (width>=48rem)`) and
@@ -125,28 +97,10 @@ export default defineConfig({
       SVG: false,
       Logger: 1,
     }),
-
-    astrowind({
-      config: './src/config.yaml',
-    }),
   ],
 
   image: {
-    // Astro's default Sharp service handles local images.
-    //
-    // Most remote CDN images (Unsplash, Cloudinary, Imgix…) are routed by
-    // src/components/common/Image.astro through `unpic`, which rewrites the
-    // URL with CDN-side query parameters and serves it straight from the
-    // provider — Astro never downloads it, so they don't need to be listed.
-    //
-    // `domains` only matters for remote URLs that fall through to Astro's
-    // native <Image /> (i.e. providers Unpic can't detect, like Pixabay).
-    // Listed entries are authorized to be processed by Sharp.
-    // Unsplash is listed so post covers can be rendered as real 1200×626 Open Graph images.
-
-    // Emit responsive styles for the native <Image layout=…> used by
-    // src/components/common/Image.astro (local images). Utility classes on
-    // each usage still win, since these styles use low-specificity selectors.
+    // Emit responsive styles for the native <Image layout=…> (low-specificity selectors).
     responsiveStyles: true,
   },
 

@@ -1,5 +1,5 @@
 /*
- * Site styles. CCD (see CCD.md): rem only — no px in this file.
+ * Site styles. CCD (see ARC.md): rem only — no px in this file.
  *   --cc-w   one character cell, horizontally  = 0.5rem (a CJK glyph is 2 cells)
  *   vertical = whole rem (0.5rem only as symmetric block padding)
  * Text is left-aligned; lines are inset box-shadows, not borders.
@@ -686,13 +686,6 @@ h3 {
     align-items: center;
     justify-content: space-between;
   }
-}
-
-.placeholder-box {
-  padding: 2rem;
-  border-radius: 1rem;
-  color: var(--aw-color-text-muted);
-  box-shadow: inset 0 0 0 0.0625rem var(--aw-color-line);
 }
 
 .not-found-code {

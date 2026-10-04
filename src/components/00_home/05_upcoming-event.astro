@@ -1,14 +1,8 @@
 ---
 import PostCard from '~/components/shared/PostCard.astro';
-import { useT, localePath, type Lang } from '~/i18n';
+import { t } from '~/i18n';
 import { getEvents } from '~/lib/content';
 
-interface Props {
-  lang?: Lang;
-}
-
-const { lang = 'ja' } = Astro.props;
-const t = useT(lang);
 const { upcoming } = await getEvents();
 const next = upcoming[0];
 ---
@@ -18,11 +12,11 @@ const next = upcoming[0];
     <section class="container-cc section">
       <div class="section-head">
         <h2 class="heading-2">{t('home.upcomingEvent')}</h2>
-        <a href={localePath('/events', lang)} class="link-more">
+        <a href="/events" class="link-more">
           {t('home.moreEvents')}
         </a>
       </div>
-      <PostCard post={next} lang={lang} />
+      <PostCard post={next} />
     </section>
   )
 }

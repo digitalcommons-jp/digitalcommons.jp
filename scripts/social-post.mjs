@@ -1,6 +1,6 @@
 // POSSE to GoToSocial: posts title + link + summary for every `social: true` post that
 // has not been posted yet. Idempotent via .social-state.json (slug -> { url, postedAt }).
-// Never re-posts on update (PLAN §6.4).
+// Never re-posts on update.
 //
 //   node scripts/social-post.mjs --dry-run     # show what would be posted
 //   GTS_URL=https://digitalcommons.jp GTS_TOKEN=... node scripts/social-post.mjs

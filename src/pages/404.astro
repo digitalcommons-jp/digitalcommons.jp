@@ -1,9 +1,7 @@
 ---
 import Layout from '~/components/frame/Layout.astro';
 import Message from '~/components/05_not-found/01_message.astro';
-import { useT } from '~/i18n';
-
-const t = useT('ja');
+import { t } from '~/i18n';
 ---
 
 <Layout metadata={{ title: t('404.title'), robots: { index: false } }}>

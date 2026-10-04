@@ -1,12 +1,11 @@
 ---
 import type { Post } from '~/lib/content';
-import { formatDate, useT, localePath } from '~/i18n';
+import { formatDate, t } from '~/i18n';
 
 interface Props {
   post: Post;
 }
 
-const t = useT('ja');
 const { title, date, updated, tags } = Astro.props.post.data;
 ---
 
@@ -22,7 +21,7 @@ const { title, date, updated, tags } = Astro.props.post.data;
     }
     {
       tags.map((tag) => (
-        <a href={localePath(`/tags/${tag}`)} class="tag">
+        <a href={`/tags/${tag}`} class="tag">
           {tag}
         </a>
       ))

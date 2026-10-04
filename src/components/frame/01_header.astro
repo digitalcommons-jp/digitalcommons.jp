@@ -1,21 +1,14 @@
 ---
 import LogoHorizon from '~/components/shared/LogoHorizon.astro';
-import { useT, localePath, type Lang } from '~/i18n';
-
-interface Props {
-  lang?: Lang;
-}
-
-const { lang = 'ja' } = Astro.props;
-const t = useT(lang);
+import { t } from '~/i18n';
 
 // One flat list. Order = display order. `btn` items render as buttons in the
 // header bar and as plain links inside the hamburger panel.
 const items = [
-  { text: t('nav.about'), href: localePath('/about', lang) },
-  { text: t('nav.events'), href: localePath('/events', lang) },
-  { text: t('nav.follow'), href: localePath('/follow', lang), btn: 'btn-secondary' },
-  { text: t('nav.join'), href: localePath('/join', lang), btn: 'btn-primary' },
+  { text: t('nav.about'), href: '/about' },
+  { text: t('nav.events'), href: '/events' },
+  { text: t('nav.follow'), href: '/follow', btn: 'btn-secondary' },
+  { text: t('nav.join'), href: '/join', btn: 'btn-primary' },
 ];
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -25,7 +18,7 @@ const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
 <div class="site-header-spacer" aria-hidden="true"></div>
 <header class="site-header" data-site-header>
   <div class="container-cc header-inner">
-    <a href={localePath('/', lang)} aria-label={t('site.name')}>
+    <a href="/" aria-label={t('site.name')}>
       <LogoHorizon />
     </a>
 

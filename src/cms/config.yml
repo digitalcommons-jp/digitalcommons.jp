@@ -77,7 +77,7 @@ collections:
   - name: pages
     label: 固定ページ
     label_singular: 固定ページ
-    folder: src/content/pages/ja
+    folder: src/content/pages
     extension: md
     format: frontmatter
     create: false
@@ -87,7 +87,6 @@ collections:
       - { name: title, label: タイトル, widget: string }
       - { name: description, label: 説明, widget: text }
       - { name: slug, label: スラッグ, widget: string, readonly: true }
-      - { name: lang, label: 言語, widget: hidden, default: ja }
       - { name: body, label: 本文, widget: markdown }
 
   - name: settings
@@ -104,12 +103,10 @@ collections:
               - name: type
                 label: 種類
                 widget: select
-                options: [hero, pickup, intro, upcoming-event, latest-posts, custom, join-cta]
+                options: [hero, pickup, upcoming-event, latest-posts, join-cta]
               - { name: enabled, label: 表示する, widget: boolean, default: true }
               - { name: slug, label: 記事スラッグ（pickup）, widget: string, required: false }
               - { name: count, label: 件数（latest-posts）, widget: number, required: false }
-              - { name: component, label: コンポーネント名（custom）, widget: string, required: false }
-              - { name: props, label: props（custom）, widget: keyvalue, required: false }
       - name: site
         label: サイト情報
         file: src/content/settings/site.yml
@@ -117,6 +114,7 @@ collections:
           - { name: name, label: サイト名, widget: string }
           - { name: legalName, label: 法人名, widget: string }
           - { name: tagline, label: キャッチコピー, widget: string }
+          - { name: description, label: サイト説明（meta description）, widget: text }
           - { name: email, label: 連絡先メール, widget: string }
           - { name: fediverse, label: Fediverse アカウント, widget: string }
           - { name: bluesky, label: Bluesky ハンドル, widget: string }

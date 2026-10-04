@@ -11,21 +11,19 @@ import Header from '~/components/frame/01_header.astro';
 import Main from '~/components/frame/03_main.astro';
 import Footer from '~/components/frame/05_footer.astro';
 import { getSetting } from '~/lib/content';
-import type { Lang } from '~/i18n';
 
 import type { MetaData as MetaDataType } from '~/types';
 
 export interface Props {
   metadata?: MetaDataType;
-  lang?: Lang;
 }
 
-const { metadata = {}, lang = 'ja' } = Astro.props;
+const { metadata = {} } = Astro.props;
 const site = await getSetting('site');
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang="ja">
   <head>
     <CommonMeta />
     <Favicons />
@@ -38,10 +36,10 @@ const site = await getSetting('site');
   </head>
 
   <body>
-    <Header lang={lang} />
+    <Header />
     <Main>
       <slot />
     </Main>
-    <Footer lang={lang} email={site.email} />
+    <Footer email={site.email} />
   </body>
 </html>
