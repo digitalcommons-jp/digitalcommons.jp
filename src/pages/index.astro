@@ -1,12 +1,12 @@
 ---
-import Layout from '~/layouts/Layout.astro';
-import Hero from '~/components/home/Hero.astro';
-import Pickup from '~/components/home/Pickup.astro';
-import Intro from '~/components/home/Intro.astro';
-import UpcomingEvent from '~/components/home/UpcomingEvent.astro';
-import LatestPosts from '~/components/home/LatestPosts.astro';
-import JoinCta from '~/components/home/JoinCta.astro';
-import { customComponents } from '~/components/custom';
+import Layout from '~/components/frame/Layout.astro';
+import Hero from '~/components/00_home/01_hero.astro';
+import Pickup from '~/components/00_home/03_pickup.astro';
+import Intro from '~/components/00_home/05_intro.astro';
+import UpcomingEvent from '~/components/00_home/07_upcoming-event.astro';
+import LatestPosts from '~/components/00_home/09_latest-posts.astro';
+import JoinCta from '~/components/00_home/11_join-cta.astro';
+import { customComponents } from '~/components/00_home/custom';
 import { getSetting } from '~/lib/content';
 
 const home = await getSetting('home');

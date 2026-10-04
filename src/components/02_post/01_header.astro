@@ -1,0 +1,32 @@
+---
+import type { Post } from '~/lib/content';
+import { formatDate, useT, localePath } from '~/i18n';
+
+interface Props {
+  post: Post;
+}
+
+const t = useT('ja');
+const { title, date, updated, tags } = Astro.props.post.data;
+---
+
+<header>
+  <div class="post-meta">
+    <time datetime={date.toISOString()}>{formatDate(date)}</time>
+    {
+      updated && (
+        <span>
+          （{t('post.updated')} {formatDate(updated)}）
+        </span>
+      )
+    }
+    {
+      tags.map((tag) => (
+        <a href={localePath(`/tags/${tag}`)} class="tag">
+          {tag}
+        </a>
+      ))
+    }
+  </div>
+  <h1 class="post-title">{title}</h1>
+</header>

@@ -1,0 +1,25 @@
+---
+import PostCard from '~/components/shared/PostCard.astro';
+import { useT } from '~/i18n';
+import { getEvents } from '~/lib/content';
+
+const t = useT('ja');
+const { past } = await getEvents();
+---
+
+<section>
+  <h2 class="heading-2">{t('events.past')}</h2>
+  {
+    past.length ? (
+      <ul class="card-grid">
+        {past.map((p) => (
+          <li>
+            <PostCard post={p} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-muted">{t('events.noPast')}</p>
+    )
+  }
+</section>

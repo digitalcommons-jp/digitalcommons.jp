@@ -74,23 +74,23 @@ npm run build      # 本番ビルド（dist/）。エラーが出ないことを
 
 ## 1. どこに何があるか
 
-| やりたいこと                                 | 触るファイル                                                                              |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| 見た目（色・余白・サイズ・レイアウト）       | `src/assets/styles/style.css`（**ほぼ全部ここ**）                                         |
-| 色・フォントの変数                           | `src/components/CustomStyles.astro`                                                       |
-| ブレークポイント                             | `style.css` の先頭 `@custom-media`                                                        |
-| 全ページ共通の枠（`<head>`・ヘッダ・フッタ） | `src/layouts/Layout.astro`                                                                |
-| ヘッダ / フッタ / ロゴ                       | `src/components/Header.astro` `Footer.astro` `LogoBlock.astro` `LogoHorizon.astro`        |
-| トップページの各セクションの HTML            | `src/components/home/*.astro`（Hero, Pickup, Intro, UpcomingEvent, LatestPosts, JoinCta） |
-| トップのセクションの並び・表示 ON/OFF        | `src/content/settings/home.yml`                                                           |
-| 記事カード                                   | `src/components/PostCard.astro`                                                           |
-| 固定ページ（about, join など）の本文         | `src/content/pages/ja/*.md`（Markdown）                                                   |
-| ブログ記事                                   | `src/content/posts/*.md`                                                                  |
-| サイト名・メール・タグライン                 | `src/content/settings/site.yml`                                                           |
-| ナビ等の UI 文言                             | `src/i18n/ja.ts`（英語は `en.ts`）                                                        |
-| フォント設定                                 | `astro.config.ts` の `fonts`                                                              |
-| 画像                                         | `src/assets/images/`                                                                      |
-| favicon・そのまま配信するファイル            | `public/`                                                                                 |
+| やりたいこと                                 | 触るファイル                                                                       |
+| -------------------------------------------- | ---------------------------------------------------------------------------------- |
+| 見た目（色・余白・サイズ・レイアウト）       | `src/assets/styles/style.css`（**ほぼ全部ここ**）                                  |
+| 色・フォントの変数                           | `src/components/head/CustomStyles.astro`                                           |
+| ブレークポイント                             | `style.css` の先頭 `@custom-media`                                                 |
+| 全ページ共通の枠（`<head>`・ヘッダ・フッタ） | `src/components/frame/Layout.astro`                                                |
+| ヘッダ / フッタ / ロゴ                       | `src/components/frame/`（`01_header` `03_main` `05_footer`）, `shared/Logo*.astro` |
+| トップページの各セクションの HTML            | `src/components/00_home/*.astro`（01_hero … 11_join-cta）                          |
+| トップのセクションの並び・表示 ON/OFF        | `src/content/settings/home.yml`                                                    |
+| 記事カード                                   | `src/components/shared/PostCard.astro`                                             |
+| 固定ページ（about, join など）の本文         | `src/content/pages/ja/*.md`（Markdown）                                            |
+| ブログ記事                                   | `src/content/posts/*.md`                                                           |
+| サイト名・メール・タグライン                 | `src/content/settings/site.yml`                                                    |
+| ナビ等の UI 文言                             | `src/i18n/ja.ts`（英語は `en.ts`）                                                 |
+| フォント設定                                 | `astro.config.ts` の `fonts`                                                       |
+| 画像                                         | `src/assets/images/`                                                               |
+| favicon・そのまま配信するファイル            | `public/`                                                                          |
 
 `.astro` ファイルは「上の `---` の間が処理（TypeScript）、下が HTML」。HTML 部分は普通の HTML と同じように書ける。
 
@@ -141,10 +141,11 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 
 ## 4. HTML を変える
 
-- トップの各セクション: `src/components/home/` の該当ファイルを編集。
-- 共通の枠・ヘッダ・フッタ: `Layout.astro` / `Header.astro` / `Footer.astro`。
+- ページの部品は `src/components/NN_<page>/` に置く（構成は `ARC.md`）。ファイル名の番号は上から下の表示順。
+- トップの各セクション: `src/components/00_home/` の該当ファイルを編集。
+- 共通の枠・ヘッダ・フッタ: `components/frame/Layout.astro` / `01_header.astro` / `05_footer.astro`。
 - 文言は `.astro` に直書きするより `src/i18n/ja.ts` のキー（`t('nav.join')`）を使う。英語版に備えて `en.ts` にも同じキーを足す。
-- 画像は `import` して `<Image>` で表示する（最適化される）。例は `home/Hero.astro`。
+- 画像は `import` して `<Image>` で表示する（最適化される）。例は `00_home/01_hero.astro`。
 - 新しい class を足したら、`style.css` に対応するスタイルを書く。
 
 ### トップのセクションを並べ替える・隠す
@@ -153,8 +154,8 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 
 ### 自由枠（custom）にコンポーネントを足す
 
-1. `src/components/custom/` に `.astro` を作る（`ExampleBlock.astro` を雛形にする）。
-2. `src/components/custom/index.ts` の `customComponents` に登録する。
+1. `src/components/00_home/custom/` に `.astro` を作る（`ExampleBlock.astro` を雛形にする）。
+2. `src/components/00_home/custom/index.ts` の `customComponents` に登録する。
 3. `home.yml` に `type: custom` / `component: <名前>` / `props:` を書く。
 
 ### 新しい固定ページ

@@ -1,15 +1,11 @@
 ---
-import Layout from '~/layouts/Layout.astro';
-import { useT, localePath } from '~/i18n';
+import Layout from '~/components/frame/Layout.astro';
+import Message from '~/components/05_not-found/01_message.astro';
+import { useT } from '~/i18n';
 
 const t = useT('ja');
 ---
 
 <Layout metadata={{ title: t('404.title'), robots: { index: false } }}>
-  <section class="container-cc container-cc-narrow section-lg">
-    <p class="not-found-code">404</p>
-    <h1 class="heading-2">{t('404.title')}</h1>
-    <p class="text-muted">{t('404.body')}</p>
-    <p><a href={localePath('/')} class="btn">{t('404.back')}</a></p>
-  </section>
+  <Message />
 </Layout>

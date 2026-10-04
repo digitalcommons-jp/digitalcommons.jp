@@ -1,49 +1,16 @@
 ---
-import Layout from '~/layouts/Layout.astro';
-import PostCard from '~/components/PostCard.astro';
+import Layout from '~/components/frame/Layout.astro';
+import Upcoming from '~/components/01_events/01_upcoming.astro';
+import Past from '~/components/01_events/03_past.astro';
 import { useT } from '~/i18n';
-import { getEvents } from '~/lib/content';
 
 const t = useT('ja');
-const { upcoming, past } = await getEvents();
 ---
 
 <Layout metadata={{ title: t('events.title') }}>
   <div class="container-cc section-lg">
     <h1 class="heading-1">{t('events.title')}</h1>
-
-    <section class="block-gap">
-      <h2 class="heading-2">{t('events.upcoming')}</h2>
-      {
-        upcoming.length ? (
-          <ul class="card-grid">
-            {upcoming.map((p) => (
-              <li>
-                <PostCard post={p} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="text-muted">{t('events.noUpcoming')}</p>
-        )
-      }
-    </section>
-
-    <section>
-      <h2 class="heading-2">{t('events.past')}</h2>
-      {
-        past.length ? (
-          <ul class="card-grid">
-            {past.map((p) => (
-              <li>
-                <PostCard post={p} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="text-muted">{t('events.noPast')}</p>
-        )
-      }
-    </section>
+    <Upcoming />
+    <Past />
   </div>
 </Layout>

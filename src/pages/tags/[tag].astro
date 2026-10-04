@@ -1,6 +1,6 @@
 ---
-import Layout from '~/layouts/Layout.astro';
-import PostCard from '~/components/PostCard.astro';
+import Layout from '~/components/frame/Layout.astro';
+import List from '~/components/03_tag/01_list.astro';
 import { useT } from '~/i18n';
 import { getTags } from '~/lib/content';
 
@@ -14,16 +14,5 @@ const { tag, posts } = Astro.props;
 ---
 
 <Layout metadata={{ title: `${t('tags.title')}: ${tag}`, robots: { index: false } }}>
-  <div class="container-cc section-lg">
-    <h1 class="heading-1">{t('tags.title')}: {tag}</h1>
-    <ul class="card-grid">
-      {
-        posts.map((p) => (
-          <li>
-            <PostCard post={p} />
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+  <List tag={tag} posts={posts} />
 </Layout>

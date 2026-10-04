@@ -1,0 +1,14 @@
+---
+import { render } from 'astro:content';
+import type { Post } from '~/lib/content';
+
+interface Props {
+  post: Post;
+}
+
+const { Content } = await render(Astro.props.post);
+---
+
+<div class="prose">
+  <Content />
+</div>

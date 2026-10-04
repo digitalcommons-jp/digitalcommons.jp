@@ -1,0 +1,44 @@
+---
+import { isEvent, type Post } from '~/lib/content';
+import { formatDate, useT } from '~/i18n';
+
+interface Props {
+  post: Post;
+}
+
+const t = useT('ja');
+const { post } = Astro.props;
+const { event } = post.data;
+---
+
+{
+  isEvent(post) && event && (
+    <dl class="event-details">
+      <dt>{t('event.start')}</dt>
+      <dd>
+        {formatDate(event.start, 'ja', true)}
+        {event.end && ` 〜 ${formatDate(event.end, 'ja', true)}`}
+        {event.status !== 'scheduled' && `（${t(`event.status.${event.status}`)}）`}
+      </dd>
+      <dt>{t(`event.mode.${event.mode}`)}</dt>
+      <dd>
+        {[event.venue, event.address].filter(Boolean).join(' / ')}
+        {event.onlineUrl && (
+          <a class="text-link" href={event.onlineUrl}>
+            {event.onlineUrl}
+          </a>
+        )}
+      </dd>
+      {event.contact && (
+        <>
+          <dt>{t('event.contact')}</dt>
+          <dd>
+            <a class="text-link" href={event.contact}>
+              {event.contact.replace(/^mailto:/, '')}
+            </a>
+          </dd>
+        </>
+      )}
+    </dl>
+  )
+}
