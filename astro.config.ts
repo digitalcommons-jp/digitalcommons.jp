@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import { randomUUID } from 'node:crypto';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -14,28 +12,6 @@ import compress from 'astro-compress';
 import { responsiveTablesRehypePlugin } from './src/lib/markdown';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Dev only: serves /.well-known/appspecific/com.chrome.devtools.json so Chrome DevTools
-// auto-connects this folder as a Workspace (edits in the Styles pane are saved to the file).
-const devtoolsWorkspace = {
-  name: 'devtools-workspace',
-  hooks: {
-    'astro:server:setup': ({ server }: { server: import('vite').ViteDevServer }) => {
-      const root = path.resolve(__dirname);
-      const uuidFile = path.join(root, '.astro', 'devtools-uuid');
-      server.middlewares.use('/.well-known/appspecific/com.chrome.devtools.json', (_req, res) => {
-        let uuid = fs.existsSync(uuidFile) ? fs.readFileSync(uuidFile, 'utf-8') : '';
-        if (!uuid) {
-          uuid = randomUUID();
-          fs.mkdirSync(path.dirname(uuidFile), { recursive: true });
-          fs.writeFileSync(uuidFile, uuid);
-        }
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ workspace: { root, uuid } }));
-      });
-    },
-  },
-};
 
 // The CMS lives at a secret, unguessable path (CMS_PATH in .env, never committed): there is
 // no /admin. Without CMS_PATH the CMS is simply not built.
@@ -78,7 +54,6 @@ export default defineConfig({
   ],
 
   integrations: [
-    devtoolsWorkspace,
     sitemap({ filter: (page) => !CMS_PATH || !page.includes(CMS_PATH) }),
     cms,
     compress({

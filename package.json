@@ -1,7 +1,6 @@
 {
   "name": "digitalcommons-jp",
-  "version": "1.0.0-beta.66",
-  "description": "Digital Commons Japan (AstroWind)",
+  "description": "Digital Commons Japan",
   "type": "module",
   "private": true,
   "engines": {
@@ -9,17 +8,10 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "npm run check:astro && npm run check:eslint && npm run check:prettier",
-    "check:astro": "astro check",
-    "check:eslint": "eslint .",
-    "check:prettier": "prettier --check .",
-    "fix": "npm run fix:eslint && npm run fix:prettier",
-    "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier -w .",
+    "check": "astro check",
     "prepare:sequoia": "node scripts/prepare-sequoia.mjs",
     "social:post": "node scripts/social-post.mjs",
     "prune:sequoia": "node scripts/sequoia-prune.mjs"
@@ -33,22 +25,11 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.3.0",
-    "@eslint/js": "^10.0.1",
-    "@types/js-yaml": "^4.0.9",
-    "@typescript-eslint/eslint-plugin": "^8.66.0",
-    "@typescript-eslint/parser": "^8.66.0",
     "astro-compress": "^2.4.3",
-    "astro-eslint-parser": "^3.0.0",
-    "eslint": "^10.8.1",
-    "eslint-plugin-astro": "^3.1.0",
-    "globals": "^17.9.0",
     "js-yaml": "^4.3.2",
-    "prettier": "^3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
     "sequoia-cli": "^0.5.7",
     "sharp": "^0.35.3",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.66.0"
+    "typescript": "^5.9.3"
   },
   "overrides": {
     "yaml": ">=2.8.3",
