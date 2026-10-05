@@ -1,0 +1,23 @@
+---
+import ItemRow from '~/components/shared/ItemRow.astro';
+import { formatDate } from '~/i18n';
+import type { Post } from '~/lib/content';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.map((p) => (
+    <ItemRow
+      title={p.data.title}
+      description={p.data.description}
+      href={`/posts/${p.id}`}
+      meta={[formatDate(p.data.date)]}
+      image={p.data.image}
+    />
+  ))
+}

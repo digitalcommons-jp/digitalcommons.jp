@@ -1,0 +1,22 @@
+---
+import ItemRow from '~/components/shared/ItemRow.astro';
+import { formatDate, t } from '~/i18n';
+import { getEvents } from '~/lib/content';
+
+const { upcoming } = await getEvents();
+const next = upcoming[0];
+---
+
+{
+  next && (
+    <ItemRow
+      title={next.data.title}
+      description={next.data.description}
+      href={`/posts/${next.id}`}
+      label={t('home.upcomingEvent')}
+      meta={[formatDate(next.data.event!.start, true)]}
+      image={next.data.image}
+      more={{ href: '/events', text: t('home.moreEvents') }}
+    />
+  )
+}

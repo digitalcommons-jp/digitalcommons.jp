@@ -36,6 +36,19 @@ const posts = defineCollection({
     }),
 });
 
+const projects = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/content/projects' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      date: z.coerce.date(),
+      status: z.enum(['ongoing', 'done']).default('ongoing'),
+      url: blank(z.string().optional()),
+      image: blank(image().optional()),
+    }),
+});
+
 const pages = defineCollection({
   loader: glob({ pattern: '*.md', base: 'src/content/pages' }),
   schema: z.object({
@@ -50,4 +63,4 @@ const settings = defineCollection({
   schema: z.any(),
 });
 
-export const collections = { posts, pages, settings };
+export const collections = { posts, projects, pages, settings };

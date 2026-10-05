@@ -1,0 +1,12 @@
+---
+import PageHero from '~/components/shared/PageHero.astro';
+import { t } from '~/i18n';
+
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+---
+
+<PageHero title={`${t('tags.title')}: ${tag}`} />

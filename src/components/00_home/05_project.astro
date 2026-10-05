@@ -1,0 +1,29 @@
+---
+import ItemRow from '~/components/shared/ItemRow.astro';
+import { t } from '~/i18n';
+import { getProjects } from '~/lib/content';
+
+const [latest] = await getProjects();
+const more = { href: '/projects', text: t('home.moreProjects') };
+---
+
+{
+  latest ? (
+    <ItemRow
+      title={latest.data.title}
+      description={latest.data.description}
+      href={latest.data.url}
+      label={t('home.projects')}
+      meta={[t(`project.status.${latest.data.status}`)]}
+      image={latest.data.image}
+      more={more}
+    />
+  ) : (
+    <section class="row item-row">
+      <div class="container-cc">
+        <p class="item-row-label">{t('home.projects')}</p>
+        <p class="text-muted">{t('projects.empty')}</p>
+      </div>
+    </section>
+  )
+}

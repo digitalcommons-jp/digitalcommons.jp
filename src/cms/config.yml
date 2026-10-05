@@ -74,6 +74,26 @@ collections:
         }
       - { name: body, label: 本文, widget: markdown }
 
+  - name: projects
+    label: プロジェクト
+    label_singular: プロジェクト
+    folder: src/content/projects
+    extension: md
+    format: frontmatter
+    create: true
+    slug: '{{slug}}'
+    media_folder: /src/content/projects/images
+    public_folder: ./images
+    summary: '{{title}}'
+    fields:
+      - { name: title, label: タイトル, widget: string }
+      - { name: description, label: 説明, widget: text }
+      - { name: date, label: 開始日, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
+      - { name: status, label: 状態, widget: select, options: [ongoing, done], default: ongoing }
+      - { name: url, label: リンク先 URL, widget: string, required: false }
+      - { name: image, label: 画像, widget: image, required: false }
+      - { name: body, label: 本文, widget: markdown, required: false }
+
   - name: pages
     label: 固定ページ
     label_singular: 固定ページ
@@ -92,21 +112,6 @@ collections:
   - name: settings
     label: 設定
     files:
-      - name: home
-        label: ランディング構成
-        file: src/content/settings/home.yml
-        fields:
-          - name: sections
-            label: セクション（上から順に表示）
-            widget: list
-            fields:
-              - name: type
-                label: 種類
-                widget: select
-                options: [hero, pickup, upcoming-event, latest-posts, join-cta]
-              - { name: enabled, label: 表示する, widget: boolean, default: true }
-              - { name: slug, label: 記事スラッグ（pickup）, widget: string, required: false }
-              - { name: count, label: 件数（latest-posts）, widget: number, required: false }
       - name: site
         label: サイト情報
         file: src/content/settings/site.yml

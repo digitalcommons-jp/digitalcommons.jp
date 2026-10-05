@@ -1,0 +1,27 @@
+---
+import ItemRow from '~/components/shared/ItemRow.astro';
+import { t } from '~/i18n';
+import { getProjects } from '~/lib/content';
+
+const projects = await getProjects();
+---
+
+{
+  projects.length ? (
+    projects.map((p) => (
+      <ItemRow
+        title={p.data.title}
+        description={p.data.description}
+        href={p.data.url}
+        meta={[t(`project.status.${p.data.status}`)]}
+        image={p.data.image}
+      />
+    ))
+  ) : (
+    <section class="row item-row">
+      <div class="container-cc">
+        <p class="text-muted">{t('projects.empty')}</p>
+      </div>
+    </section>
+  )
+}

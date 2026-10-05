@@ -1,0 +1,16 @@
+---
+// Top row of a list page (events / projects / tag): title and an optional lead.
+interface Props {
+  title: string;
+  lead?: string;
+}
+
+const { title, lead } = Astro.props;
+---
+
+<section class="row page-hero">
+  <div class="container-cc">
+    <h1 class="heading-1">{title}</h1>
+    {lead && <p class="text-muted">{lead}</p>}
+  </div>
+</section>

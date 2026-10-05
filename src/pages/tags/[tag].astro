@@ -1,6 +1,7 @@
 ---
 import Layout from '~/components/frame/Layout.astro';
-import List from '~/components/03_tag/01_list.astro';
+import Hero from '~/components/03_tag/01_hero.astro';
+import List from '~/components/03_tag/03_list.astro';
 import { t } from '~/i18n';
 import { getTags } from '~/lib/content';
 
@@ -13,5 +14,6 @@ const { tag, posts } = Astro.props;
 ---
 
 <Layout metadata={{ title: `${t('tags.title')}: ${tag}`, robots: { index: false } }}>
-  <List tag={tag} posts={posts} />
+  <Hero tag={tag} />
+  <List posts={posts} />
 </Layout>

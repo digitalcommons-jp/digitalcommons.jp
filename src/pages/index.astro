@@ -1,36 +1,16 @@
 ---
 import Layout from '~/components/frame/Layout.astro';
 import Hero from '~/components/00_home/01_hero.astro';
-import Pickup from '~/components/00_home/03_pickup.astro';
-import UpcomingEvent from '~/components/00_home/05_upcoming-event.astro';
-import LatestPosts from '~/components/00_home/07_latest-posts.astro';
-import JoinCta from '~/components/00_home/09_join-cta.astro';
+import Event from '~/components/00_home/03_event.astro';
+import Project from '~/components/00_home/05_project.astro';
 import { getSetting } from '~/lib/content';
 
-const home = await getSetting('home');
 const site = await getSetting('site');
-const sections = (home.sections ?? []).filter((s) => s.enabled);
-
-const metadata = { title: site.legalName, ignoreTitleTemplate: true };
 ---
 
-<Layout metadata={metadata}>
-  {
-    sections.map((s) => {
-      switch (s.type) {
-        case 'hero':
-          return <Hero tagline={site.tagline} />;
-        case 'pickup':
-          return <Pickup slug={s.slug ?? ''} />;
-        case 'upcoming-event':
-          return <UpcomingEvent />;
-        case 'latest-posts':
-          return <LatestPosts count={s.count} />;
-        case 'join-cta':
-          return <JoinCta />;
-        default:
-          return null;
-      }
-    })
-  }
+<Layout metadata={{ title: site.legalName, ignoreTitleTemplate: true }}>
+  <!-- Rows, top to bottom. Each is a full-width <section class="row">. -->
+  <Hero tagline={site.tagline} />
+  <Event />
+  <Project />
 </Layout>

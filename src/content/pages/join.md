@@ -1,6 +1,6 @@
 ---
 title: 参加する
-description: 運営メンバーを募集しています。いっしょに会をつくる仲間を探しています。
+description: 運営メンバーを募集しています。RSS・Mastodon・Bluesky での最新情報の受け取り方も案内します。
 slug: join
 ---
 
@@ -34,3 +34,21 @@ slug: join
 ## お申し込み・お問い合わせ
 
 [info@digitalcommons.jp](mailto:info@digitalcommons.jp) までご連絡ください。
+
+## 最新情報を受け取る
+
+参加の前に、まずは活動の様子を見てみたい方は、次の方法で新着記事やイベントの案内を受け取れます。
+
+### RSS
+
+RSS リーダーというアプリで、好きなサイトの更新をまとめて読めます。アカウントは要りません。
+
+[フィードを購読する](/feed.xml)
+
+### Mastodon
+
+Fediverse（Mastodon など）のアカウントがあれば、`@info@digitalcommons.jp` をフォローしてください。
+
+### Bluesky
+
+Bluesky では `digitalcommons.jp` をフォローしてください。

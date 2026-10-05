@@ -51,7 +51,7 @@ scripts/deploy.sh             # ビルドして /opt/dc/dist に rsync
 | **`/tags/<x>`**                                                                       | **あり（衝突）**                         | **Astro**（下記の注意）                       |
 | `/robots.txt`                                                                         | あり                                     | Astro（許可リスト外）                         |
 | `/.well-known/site.standard.publication`                                              | なし                                     | Astro                                         |
-| `/follow` `/join` `/events` `/privacy` `/disclosure` `/feed.xml` `/posts/*`           | なし                                     | Astro                                         |
+| `/join` `/projects` `/events` `/privacy` `/disclosure` `/feed.xml` `/posts/*`           | なし                                     | Astro                                         |
 
 **注意**: GoToSocial の投稿に付いたハッシュタグのリンクは `https://digitalcommons.jp/tags/<名前>` 形式。これは Astro のタグページ（`/tags/<タグ>`）に流れる。該当するタグが無ければ 404 になる。気になるなら、サイトのタグページを別のパス（例 `/topics/`）に移す。
 
@@ -115,8 +115,8 @@ npm run build      # 本番ビルド（dist/）。エラーが出ないことを
 | 全ページ共通の枠（`<head>`・ヘッダ・フッタ） | `src/components/frame/Layout.astro`                                                |
 | ヘッダ / フッタ / ロゴ                       | `src/components/frame/`（`01_header` `03_main` `05_footer`）, `shared/Logo*.astro` |
 | トップページの各セクションの HTML            | `src/components/00_home/*.astro`（01_hero … 09_join-cta）                          |
-| トップのセクションの並び・表示 ON/OFF        | `src/content/settings/home.yml`                                                    |
-| 記事カード                                   | `src/components/shared/PostCard.astro`                                             |
+| トップの行の並び・表示 ON/OFF                | `src/pages/index.astro`（部品を上から並べる）                                      |
+| イベント・プロジェクトの 1 行                | `src/components/shared/ItemRow.astro`                                              |
 | 固定ページ（about, join など）の本文         | `src/content/pages/*.md`（Markdown）                                               |
 | ブログ記事                                   | `src/content/posts/*.md`                                                           |
 | サイト名・メール・タグライン                 | `src/content/settings/site.yml`                                                    |
@@ -181,9 +181,9 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 - 画像は `import` して `<Image>` で表示する（最適化される）。例は `00_home/01_hero.astro`。
 - 新しい class を足したら、`style.css` に対応するスタイルを書く。
 
-### トップのセクションを並べ替える・隠す
+### トップの行を並べ替える・隠す・足す
 
-`src/content/settings/home.yml` の `sections` を編集する。上から順に表示され、`enabled: false` で非表示。HTML は触らなくてよい。
+`src/pages/index.astro` に部品が上から順に並んでいる。行を入れ替える・コメントアウトする・足すのは、このファイルを編集する。新しい行は `src/components/00_home/` に奇数番号の `.astro` を作る（最外側は `<section class="row">`。幅 100%・margin 0）。中身を本文幅に収めたい行だけ、内側に `<div class="container-cc">` を置く。
 
 ### 新しい固定ページ
 

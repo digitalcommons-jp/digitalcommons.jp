@@ -470,19 +470,14 @@ h3 {
  * Page sections, grids, headings
  * ------------------------------------------------------------- */
 
-.section {
-  padding-block: 2rem;
+/* Landing-page row: full width, no margin. Rows are stacked in pages/index.astro. */
+.row {
+  width: 100%;
+  margin: 0;
 }
 
 .section-lg {
   padding-block: 4rem;
-}
-
-.section-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-block-end: 2rem;
 }
 
 .heading-1 {
@@ -498,10 +493,6 @@ h3 {
   margin-block-end: 2rem;
 }
 
-.section-head .heading-2 {
-  margin-block-end: 0;
-}
-
 .link-more {
   color: var(--aw-color-primary);
 }
@@ -510,104 +501,70 @@ h3 {
   text-decoration: underline;
 }
 
-.block-gap {
-  margin-block-end: 4rem;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
-
-@media (--bp-sm) {
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (--bp-lg) {
-  .card-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 /* ---------------------------------------------------------------
- * Post card
+ * List pages (events / projects / tag): page hero, then one full-width row per item.
  * ------------------------------------------------------------- */
 
-.card {
+.page-hero {
+  padding-block: 4rem;
+}
+
+.page-hero .heading-1 {
+  margin-block-end: 0;
+}
+
+.item-row {
+  padding-block: 4rem;
+  box-shadow: inset 0 0.0625rem 0 var(--aw-color-line);
+}
+
+.item-row-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (--bp-md) {
+  .item-row-inner:has(.item-row-media) {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: calc(4 * var(--cc-w));
+  }
+}
+
+.item-row-text {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  background: var(--aw-color-bg-surface);
-  border-radius: 1rem;
-  box-shadow: inset 0 0 0 0.0625rem var(--aw-color-line);
+  gap: 1rem;
 }
 
-.card-image {
-  display: block;
-  flex-shrink: 0;
-}
-
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card-body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: 2rem;
-}
-
-.card-meta {
+.item-row-label,
+.item-row-meta {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 1rem;
   font-size: 0.875rem;
   color: var(--aw-color-text-muted);
 }
 
-.card-title {
-  font-size: 1.125rem;
+.item-row-label {
   font-weight: 700;
-}
-
-.card-title a:hover {
   color: var(--aw-color-primary);
 }
 
-.card-text {
-  color: var(--aw-color-text-muted);
-}
-
-.card-event {
-  margin-block-start: auto;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--aw-color-primary);
-}
-
-.card-large .card-title {
+.item-row-title {
   font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 2rem;
 }
 
-@media (--bp-md) {
-  .card-large {
-    flex-direction: row;
-  }
-  .card-large .card-image {
-    width: 50%;
-  }
-  .card-large .card-body {
-    padding: 4rem;
-    justify-content: center;
-  }
+.item-row-title a:hover {
+  color: var(--aw-color-primary);
+}
+
+.item-row-media img {
+  width: 100%;
+  height: auto;
 }
 
 .tag {

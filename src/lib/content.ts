@@ -24,6 +24,14 @@ export async function getEvents() {
   return { upcoming, past };
 }
 
+/** Projects, newest first. */
+export async function getProjects() {
+  const projects = await getCollection('projects');
+  return projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
+export type Project = CollectionEntry<'projects'>;
+
 export async function getTags(): Promise<Map<string, Post[]>> {
   const map = new Map<string, Post[]>();
   for (const post of await getPosts()) {
@@ -42,20 +50,8 @@ export interface SiteSettings {
   bluesky: string;
 }
 
-export interface HomeSection {
-  type: 'hero' | 'pickup' | 'upcoming-event' | 'latest-posts' | 'join-cta';
-  enabled: boolean;
-  slug?: string;
-  count?: number;
-}
-
-export interface HomeSettings {
-  sections: HomeSection[];
-}
-
 interface SettingsMap {
   site: SiteSettings;
-  home: HomeSettings;
 }
 
 export async function getSetting<K extends keyof SettingsMap>(id: K): Promise<SettingsMap[K]> {

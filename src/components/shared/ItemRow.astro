@@ -1,0 +1,54 @@
+---
+// One full-width row for an event / project / post. Shared by the list pages and the landing page.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  title: string;
+  description: string;
+  href?: string;
+  /** Small caption above the title (e.g. "直近のイベント"). */
+  label?: string;
+  /** Small facts under the label (date, status, ...). */
+  meta?: string[];
+  image?: ImageMetadata;
+  more?: { href: string; text: string };
+}
+
+const { title, description, href, label, meta = [], image, more } = Astro.props;
+---
+
+<section class="row item-row">
+  <div class="container-cc item-row-inner">
+    <div class="item-row-text">
+      {label && <p class="item-row-label">{label}</p>}
+      {
+        meta.length > 0 && (
+          <p class="item-row-meta">
+            {meta.map((m) => (
+              <span>{m}</span>
+            ))}
+          </p>
+        )
+      }
+      <h2 class="item-row-title">{href ? <a href={href}>{title}</a> : title}</h2>
+      <p class="text-muted">{description}</p>
+      {
+        more && (
+          <p>
+            <a href={more.href} class="link-more">
+              {more.text}
+            </a>
+          </p>
+        )
+      }
+    </div>
+    {
+      image && (
+        <div class="item-row-media">
+          <Image src={image} alt="" widths={[480, 960]} sizes="(min-width: 48rem) 40rem, 100vw" />
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -24,9 +24,10 @@ src/
 │   └── config.yml.ts    config.yml を ?raw で返すエンドポイント
 ├── components/        → 下記
 ├── content/           コンテンツ（content.config.ts のコレクション）
-│   ├── pages/           固定ページ（about / follow / join / privacy / disclosure）
+│   ├── pages/           固定ページ（about / join / privacy / disclosure）
 │   ├── posts/           記事（イベント記事含む）
-│   └── settings/        home.yml（トップの並び）/ site.yml（サイト名・説明・連絡先）
+│   ├── projects/        プロジェクト（長期的な取り組み・成果物）
+│   └── settings/        site.yml（サイト名・説明・連絡先）
 ├── i18n/ja.ts         UI 文言（キー → 日本語）
 ├── i18n/index.ts      t() と formatDate()
 ├── lib/
@@ -53,28 +54,31 @@ components/
 │   ├── 03_main.astro      <main><slot/></main>
 │   └── 05_footer.astro
 ├── shared/            ページ横断で再利用する部品
-│   ├── PostCard.astro
+│   ├── PageHero.astro     一覧ページの先頭行（タイトル）
+│   ├── ItemRow.astro      イベント・プロジェクト・記事の 1 行（全幅・margin 0）
 │   └── LogoHorizon.astro  ヘッダが使用
 │
-├── 00_home/           pages/index.astro（セクション順は content/settings/home.yml が決定。番号は既定の並び）
+├── 00_home/           pages/index.astro（上から並べる行。各部品は最外側が全幅の `<section class="row">`）
 │   ├── 01_hero.astro
-│   ├── 03_pickup.astro
-│   ├── 05_upcoming-event.astro
-│   ├── 07_latest-posts.astro
-│   └── 09_join-cta.astro
+│   ├── 03_event.astro
+│   └── 05_project.astro
 ├── 01_events/         pages/events.astro
-│   ├── 01_upcoming.astro
-│   └── 03_past.astro
+│   ├── 01_hero.astro
+│   └── 03_list.astro      開催予定 → 過去の順に ItemRow を並べる
 ├── 02_post/           pages/posts/[slug].astro
 │   ├── 01_header.astro    日付・タグ・タイトル
 │   ├── 03_event-details.astro  イベント記事のみ表示
 │   └── 05_body.astro      Markdown 本文
 ├── 03_tag/            pages/tags/[tag].astro
-│   └── 01_list.astro
-├── 04_page/           pages/[slug].astro（about / join / follow / privacy / disclosure など Markdown 固定ページ共通）
+│   ├── 01_hero.astro
+│   └── 03_list.astro
+├── 04_page/           pages/[slug].astro（about / join / privacy / disclosure など Markdown 固定ページ共通）
 │   └── 01_article.astro
-└── 05_not-found/      pages/404.astro
-    └── 01_message.astro
+├── 05_not-found/      pages/404.astro
+│   └── 01_message.astro
+└── 06_projects/       pages/projects.astro
+    ├── 01_hero.astro
+    └── 03_list.astro
 ```
 
 ### ページとルートの対応
@@ -85,7 +89,8 @@ components/
 | `/events`                                           | `pages/events.astro`       | `01_events/*`                                 |
 | `/posts/<id>`                                       | `pages/posts/[slug].astro` | `02_post/*`                                   |
 | `/tags/<tag>`                                       | `pages/tags/[tag].astro`   | `03_tag/*`                                    |
-| `/about` `/join` `/follow` `/privacy` `/disclosure` | `pages/[slug].astro`       | `04_page/*`（本文は `content/pages/ja/*.md`） |
+| `/about` `/join` `/privacy` `/disclosure` | `pages/[slug].astro`       | `04_page/*`（本文は `content/pages/ja/*.md`） |
+| `/projects`                                         | `pages/projects.astro`     | `06_projects/*`                               |
 | 404                                                 | `pages/404.astro`          | `05_not-found/*`                              |
 | `/feed.xml`                                         | `pages/feed.xml.ts`        | なし（RSS）                                   |
 

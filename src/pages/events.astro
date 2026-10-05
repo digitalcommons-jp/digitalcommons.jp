@@ -1,14 +1,11 @@
 ---
 import Layout from '~/components/frame/Layout.astro';
-import Upcoming from '~/components/01_events/01_upcoming.astro';
-import Past from '~/components/01_events/03_past.astro';
+import Hero from '~/components/01_events/01_hero.astro';
+import List from '~/components/01_events/03_list.astro';
 import { t } from '~/i18n';
 ---
 
 <Layout metadata={{ title: t('events.title') }}>
-  <div class="container-cc section-lg">
-    <h1 class="heading-1">{t('events.title')}</h1>
-    <Upcoming />
-    <Past />
-  </div>
+  <Hero />
+  <List />
 </Layout>
