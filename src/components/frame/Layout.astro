@@ -30,7 +30,7 @@ const site = await getSetting('site');
     <Font cssVariable="--font-fira" preload />
     <CustomStyles />
     <Metadata {...metadata} />
-    <link rel="alternate" type="application/rss+xml" title={site.legalName} href="/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title={site.name} href="/feed.xml" />
     <meta name="fediverse:creator" content={site.fediverse} />
     <slot name="head" />
   </head>
@@ -40,6 +40,6 @@ const site = await getSetting('site');
     <Main>
       <slot />
     </Main>
-    <Footer email={site.email} />
+    <Footer />
   </body>
 </html>

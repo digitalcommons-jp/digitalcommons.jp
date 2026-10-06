@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   const posts = (await getPosts()).filter((p) => p.data.social);
 
   return rss({
-    title: site.legalName,
+    title: site.name,
     description: site.tagline,
     site: context.site!,
     trailingSlash: false,

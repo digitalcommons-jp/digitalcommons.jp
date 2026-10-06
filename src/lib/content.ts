@@ -42,7 +42,6 @@ export async function getTags(): Promise<Map<string, Post[]>> {
 
 export interface SiteSettings {
   name: string;
-  legalName: string;
   tagline: string;
   description: string;
   email: string;

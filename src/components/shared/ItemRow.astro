@@ -2,6 +2,7 @@
 // One full-width row for an event / project / post. Shared by the list pages and the landing page.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import placeholder from '~/assets/images/hero-placeholder.svg';
 
 interface Props {
   title: string;
@@ -11,11 +12,12 @@ interface Props {
   label?: string;
   /** Small facts under the label (date, status, ...). */
   meta?: string[];
+  /** Falls back to a placeholder until real images exist. */
   image?: ImageMetadata;
   more?: { href: string; text: string };
 }
 
-const { title, description, href, label, meta = [], image, more } = Astro.props;
+const { title, description, href, label, meta = [], image = placeholder, more } = Astro.props;
 ---
 
 <section class="row item-row">
@@ -46,7 +48,13 @@ const { title, description, href, label, meta = [], image, more } = Astro.props;
     {
       image && (
         <div class="item-row-media">
-          <Image src={image} alt="" widths={[480, 960]} sizes="(min-width: 48rem) 40rem, 100vw" />
+          {
+            image === placeholder ? (
+              <img src={placeholder.src} alt="" width={placeholder.width} height={placeholder.height} loading="lazy" />
+            ) : (
+              <Image src={image} alt="" widths={[480, 960]} sizes="(min-width: 48rem) 40rem, 100vw" />
+            )
+          }
         </div>
       )
     }

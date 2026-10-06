@@ -117,7 +117,6 @@ collections:
         file: src/content/settings/site.yml
         fields:
           - { name: name, label: サイト名, widget: string }
-          - { name: legalName, label: 法人名, widget: string }
           - { name: tagline, label: キャッチコピー, widget: string }
           - { name: description, label: サイト説明（meta description）, widget: text }
           - { name: email, label: 連絡先メール, widget: string }

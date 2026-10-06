@@ -9,7 +9,7 @@ const { title, ignoreTitleTemplate = false, canonical, robots = {}, description,
 const site = await getSetting('site');
 
 const siteName = openGraph.siteName ?? site.name;
-const pageTitle = title || site.legalName;
+const pageTitle = title || site.name;
 const fullTitle = ignoreTitleTemplate ? pageTitle : `${pageTitle} — ${site.name}`;
 const desc = description || site.description;
 const url = canonical ?? new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '');

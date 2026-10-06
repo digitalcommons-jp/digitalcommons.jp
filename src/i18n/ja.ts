@@ -1,7 +1,6 @@
 // UI strings (Japanese).
 export const ja = {
   'site.name': 'digital commons',
-  'site.legalName': '一般社団法人 digital commons',
   'nav.about': '私たちについて',
   'nav.events': 'イベント',
   'nav.projects': 'プロジェクト',

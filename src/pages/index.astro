@@ -8,7 +8,7 @@ import { getSetting } from '~/lib/content';
 const site = await getSetting('site');
 ---
 
-<Layout metadata={{ title: site.legalName, ignoreTitleTemplate: true }}>
+<Layout metadata={{ title: site.name, ignoreTitleTemplate: true }}>
   <!-- Rows, top to bottom. Each is a full-width <section class="row">. -->
   <Hero tagline={site.tagline} />
   <Event />

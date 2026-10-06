@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import heroImage from '~/assets/images/hero-placeholder.svg';
 import { t } from '~/i18n';
 
@@ -23,6 +22,6 @@ const { tagline } = Astro.props;
   </div>
   <div class="hero-media">
     <!-- Placeholder photo: replace src/assets/images/hero-placeholder.svg -->
-    <Image src={heroImage} alt="" width={1200} height={1000} />
+    <img src={heroImage.src} alt="" width={heroImage.width} height={heroImage.height} />
   </div>
 </section>

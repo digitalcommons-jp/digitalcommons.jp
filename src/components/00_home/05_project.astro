@@ -19,11 +19,6 @@ const more = { href: '/projects', text: t('home.moreProjects') };
       more={more}
     />
   ) : (
-    <section class="row item-row">
-      <div class="container-cc">
-        <p class="item-row-label">{t('home.projects')}</p>
-        <p class="text-muted">{t('projects.empty')}</p>
-      </div>
-    </section>
+    <ItemRow title={t('home.projects')} description={t('projects.empty')} more={more} />
   )
 }
