@@ -59,6 +59,9 @@ collections:
               { name: start, label: 開始, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ' },
               { name: end, label: 終了, widget: datetime, format: 'YYYY-MM-DDTHH:mm:ssZ', required: false },
               { name: mode, label: 開催形態, widget: select, options: [offline, online, hybrid], default: offline },
+              { name: when, label: 日時の表示（任意。例：2026年未定）, widget: string, required: false },
+              { name: fee, label: 参加費（例：無料）, widget: string, required: false },
+              { name: pickup, label: ピックアップ（イベントページの先頭に大きく表示）, widget: boolean, default: false },
               { name: venue, label: 会場, widget: string, required: false },
               { name: address, label: 住所, widget: string, required: false },
               { name: onlineUrl, label: オンライン URL, widget: string, required: false },
@@ -88,6 +91,9 @@ collections:
     fields:
       - { name: title, label: タイトル, widget: string }
       - { name: description, label: 説明, widget: text }
+      - { name: goal, label: 目標, widget: string }
+      - { name: deliverable, label: 成果物, widget: string }
+      - { name: pickup, label: ピックアップ（プロジェクトページの先頭に大きく表示）, widget: boolean, default: false }
       - { name: date, label: 開始日, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
       - { name: status, label: 状態, widget: select, options: [ongoing, done], default: ongoing }
       - { name: url, label: リンク先 URL, widget: string, required: false }

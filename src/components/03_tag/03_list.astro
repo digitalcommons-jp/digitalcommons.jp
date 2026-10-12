@@ -18,6 +18,7 @@ const { posts } = Astro.props;
       href={`/posts/${p.id}`}
       meta={[formatDate(p.data.date)]}
       image={p.data.image}
+      seed={p.id}
     />
   ))
 }

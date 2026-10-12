@@ -1,5 +1,5 @@
 ---
-import { isEvent, type Post } from '~/lib/content';
+import { eventWhen, isEvent, type Post } from '~/lib/content';
 import { formatDate, t } from '~/i18n';
 
 interface Props {
@@ -15,8 +15,8 @@ const { event } = post.data;
     <dl class="event-details">
       <dt>{t('event.start')}</dt>
       <dd>
-        {formatDate(event.start, true)}
-        {event.end && ` 〜 ${formatDate(event.end, true)}`}
+        {eventWhen(event)}
+        {!event.when && event.end && ` 〜 ${formatDate(event.end, true)}`}
         {event.status !== 'scheduled' && `（${t(`event.status.${event.status}`)}）`}
       </dd>
       <dt>{t(`event.mode.${event.mode}`)}</dt>
@@ -28,6 +28,12 @@ const { event } = post.data;
           </a>
         )}
       </dd>
+      {event.fee && (
+        <>
+          <dt>{t('event.fee')}</dt>
+          <dd>{event.fee}</dd>
+        </>
+      )}
       {event.contact && (
         <>
           <dt>{t('event.contact')}</dt>
@@ -39,5 +45,14 @@ const { event } = post.data;
         </>
       )}
     </dl>
+  )
+}
+{
+  isEvent(post) && event?.contact && event.status === 'scheduled' && (
+    <p class="event-apply">
+      <a class="btn-primary" href={event.contact}>
+        {t('event.apply')}
+      </a>
+    </p>
   )
 }

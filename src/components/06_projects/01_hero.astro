@@ -1,6 +1,38 @@
 ---
+// The picked project (see getPickedProject) is the page hero. With no projects, a plain title hero is shown.
 import PageHero from '~/components/shared/PageHero.astro';
 import { t } from '~/i18n';
+import { getPickedProject } from '~/lib/content';
+
+const pick = await getPickedProject();
+const project = pick?.data;
 ---
 
-<PageHero title={t('projects.title')} />
+{
+  project ? (
+    <section class="row hero">
+      <div class="container-cc hero-inner">
+        <div class="hero-block">
+          <p class="item-row-label">{t(`project.status.${project.status}`)}</p>
+          <h1 class="hero-title"><span class="hero-marker">{project.title}</span></h1>
+          <p class="text-muted">{project.description}</p>
+          <dl class="item-row-details">
+            <dt>{t('project.goal')}</dt>
+            <dd>{project.goal}</dd>
+            <dt>{t('project.deliverable')}</dt>
+            <dd>{project.deliverable}</dd>
+          </dl>
+          {project.url && (
+            <p class="hero-actions">
+              <a href={project.url} class="btn-primary">
+                {t('project.link')}
+              </a>
+            </p>
+          )}
+        </div>
+      </div>
+    </section>
+  ) : (
+    <PageHero title={t('projects.title')} />
+  )
+}

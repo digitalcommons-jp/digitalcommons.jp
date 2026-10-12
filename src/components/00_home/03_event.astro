@@ -1,21 +1,21 @@
 ---
 import ItemRow from '~/components/shared/ItemRow.astro';
-import { formatDate, t } from '~/i18n';
-import { getEvents } from '~/lib/content';
+import { t } from '~/i18n';
+import { eventWhen, getPickedEvent } from '~/lib/content';
 
-const { upcoming } = await getEvents();
-const next = upcoming[0];
+const picked = await getPickedEvent();
 ---
 
 {
-  next && (
+  picked && (
     <ItemRow
-      title={next.data.title}
-      description={next.data.description}
-      href={`/posts/${next.id}`}
-      label={t('home.upcomingEvent')}
-      meta={[formatDate(next.data.event!.start, true)]}
-      image={next.data.image}
+      title={picked.data.title}
+      description={picked.data.description}
+      href={`/posts/${picked.id}`}
+      label={t('home.events')}
+      meta={[eventWhen(picked.data.event!)]}
+      image={picked.data.image}
+      seed={picked.id}
       more={{ href: '/events', text: t('home.moreEvents') }}
     />
   )

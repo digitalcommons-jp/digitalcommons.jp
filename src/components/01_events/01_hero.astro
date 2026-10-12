@@ -1,6 +1,44 @@
 ---
+// The picked event (see getPickedEvent) is the page hero. With no events, a plain title hero is shown.
 import PageHero from '~/components/shared/PageHero.astro';
 import { t } from '~/i18n';
+import { eventWhen, getPickedEvent, isUpcoming } from '~/lib/content';
+
+const next = await getPickedEvent();
+const event = next?.data.event;
 ---
 
-<PageHero title={t('events.title')} />
+{
+  next && event ? (
+    <section class="row hero">
+      <div class="container-cc hero-inner">
+        <div class="hero-block">
+          <p class="item-row-label">{isUpcoming(next) ? t('events.upcoming') : t('events.past')}</p>
+          <h1 class="hero-title"><span class="hero-marker">{next.data.title}</span></h1>
+          <p class="item-row-meta">
+            <span>{eventWhen(event)}</span>
+            {event.venue && <span>{event.venue}</span>}
+            {event.fee && (
+              <span>
+                {t('event.fee')}：{event.fee}
+              </span>
+            )}
+          </p>
+          <p class="text-muted">{next.data.description}</p>
+          <p class="hero-actions">
+            {event.contact && isUpcoming(next) && (
+              <a href={event.contact} class="btn-primary">
+                {t('event.apply')}
+              </a>
+            )}
+            <a href={`/posts/${next.id}`} class="btn-secondary">
+              {t('event.details')}
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <PageHero title={t('events.title')} />
+  )
+}

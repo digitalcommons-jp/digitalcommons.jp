@@ -1,0 +1,29 @@
+---
+import ItemRow from '~/components/shared/ItemRow.astro';
+import { t } from '~/i18n';
+import { eventWhen, getEvents } from '~/lib/content';
+
+const { past } = await getEvents();
+---
+
+{
+  past.length ? (
+    past.map((post) => (
+      <ItemRow
+        title={post.data.title}
+        description={post.data.description}
+        href={`/posts/${post.id}`}
+        label={t('events.past')}
+        meta={[eventWhen(post.data.event!), ...(post.data.event!.status !== 'scheduled' ? [t(`event.status.${post.data.event!.status}`)] : [])]}
+        image={post.data.image}
+        seed={post.id}
+      />
+    ))
+  ) : (
+    <section class="row item-row fluid-section">
+      <div class="container-cc">
+        <p class="text-muted">{t('events.pastEmpty')}</p>
+      </div>
+    </section>
+  )
+}

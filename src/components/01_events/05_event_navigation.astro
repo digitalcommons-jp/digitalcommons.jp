@@ -1,0 +1,58 @@
+---
+// Below the upcoming list: link to past events, and a minimal calendar of the current month.
+import { t } from '~/i18n';
+import { getEvents } from '~/lib/content';
+import { jstParts, monthGrid } from '~/lib/calendar';
+
+const { upcoming, past } = await getEvents();
+const { year, month } = jstParts(new Date());
+
+// day of month -> first event of that day
+const eventOn = new Map<number, string>();
+for (const p of [...upcoming, ...past]) {
+  const d = jstParts(p.data.event!.start);
+  if (d.year === year && d.month === month && !eventOn.has(d.day)) eventOn.set(d.day, p.id);
+}
+
+const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+const weeks = monthGrid(year, month);
+---
+
+<section class="row rigid-card event-navigation">
+  <div class="container-cc event-navigation-inner">
+    <div class="event-navigation-text">
+      <h2 class="heading-2">{t('events.pastTitle')}</h2>
+      <p>
+        <a href="/events/past" class="link-more">{t('events.pastLink')}</a>
+      </p>
+    </div>
+    <table class="calendar" aria-label={t('events.calendar')}>
+      <caption>{year}年{month}月</caption>
+      <thead>
+        <tr>
+          {weekdays.map((w) => <th scope="col">{w}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          weeks.map((week) => (
+            <tr>
+              {week.map((day) => (
+                <td>
+                  {day &&
+                    (eventOn.has(day) ? (
+                      <a href={`/posts/${eventOn.get(day)}`} class="calendar-event">
+                        {day}
+                      </a>
+                    ) : (
+                      day
+                    ))}
+                </td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -25,8 +25,11 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.3.0",
+    "@dicebear/core": "^10.7.0",
+    "@dicebear/styles": "^10.6.0",
     "astro-compress": "^2.4.3",
     "js-yaml": "^4.3.2",
+    "potrace": "^2.1.8",
     "sequoia-cli": "^0.5.7",
     "sharp": "^0.35.3",
     "typescript": "^5.9.3"

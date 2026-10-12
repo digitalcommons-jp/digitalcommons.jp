@@ -31,3 +31,7 @@ pnpm-workspace.yaml
 .social-state.json
 .publish.lock
 
+
+
+# Purchased PIXTA originals (not for redistribution): only the traced SVG is committed
+src/assets/images/nez.png

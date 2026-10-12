@@ -1,4 +1,5 @@
 ---
+import LogoBlock from '~/components/shared/LogoBlock.astro';
 import LogoHorizon from '~/components/shared/LogoHorizon.astro';
 import { t } from '~/i18n';
 import { nav } from '~/lib/nav';
@@ -13,8 +14,10 @@ const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
 <div class="site-header-spacer" aria-hidden="true"></div>
 <header class="site-header" data-site-header>
   <div class="container-cc header-inner">
-    <a href="/" aria-label={t('site.name')}>
-      <LogoHorizon />
+    <!-- Block logo at the top of the page; after the header has hidden and comes back, it shows the one-line logo. -->
+    <a href="/" class="logo-link" aria-label={t('site.name')}>
+      <span class="logo-swap logo-swap-block" aria-hidden="true"><LogoBlock /></span>
+      <span class="logo-swap logo-swap-horizon" aria-hidden="true"><LogoHorizon /></span>
     </a>
 
     <!-- Items overflow into the hamburger from the left (see script). Without JS all items stay in the bar. -->
@@ -55,11 +58,27 @@ const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
 </header>
 
 <script>
-  // Compact the header once the page is scrolled.
+  // Compact the header once the page is scrolled; slide it away while scrolling down and back in while
+  // scrolling up. It stays visible near the top, while the menu is open, and while something inside has focus.
   const header = document.querySelector<HTMLElement>('[data-site-header]');
-  const update = () => header?.classList.toggle('is-compact', window.scrollY > 16);
+  let lastY = window.scrollY;
+  const update = () => {
+    const y = Math.max(0, window.scrollY);
+    header?.classList.toggle('is-compact', y > 16);
+    const delta = y - lastY;
+    if (Math.abs(delta) >= 4) {
+      const pinned = y < 80 || header?.querySelector('details[open]') || header?.matches(':focus-within');
+      const hide = delta > 0 && !pinned;
+      header?.classList.toggle('is-hidden', hide);
+      // Once the header has slid away, it comes back with the one-line logo (until the page is at the top again).
+      if (hide) header?.classList.add('is-horizon');
+      lastY = y;
+    }
+    if (y < 80) header?.classList.remove('is-horizon');
+  };
   update();
   window.addEventListener('scroll', update, { passive: true });
+  header?.addEventListener('focusin', () => header.classList.remove('is-hidden'));
 
   // Fit the nav items into the bar; whatever does not fit moves, leftmost first,
   // into the hamburger panel. Opening the hamburger moves every item into it.

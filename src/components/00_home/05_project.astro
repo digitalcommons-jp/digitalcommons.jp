@@ -1,24 +1,30 @@
 ---
 import ItemRow from '~/components/shared/ItemRow.astro';
 import { t } from '~/i18n';
-import { getProjects } from '~/lib/content';
+import { getPickedProject } from '~/lib/content';
 
-const [latest] = await getProjects();
+const latest = await getPickedProject();
 const more = { href: '/projects', text: t('home.moreProjects') };
 ---
 
 {
   latest ? (
     <ItemRow
+      variant="inset"
       title={latest.data.title}
       description={latest.data.description}
       href={latest.data.url}
       label={t('home.projects')}
       meta={[t(`project.status.${latest.data.status}`)]}
+      details={[
+        { label: t('project.goal'), value: latest.data.goal },
+        { label: t('project.deliverable'), value: latest.data.deliverable },
+      ]}
       image={latest.data.image}
+      seed={latest.id}
       more={more}
     />
   ) : (
-    <ItemRow title={t('home.projects')} description={t('projects.empty')} more={more} />
+    <ItemRow variant="inset" title={t('home.projects')} description={t('projects.empty')} more={more} />
   )
 }

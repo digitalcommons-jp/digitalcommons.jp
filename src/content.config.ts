@@ -10,6 +10,11 @@ const blank = <T extends z.ZodTypeAny>(schema: T) =>
 const eventSchema = z.object({
   start: z.coerce.date(),
   end: blank(z.coerce.date().optional()),
+  /** Free-text date shown instead of `start` (e.g. "2026年未定"). `start` still drives the sort order. */
+  when: blank(z.string().optional()),
+  fee: blank(z.string().optional()),
+  /** Show this event as the hero (otherwise the most recent event is used). */
+  pickup: z.boolean().default(false),
   mode: z.enum(['offline', 'online', 'hybrid']).default('offline'),
   venue: z.string().optional(),
   address: z.string().optional(),
@@ -42,6 +47,11 @@ const projects = defineCollection({
     z.object({
       title: z.string(),
       description: z.string(),
+      /** Every project has a goal and a deliverable. */
+      goal: z.string(),
+      deliverable: z.string(),
+      /** Show this project as the hero (otherwise the newest project is used). */
+      pickup: z.boolean().default(false),
       date: z.coerce.date(),
       status: z.enum(['ongoing', 'done']).default('ongoing'),
       url: blank(z.string().optional()),

@@ -1,3 +1,7 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
+
+
 /*
  * Site styles. CCD (see ARC.md): rem only — no px in this file.
  *   --cc-w   one character cell, horizontally  = 0.5rem (a CJK glyph is 2 cells)
@@ -22,22 +26,28 @@
   --white: rgb(255 255 255);
   --black: rgb(0 0 0);
   --ink: rgb(16 16 16);
-  --teal: rgb(15 118 110);
-  --teal-dark: rgb(17 94 89);
+  --teal: #00ab00; /* the raw accent color */
+  --blue: rgb(29 78 216);
+  --yellow: rgb(255 214 0);
 
   --ink-6: color-mix(in srgb, var(--ink) 6%, transparent);
   --ink-8: color-mix(in srgb, var(--ink) 8%, transparent);
   --ink-12: color-mix(in srgb, var(--ink) 12%, transparent);
   --ink-30: color-mix(in srgb, var(--ink) 30%, transparent);
   --ink-66: color-mix(in srgb, var(--ink) 66%, transparent);
-  --teal-5: color-mix(in srgb, var(--teal) 5%, transparent);
-  --teal-12: color-mix(in srgb, var(--teal) 12%, transparent);
-  --teal-20: color-mix(in srgb, var(--teal) 20%, transparent);
+  --yellow-50: color-mix(in srgb, var(--yellow) 75%, transparent);
+
+  /* Accent. --accent is the one accent color (buttons, links, marks, the hero illustration). The variants are the
+   * same color at lower opacity, so changing --accent (or --teal) recolors all of them. */
+  --accent: var(--teal);
+  --accent-muted: color-mix(in srgb, var(--accent) 60%, transparent);
+  --accent-light: color-mix(in srgb, var(--accent) 20%, transparent);
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-faint: color-mix(in srgb, var(--accent) 5%, transparent);
 
   /* 2. Tokens */
-  --aw-color-primary: var(--teal);
-  --aw-color-secondary: var(--teal-dark);
-  --aw-color-accent: var(--teal);
+  --aw-color-primary: var(--accent);
+  --aw-color-accent: var(--accent);
   --aw-color-on-primary: var(--white); /* text/ink on a primary fill */
 
   --aw-color-text-heading: var(--black);
@@ -49,9 +59,9 @@
   --aw-color-bg-surface: var(--white); /* cards, popover panels */
   --aw-color-bg-hover: var(--ink-6);
   --aw-color-bg-code: var(--ink-8);
-  --aw-color-bg-primary-faint: var(--teal-5);
-  --aw-color-bg-primary-soft: var(--teal-12);
-  --aw-color-selection: var(--teal-20);
+  --aw-color-bg-primary-faint: var(--accent-faint);
+  --aw-color-bg-primary-soft: var(--accent-soft);
+  --aw-color-selection: var(--accent-light);
 
   --aw-color-line: var(--ink-12);
   --aw-color-line-strong: var(--ink-30);
@@ -76,7 +86,7 @@ body {
 
 @media (--bp-md) {
   :root {
-    --logo-size-large: 1.75rem;
+    --logo-size-large: 1.5rem;
   }
 }
 
@@ -213,6 +223,7 @@ h3 {
   width: 100%;
   line-height: 1;
   overflow: visible; /* scaled text isn't clipped while fitting */
+  /*box-shadow: inset 0 -0.2em 0 var(--yellow-50); /* same marker as the one-line logo */
 }
 
 .logo-block .logo-line-1 {
@@ -241,8 +252,14 @@ h3 {
   height: var(--header-h-large);
   background: var(--aw-color-bg-page);
   /*box-shadow: 0 0.0625rem 0 0 var(--aw-color-line);*/
-  transition: height 0.2s ease;
+  transition:
+    height 0.2s ease,
+    transform 0.3s ease;
   --logo-size: var(--logo-size-large);
+}
+
+.site-header.is-hidden {
+  transform: translateY(-100%);
 }
 
 .site-header.is-compact {
@@ -254,65 +271,140 @@ h3 {
   transition: font-size 0.2s ease;
 }
 
+/* Header logo: block form by default; one-line form when the header comes back after having hidden (cross-fade). */
+.logo-link {
+  position: relative;
+  display: block;
+  /* Wide enough for the one-line logo, so nothing in the header moves when the logos swap. */
+  min-width: 11.5rem;
+  --logo-width: 5rem;
+  margin-top:1.5rem;
+  margin-left:1rem;
+}
+
+.logo-swap {
+  display: block;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.logo-swap-block {
+  transform-origin: left center;
+}
+
+.logo-swap-horizon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 0;
+  opacity: 0;
+  transform: translateY(-30%);
+  pointer-events: none;
+}
+
+.site-header.is-horizon .logo-swap-block {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.site-header.is-horizon .logo-swap-horizon {
+  opacity: 1;
+  transform: translateY(-50%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .site-header,
-  .site-header .logo-horizon {
+  .site-header .logo-horizon,
+  .logo-swap {
     transition: none;
   }
 }
 
 /* ---------------------------------------------------------------
- * Hero: full-bleed, text on one side, photo on the other.
+ * Hero: photo as the section background, white content block centered on it.
  * ------------------------------------------------------------- */
 
 .hero {
-  display: grid;
-  grid-template-columns: 1fr;
-  min-height: 32rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
 }
 
-@media (--bp-md) {
-  .hero {
-    grid-template-columns: 1fr 1fr;
-  }
+.hero-inner {
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
-.hero-text {
+.hero-block {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2rem;
-  padding-block: 4rem;
-  padding-inline: calc(2 * var(--cc-w));
+  width: 100%;
+  padding: 2rem calc(4 * var(--cc-w));
+  background: var(--aw-color-bg-page);
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.hero-body {
+  display: grid;
+  gap: 2rem;
 }
 
 @media (--bp-md) {
-  /* Align the text's left edge with the page container. */
-  .hero-text {
-    padding-inline-start: max(calc(4 * var(--cc-w)), calc((100vw - 144 * var(--cc-w)) / 2 + 4 * var(--cc-w)));
-    padding-inline-end: calc(4 * var(--cc-w));
+  .hero-body {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: calc(4 * var(--cc-w));
   }
+}
+
+/* Inline SVG (traced from a purchased illustration): its ink follows --accent. */
+.hero-art {
+  --art-ink: var(--accent);
+  justify-self: center; /* mobile: stacked under the text, centered */
+}
+
+@media (--bp-md) {
+  .hero-art {
+    justify-self: end; /* desktop: illustration on the right of the text */
+  }
+}
+
+/* Mirrored (flipping is allowed by the stock license) so it faces the text on its left. */
+.hero-art svg {
+  display: block;
+  transform: scaleX(-1);
+  width: auto;
+  max-width: 100%;
+  height: 18rem;
 }
 
 .hero-title {
-  font-size: 3rem;
+  /* Scales with the viewport between 2.5rem and 5rem; line-height rounds up to whole rem. */
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 800;
-  line-height: 4rem;
+  line-height: round(up, 1.2em, 1rem);
+  letter-spacing:-0.1rem;
+  color:#333;
 }
 
-.hero-media {
-  position: relative;
-  min-height: 16rem;
-  background: var(--aw-color-bg-primary-soft);
+/* Yellow marker under the title, one band per line: an inline box whose fragments each get their own shadow. */
+
+.hero-marker {
+  box-shadow: inset 0 -0.2em 0 var(--yellow-50);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  font-family:"Mobo-bold"
 }
 
-.hero-media img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 /* ---------------------------------------------------------------
  * Buttons: 2rem tall, 0.5rem symmetric block padding, inset-shadow outline.
@@ -327,9 +419,9 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.5rem;
+  height: 2.75rem;
   padding-block: 0.5rem;
-  padding-inline: calc(4 * var(--cc-w));
+  padding-inline: calc(2.5 * var(--cc-w));
   border-radius: 62.4375rem;
   font-weight: 500;
   line-height: 1rem;
@@ -385,8 +477,9 @@ h3 {
 .nav-items {
   display: flex;
   align-items: center;
-  gap: 3rem;
-  font-weight: 500;
+  gap: 2rem;
+  font-weight: 600;
+  font-size:0.9rem;
 }
 
 .nav-items:empty {
@@ -397,7 +490,22 @@ h3 {
   white-space: nowrap;
 }
 
-.nav-item a:not(.btn-primary, .btn-secondary):hover,
+/* Plain links: on hover a pill (same shape as the buttons) with a slightly darker background shows up behind the
+ * text. The padding is cancelled by the negative margin, so the text stays where it was. */
+.nav-bar .nav-item a:not(.btn-primary, .btn-secondary) {
+  display: inline-flex;
+  align-items: center;
+  height: 2.75rem;
+  padding-inline: 1rem;
+  margin-inline: -1rem;
+  border-radius: 62.4375rem;
+  transition: background 0.2s ease;
+}
+
+.nav-bar .nav-item a:not(.btn-primary, .btn-secondary):hover {
+  background: var(--aw-color-bg-hover);
+}
+
 .nav-item a[aria-current='page'] {
   color: var(--aw-color-primary);
 }
@@ -466,7 +574,14 @@ h3 {
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center; /* mobile: centered */
   gap: 1rem;
+}
+
+@media (--bp-md) {
+  .hero-actions {
+    justify-content: flex-start;
+  }
 }
 
 /* ---------------------------------------------------------------
@@ -477,6 +592,22 @@ h3 {
 .row {
   width: 100%;
   margin: 0;
+}
+
+/* fluid_section: full width on mobile, card on desktop (follows the viewport, not the scroll position). Mobile
+ * (below md): edge to edge. Desktop (md+): margin and corner radius 1rem. Heroes are always full width. */
+.fluid-section {
+  width: auto;
+  margin: 0;
+  border-radius: 0;
+  overflow: clip;
+}
+
+@media (--bp-md) {
+  .fluid-section {
+    margin: 1rem;
+    border-radius: 1rem;
+  }
 }
 
 .section-lg {
@@ -505,6 +636,88 @@ h3 {
 }
 
 /* ---------------------------------------------------------------
+ * Event navigation: link to past events + minimal month calendar.
+ * ------------------------------------------------------------- */
+
+/* rigid_card: a card whose layout never changes (unlike a fluid_section). */
+.rigid-card {
+  width: auto;
+  margin: 1rem;
+  border-radius: 1rem;
+  overflow: clip;
+}
+
+.event-navigation {
+  padding-block: 2rem;
+  /*background: var(--aw-color-bg-primary-faint);*/
+}
+
+.event-navigation-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+}
+
+@media (--bp-md) {
+  .event-navigation-inner {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.event-navigation-text {
+  text-align: center;
+}
+
+.event-navigation-text .heading-2 {
+  margin-block-end: 1rem;
+}
+
+.calendar {
+  margin: 0rem auto 0;
+}
+
+.calendar {
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.calendar caption {
+  margin-block-end: 1rem;
+  font-weight: 700;
+}
+
+.calendar th,
+.calendar td {
+  width: calc(6 * var(--cc-w));
+  height: 3rem;
+  padding: 0;
+  text-align: center;
+}
+
+.calendar th {
+  font-weight: 500;
+  color: var(--aw-color-text-muted);
+}
+
+.calendar-event {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 62.4375rem;
+  box-shadow: inset 0 0 0 0.125rem var(--blue);
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.calendar-event:hover {
+  background: var(--blue);
+  color: var(--white);
+}
+
+/* ---------------------------------------------------------------
  * List pages (events / projects / tag): page hero, then one full-width row per item.
  * ------------------------------------------------------------- */
 
@@ -518,11 +731,12 @@ h3 {
 
 .item-row {
   padding-block: 4rem;
+  background: var(--row-bg, transparent);
 }
 
 /* Rhythm instead of borders: every second row is tinted, and its image swaps sides. */
 .item-row:nth-child(even) {
-  background: var(--aw-color-bg-primary-faint);
+  --row-bg: var(--aw-color-bg-primary-faint);
 }
 
 .item-row-inner {
@@ -531,11 +745,57 @@ h3 {
   gap: 2rem;
 }
 
+/* Rows with an image: the image bleeds to the section's edges (no margin top / bottom / outer side);
+ * the text keeps the page container's alignment. */
+.item-row-bleed {
+  --edge: max(calc(4 * var(--cc-w)), calc((100vw - 144 * var(--cc-w)) / 2 + 4 * var(--cc-w)));
+  padding-block: 0;
+}
+
+.item-row-bleed .item-row-inner {
+  width: 100%;
+  max-width: none;
+  padding-inline: 0;
+  gap: 0;
+}
+
+.item-row-bleed .item-row-text {
+  justify-content: center;
+  padding: 4rem calc(2 * var(--cc-w));
+}
+
+.item-row-media {
+  position: relative;
+  min-height: 16rem;
+}
+
+/* Inset variant: text left, image right; the image keeps its margins and a fixed ratio. */
+.item-row-inset .item-row-media {
+  min-height: 0;
+  aspect-ratio: 3 / 2;
+}
+
 @media (--bp-md) {
-  .item-row-inner:has(.item-row-media) {
+  .item-row-inset .item-row-inner {
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    gap: calc(4 * var(--cc-w));
+    gap: calc(8 * var(--cc-w));
+  }
+}
+
+@media (--bp-md) {
+  .item-row-bleed .item-row-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Text left, image right (tinted rows): text aligns with the container's left edge. */
+  .item-row-bleed:nth-child(even) .item-row-text {
+    padding-inline: var(--edge) calc(4 * var(--cc-w));
+  }
+
+  /* Image left, text right (plain rows). */
+  .item-row-bleed:nth-child(odd) .item-row-text {
+    padding-inline: calc(4 * var(--cc-w)) var(--edge);
   }
 }
 
@@ -564,6 +824,16 @@ h3 {
   color: var(--aw-color-primary);
 }
 
+.item-row-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 2rem;
+}
+
+.item-row-details dt {
+  font-weight: 700;
+}
+
 .item-row-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -574,15 +844,18 @@ h3 {
   color: var(--aw-color-primary);
 }
 
-.item-row-media img {
+.item-row-media img,
+.item-row-media svg {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 2;
+  height: 100%;
   object-fit: cover;
+  object-position: center 15%;
 }
 
 @media (--bp-md) {
-  .item-row:nth-child(odd) .item-row-media {
+  .item-row-bleed:nth-child(odd) .item-row-media {
     order: -1;
   }
 }
@@ -634,7 +907,7 @@ h3 {
 }
 
 .site-footer {
-  background: var(--aw-color-bg-hover);
+  background: var(--accent-soft);
   font-size: 0.875rem;
   color: var(--aw-color-text-muted);
 }
@@ -693,6 +966,10 @@ h3 {
 
 .event-details dt {
   font-weight: 500;
+}
+
+.event-apply {
+  margin-block-end: 2rem;
 }
 
 .post-meta {

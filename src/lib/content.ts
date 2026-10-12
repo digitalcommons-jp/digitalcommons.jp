@@ -1,4 +1,5 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import { formatDate } from '~/i18n';
 
 export type Post = CollectionEntry<'posts'>;
 
@@ -10,11 +11,15 @@ export async function getPosts(): Promise<Post[]> {
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
-/** Event posts, soonest first. `upcoming` is computed at build time. */
+/** Date text of an event: the free-text `when` if set, otherwise the formatted `start`. */
+export const eventWhen = (event: NonNullable<Post['data']['event']>) => event.when ?? formatDate(event.start, true);
+
+/** An event that is still to come (computed at build time). */
+export const isUpcoming = (p: Post) => p.data.event!.status === 'scheduled' && p.data.event!.start.valueOf() >= Date.now();
+
+/** Event posts: `upcoming` soonest first, `past` newest first. */
 export async function getEvents() {
   const events = (await getPosts()).filter(isEvent);
-  const now = Date.now();
-  const isUpcoming = (p: Post) => p.data.event!.status === 'scheduled' && p.data.event!.start.valueOf() >= now;
   const upcoming = events
     .filter(isUpcoming)
     .sort((a, b) => a.data.event!.start.valueOf() - b.data.event!.start.valueOf());
@@ -24,6 +29,14 @@ export async function getEvents() {
   return { upcoming, past };
 }
 
+/** The hero event: the one marked `pickup` (newest if several), otherwise the most recent by start date. */
+export async function getPickedEvent() {
+  const events = (await getPosts())
+    .filter(isEvent)
+    .sort((a, b) => b.data.event!.start.valueOf() - a.data.event!.start.valueOf());
+  return events.find((p) => p.data.event!.pickup) ?? events[0];
+}
+
 /** Projects, newest first. */
 export async function getProjects() {
   const projects = await getCollection('projects');
@@ -31,6 +44,12 @@ export async function getProjects() {
 }
 
 export type Project = CollectionEntry<'projects'>;
+
+/** The hero project: the one marked `pickup` (newest if several), otherwise the newest. */
+export async function getPickedProject() {
+  const projects = await getProjects();
+  return projects.find((p) => p.data.pickup) ?? projects[0];
+}
 
 export async function getTags(): Promise<Map<string, Post[]>> {
   const map = new Map<string, Post[]>();

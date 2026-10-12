@@ -1,27 +1,27 @@
 ---
+// Every project except the hero one, newest first.
 import ItemRow from '~/components/shared/ItemRow.astro';
 import { t } from '~/i18n';
-import { getProjects } from '~/lib/content';
+import { getPickedProject, getProjects } from '~/lib/content';
 
-const projects = await getProjects();
+const hero = await getPickedProject();
+const projects = (await getProjects()).filter((p) => p.id !== hero?.id);
 ---
 
 {
-  projects.length ? (
-    projects.map((p) => (
-      <ItemRow
-        title={p.data.title}
-        description={p.data.description}
-        href={p.data.url}
-        meta={[t(`project.status.${p.data.status}`)]}
-        image={p.data.image}
-      />
-    ))
-  ) : (
-    <section class="row item-row">
-      <div class="container-cc">
-        <p class="text-muted">{t('projects.empty')}</p>
-      </div>
-    </section>
-  )
+  projects.map((p) => (
+    <ItemRow
+      variant="inset"
+      title={p.data.title}
+      description={p.data.description}
+      href={p.data.url}
+      meta={[t(`project.status.${p.data.status}`)]}
+      details={[
+        { label: t('project.goal'), value: p.data.goal },
+        { label: t('project.deliverable'), value: p.data.deliverable },
+      ]}
+      image={p.data.image}
+      seed={p.id}
+    />
+  ))
 }

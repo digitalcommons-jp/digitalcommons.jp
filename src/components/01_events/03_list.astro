@@ -1,41 +1,26 @@
 ---
+// Every upcoming event except the hero one, newest date first.
 import ItemRow from '~/components/shared/ItemRow.astro';
-import { formatDate, t } from '~/i18n';
-import { getEvents, type Post } from '~/lib/content';
+import { t } from '~/i18n';
+import { eventWhen, getEvents, getPickedEvent } from '~/lib/content';
 
-const { upcoming, past } = await getEvents();
-
-const rowOf = (p: Post, label: string) => {
-  const { event } = p.data;
-  return {
-    post: p,
-    label,
-    meta: [
-      formatDate(event!.start, true),
-      ...(event!.status !== 'scheduled' ? [t(`event.status.${event!.status}`)] : []),
-    ],
-  };
-};
-const rows = [...upcoming.map((p) => rowOf(p, t('events.upcoming'))), ...past.map((p) => rowOf(p, t('events.past')))];
+const { upcoming } = await getEvents();
+const hero = await getPickedEvent();
+const rows = upcoming
+  .filter((p) => p.id !== hero?.id)
+  .sort((a, b) => b.data.event!.start.valueOf() - a.data.event!.start.valueOf());
 ---
 
 {
-  rows.length ? (
-    rows.map(({ post, label, meta }) => (
-      <ItemRow
-        title={post.data.title}
-        description={post.data.description}
-        href={`/posts/${post.id}`}
-        label={label}
-        meta={meta}
-        image={post.data.image}
-      />
-    ))
-  ) : (
-    <section class="row item-row">
-      <div class="container-cc">
-        <p class="text-muted">{t('events.noUpcoming')}</p>
-      </div>
-    </section>
-  )
+  rows.map((post) => (
+    <ItemRow
+      title={post.data.title}
+      description={post.data.description}
+      href={`/posts/${post.id}`}
+      label={t('events.upcoming')}
+      meta={[eventWhen(post.data.event!)]}
+      image={post.data.image}
+      seed={post.id}
+    />
+  ))
 }

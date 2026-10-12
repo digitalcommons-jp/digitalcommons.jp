@@ -16,7 +16,7 @@
 src/
 ├── assets/            静的アセット（Vite が処理）
 │   ├── favicons/        favicon.ico / favicon.svg / apple-touch-icon.png
-│   ├── images/          default.png / hero-placeholder.svg
+│   ├── images/          nez-trace.svg（hero のイラスト。購入した PIXTA 素材をトレース。元の nez.png / nez.jpg は git 管理外）
 │   └── styles/style.css 全スタイル（パレット・トークン・コンポーネント class）
 ├── cms/               Sveltia CMS（秘密パス CMS_PATH で配信）
 │   ├── admin.astro      管理画面ページ（astro.config.ts の injectRoute で配信）
@@ -24,7 +24,7 @@ src/
 │   └── config.yml.ts    config.yml を ?raw で返すエンドポイント
 ├── components/        → 下記
 ├── content/           コンテンツ（content.config.ts のコレクション）
-│   ├── pages/           固定ページ（about / join / privacy / disclosure）
+│   ├── pages/           固定ページ（about / join / privacy）
 │   ├── posts/           記事（イベント記事含む）
 │   ├── projects/        プロジェクト（長期的な取り組み・成果物）
 │   └── settings/        site.yml（サイト名・説明・連絡先）
@@ -32,6 +32,8 @@ src/
 ├── i18n/index.ts      t() と formatDate()
 ├── lib/
 │   ├── content.ts       getPosts / getEvents / getTags / getSetting …
+│   ├── calendar.ts      jstParts / monthGrid（イベントカレンダー用）
+│   ├── nav.ts           メインメニューの定義（ヘッダーとフッターが共用）
 │   └── markdown.ts      rehype プラグイン（表を横スクロール可能にする。astro.config.ts から読込）
 ├── pages/             ルーティングのみ
 ├── content.config.ts  コレクション schema
@@ -63,8 +65,9 @@ components/
 │   ├── 03_event.astro
 │   └── 05_project.astro
 ├── 01_events/         pages/events.astro
-│   ├── 01_hero.astro
-│   └── 03_list.astro      開催予定 → 過去の順に ItemRow を並べる
+│   ├── 01_hero.astro      直近の開催予定 1 件
+│   ├── 03_list.astro      残りの開催予定（日付の新しい順）
+│   └── 05_event_navigation.astro  過去のイベントへのリンク + 当月カレンダー
 ├── 02_post/           pages/posts/[slug].astro
 │   ├── 01_header.astro    日付・タグ・タイトル
 │   ├── 03_event-details.astro  イベント記事のみ表示
@@ -72,14 +75,24 @@ components/
 ├── 03_tag/            pages/tags/[tag].astro
 │   ├── 01_hero.astro
 │   └── 03_list.astro
-├── 04_page/           pages/[slug].astro（about / join / privacy / disclosure など Markdown 固定ページ共通）
+├── 04_page/           pages/[slug].astro（about / join / privacy など Markdown 固定ページ共通）
 │   └── 01_article.astro
 ├── 05_not-found/      pages/404.astro
 │   └── 01_message.astro
-└── 06_projects/       pages/projects.astro
+├── 06_projects/       pages/projects.astro
+│   ├── 01_hero.astro
+│   └── 03_list.astro
+└── 07_past-events/    pages/events/past.astro
     ├── 01_hero.astro
     └── 03_list.astro
 ```
+
+### セクションの種類（用語）
+
+- **fluid_section**（`.fluid-section`）: 画面の幅に応じてレイアウトが変わるセクション。モバイル（768px 未満）では full-width（margin 0・角丸なし）、デスクトップ（768px 以上）では card（margin 1rem・角丸 1rem）。スクロールでは変わらない（以前あった、スクロールに応じた切り替えは廃止した）。`shared/ItemRow.astro` の行がこれ。
+- **rigid_section**: レイアウトが動かないセクション。
+  - **rigid_card**（`.rigid-card`）: 常にカードの形（margin 1rem、角丸 1rem。幅は問わない）。`01_events/05_event_navigation.astro` がこれ。
+  - hero / page-hero は、常に full-width で動かない。
 
 ### ページとルートの対応
 
@@ -89,7 +102,8 @@ components/
 | `/events`                                           | `pages/events.astro`       | `01_events/*`                                 |
 | `/posts/<id>`                                       | `pages/posts/[slug].astro` | `02_post/*`                                   |
 | `/tags/<tag>`                                       | `pages/tags/[tag].astro`   | `03_tag/*`                                    |
-| `/about` `/join` `/privacy` `/disclosure` | `pages/[slug].astro`       | `04_page/*`（本文は `content/pages/ja/*.md`） |
+| `/about` `/join` `/privacy` | `pages/[slug].astro`       | `04_page/*`（本文は `content/pages/*.md`） |
+| `/events/past`                                      | `pages/events/past.astro`  | `07_past-events/*`                             |
 | `/projects`                                         | `pages/projects.astro`     | `06_projects/*`                               |
 | 404                                                 | `pages/404.astro`          | `05_not-found/*`                              |
 | `/feed.xml`                                         | `pages/feed.xml.ts`        | なし（RSS）                                   |

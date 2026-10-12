@@ -51,7 +51,7 @@ scripts/deploy.sh             # ビルドして /opt/dc/dist に rsync
 | **`/tags/<x>`**                                                                       | **あり（衝突）**                         | **Astro**（下記の注意）                       |
 | `/robots.txt`                                                                         | あり                                     | Astro（許可リスト外）                         |
 | `/.well-known/site.standard.publication`                                              | なし                                     | Astro                                         |
-| `/join` `/projects` `/events` `/privacy` `/disclosure` `/feed.xml` `/posts/*`           | なし                                     | Astro                                         |
+| `/join` `/projects` `/events` `/privacy` `/feed.xml` `/posts/*`           | なし                                     | Astro                                         |
 
 **注意**: GoToSocial の投稿に付いたハッシュタグのリンクは `https://digitalcommons.jp/tags/<名前>` 形式。これは Astro のタグページ（`/tags/<タグ>`）に流れる。該当するタグが無ければ 404 になる。気になるなら、サイトのタグページを別のパス（例 `/topics/`）に移す。
 
