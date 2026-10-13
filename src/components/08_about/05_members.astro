@@ -1,0 +1,73 @@
+---
+// Staff members, one row each: avatar | name, role and social links | PGP key band. Full width, no background of its own.
+import type { CollectionEntry } from 'astro:content';
+import SocialIcon from '~/components/shared/SocialIcon.astro';
+import { t } from '~/i18n';
+import { memberAvatar } from '~/lib/avatar';
+
+interface Props {
+  page: CollectionEntry<'pages'>;
+}
+
+const { members = [] } = Astro.props.page.data;
+const services = [
+  { key: 'bluesky', label: 'Bluesky' },
+  { key: 'mastodon', label: 'Mastodon' },
+  { key: 'didwebvh', label: 'did:webvh' },
+] as const;
+---
+
+{
+  members.length > 0 && (
+    <section class="row members">
+      <div class="container-cc members-inner">
+        <h2 class="item-row-label">{t('about.members')}</h2>
+        <ul class="member-list">
+          {members.map((m) => (
+            <li class="member">
+              <div class="member-avatar" aria-hidden="true" set:html={memberAvatar(m.name)} />
+              <div class="member-info">
+                <p class="member-name">
+                  <strong>{m.name}</strong>
+                  <span class="text-muted">{m.role}</span>
+                </p>
+                <ul class="member-social">
+                  {services.map(
+                    (s) =>
+                      m[s.key] && (
+                        <li>
+                          <a href={m[s.key]} aria-label={s.label}>
+                            <SocialIcon icon={s.key} />
+                          </a>
+                        </li>
+                      ),
+                  )}
+                </ul>
+              </div>
+              {m.pgp && (
+                <a href={m.pgp.file} download class="member-key" aria-label={t('about.pgpDownload')}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <!-- Lucide "key-round" (ISC license) -->
+                    <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
+                    <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
+                  </svg>
+                  <code class="member-key-fingerprint">{m.pgp.fingerprint}</code>
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

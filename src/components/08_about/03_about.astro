@@ -1,0 +1,46 @@
+---
+// Mission (goals) and the pillars (approaches). Full width, no background of its own: it continues the page background.
+import type { CollectionEntry } from 'astro:content';
+import { t } from '~/i18n';
+
+interface Props {
+  page: CollectionEntry<'pages'>;
+}
+
+const { mission, approaches = [] } = Astro.props.page.data;
+
+// Only **bold** is supported in the mission text; everything else is escaped.
+const bold = (text: string) =>
+  text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+---
+
+<section class="row about">
+  <div class="container-cc about-inner">
+    {
+      mission && (
+        <div class="about-mission">
+          <h2 class="item-row-label">{mission.title}</h2>
+          <p class="about-mission-text" set:html={bold(mission.text)} />
+        </div>
+      )
+    }
+    {
+      approaches.length > 0 && (
+        <div>
+          <h2 class="item-row-label">{t('about.approaches')}</h2>
+          <ul class="about-approaches">
+            {approaches.map((a) => (
+              <li>
+                <h3 class="about-approach-title">{a.title}</h3>
+                <p class="text-muted">{a.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>

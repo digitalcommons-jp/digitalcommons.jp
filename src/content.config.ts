@@ -59,13 +59,55 @@ const projects = defineCollection({
     }),
 });
 
+// A titled list of short lines (the join page). `note` is a small remark under the heading.
+const list = z.object({ title: z.string(), note: z.string().optional(), items: z.array(z.string()) });
+
 const pages = defineCollection({
   loader: glob({ pattern: '*.md', base: 'src/content/pages' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    slug: z.string(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      slug: z.string(),
+      // Hero picture (see 04_page/01_hero.astro): an uploaded `image` wins; otherwise `art` (any word) generates a
+      // picture from that seed; with neither there is none.
+      image: blank(image().optional()),
+      art: blank(z.string().optional()),
+      // Where the picture starts: beside the title, or beside the lead text. And whether the text flows around it.
+      artPosition: blank(z.enum(['title', 'body']).default('title')),
+      artWrap: blank(z.boolean().default(true)),
+      // Only the about page uses the fields below (see pages/about.astro).
+      lead: z.string().optional(), // hero text (any page; default: description); paragraphs are separated by a blank line
+      mission: z.object({ title: z.string(), text: z.string() }).optional(),
+      approaches: z.array(z.object({ title: z.string(), text: z.string() })).optional(),
+      members: z
+        .array(
+          z.object({
+            name: z.string(),
+            role: z.string(),
+            bluesky: blank(z.string().optional()),
+            mastodon: blank(z.string().optional()),
+            didwebvh: blank(z.string().optional()),
+            pgp: z.object({ fingerprint: z.string(), file: z.string() }).optional(),
+          }),
+        )
+        .optional(),
+      donation: z.object({ title: z.string(), text: z.string(), button: z.string(), href: z.string() }).optional(),
+      overviewTitle: z.string().optional(), // heading of the overview card (default: 団体概要)
+      overview: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
+      // Only the join page uses the fields below (see pages/join.astro).
+      audience: list.optional(),
+      roles: list.optional(),
+      steps: list.optional(), // shown as a numbered list
+      contact: z.object({ title: z.string(), text: z.string(), button: z.string(), href: z.string() }).optional(),
+      follow: z
+        .object({
+          title: z.string(),
+          text: z.string(),
+          items: z.array(z.object({ label: z.string(), text: z.string(), href: blank(z.string().optional()) })),
+        })
+        .optional(),
+    }),
 });
 
 const settings = defineCollection({

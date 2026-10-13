@@ -104,6 +104,8 @@ collections:
     label: 固定ページ
     label_singular: 固定ページ
     folder: src/content/pages
+    media_folder: /src/content/pages/images
+    public_folder: ./images
     extension: md
     format: frontmatter
     create: false
@@ -113,7 +115,108 @@ collections:
       - { name: title, label: タイトル, widget: string }
       - { name: description, label: 説明, widget: text }
       - { name: slug, label: スラッグ, widget: string, readonly: true }
-      - { name: body, label: 本文, widget: markdown }
+      - { name: image, label: ヒーロー画像（右側に表示。あれば下の「図の種」より優先）, widget: image, required: false }
+      - { name: art, label: ヒーローの図の種（任意の単語。同じ語なら同じ図が生成される）, widget: string, required: false }
+      - { name: artPosition, label: 図の位置, widget: select, options: [{ label: タイトルの横, value: title }, { label: 本文の横, value: body }], default: title, required: false }
+      - { name: artWrap, label: 本文を図に回り込ませる（オフなら図の横に本文を揃える）, widget: boolean, default: true, required: false }
+      # 以下は「私たちについて」ページだけが使う。
+      - { name: lead, label: ヒーローの本文（空行で段落を分ける）, widget: text, required: false }
+      - name: mission
+        label: ミッション
+        widget: object
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: text, label: 本文（**太字** が使える）, widget: text }
+      - name: approaches
+        label: 活動の柱
+        widget: list
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: text, label: 説明, widget: text }
+      - name: members
+        label: 運営メンバー
+        widget: list
+        required: false
+        fields:
+          - { name: name, label: 名前, widget: string }
+          - { name: role, label: 担当, widget: string }
+          - { name: bluesky, label: Bluesky の URL, widget: string, required: false }
+          - { name: mastodon, label: Mastodon の URL, widget: string, required: false }
+          - { name: didwebvh, label: did:webvh の URL, widget: string, required: false }
+          - name: pgp
+            label: PGP 鍵
+            widget: object
+            required: false
+            fields:
+              - { name: fingerprint, label: フィンガープリント, widget: string }
+              - { name: file, label: 鍵ファイルのパス（public/ 以下。例 /keys/name.asc）, widget: string }
+      - name: donation
+        label: 寄付の案内
+        widget: object
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: text, label: 説明, widget: text }
+          - { name: button, label: ボタンの文言, widget: string }
+          - { name: href, label: ボタンのリンク先, widget: string }
+      - name: overview
+        label: 団体概要
+        widget: list
+        required: false
+        fields:
+          - { name: label, label: 項目, widget: string }
+          - { name: value, label: 内容, widget: string }
+      # 以下は「参加する」ページだけが使う。
+      - name: audience
+        label: どんな人を探しているか
+        widget: object
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: note, label: 見出しの下の注記, widget: string, required: false }
+          - { name: items, label: 項目, widget: list, field: { name: item, label: 内容, widget: string } }
+      - name: roles
+        label: 役割の例
+        widget: object
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: note, label: 見出しの下の注記, widget: string, required: false }
+          - { name: items, label: 項目, widget: list, field: { name: item, label: 内容, widget: string } }
+      - name: steps
+        label: 参加までの流れ（番号付きで表示）
+        widget: object
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: note, label: 見出しの下の注記, widget: string, required: false }
+          - { name: items, label: 項目, widget: list, field: { name: item, label: 内容, widget: string } }
+      - name: contact
+        label: お申し込み・お問い合わせ
+        widget: object
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: text, label: 説明, widget: text }
+          - { name: button, label: ボタンの文言, widget: string }
+          - { name: href, label: ボタンのリンク先, widget: string }
+      - name: follow
+        label: 最新情報を受け取る
+        widget: object
+        required: false
+        fields:
+          - { name: title, label: 見出し, widget: string }
+          - { name: text, label: 説明, widget: text }
+          - name: items
+            label: 方法
+            widget: list
+            fields:
+              - { name: label, label: 名前, widget: string }
+              - { name: text, label: 説明, widget: text }
+              - { name: href, label: リンク先（名前をリンクにする場合）, widget: string, required: false }
+      - { name: body, label: 本文, widget: markdown, required: false }
 
   - name: settings
     label: 設定

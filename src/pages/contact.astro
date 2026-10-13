@@ -1,0 +1,13 @@
+---
+import { getEntry } from 'astro:content';
+import Layout from '~/components/frame/Layout.astro';
+import Hero from '~/components/04_page/01_hero.astro';
+import Form from '~/components/09_contact/03_form.astro';
+
+const page = (await getEntry('pages', 'contact'))!;
+---
+
+<Layout metadata={{ title: page.data.title, description: page.data.description }}>
+  <Hero page={page} />
+  <Form />
+</Layout>

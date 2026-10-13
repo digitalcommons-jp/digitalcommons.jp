@@ -1,0 +1,29 @@
+---
+// Key/value card below the article (e.g. the operator on the privacy page). Same card as the about page's overview.
+import type { CollectionEntry } from 'astro:content';
+import { t } from '~/i18n';
+
+interface Props {
+  page: CollectionEntry<'pages'>;
+}
+
+const { overview = [], overviewTitle } = Astro.props.page.data;
+---
+
+{
+  overview.length > 0 && (
+    <section class="row rigid-card overview">
+      <div class="overview-info">
+        <h2 class="item-row-label">{overviewTitle ?? t('about.overview')}</h2>
+        <dl class="overview-list">
+          {overview.map((o) => (
+            <>
+              <dt>{o.label}</dt>
+              <dd>{o.value}</dd>
+            </>
+          ))}
+        </dl>
+      </div>
+    </section>
+  )
+}

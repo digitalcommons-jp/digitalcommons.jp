@@ -17,6 +17,7 @@
     "prune:sequoia": "node scripts/sequoia-prune.mjs"
   },
   "dependencies": {
+    "@astrojs/react": "^7.0.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@sveltia/cms": "^0.227.0",
@@ -27,26 +28,18 @@
     "@astrojs/markdown-remark": "^7.3.0",
     "@dicebear/core": "^10.7.0",
     "@dicebear/styles": "^10.6.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "astro-compress": "^2.4.3",
+    "boring-avatars": "^2.0.4",
     "js-yaml": "^4.3.2",
     "potrace": "^2.1.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "sequoia-cli": "^0.5.7",
     "sharp": "^0.35.3",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "8.3.4"
   },
-  "overrides": {
-    "yaml": ">=2.8.3",
-    "astro-compress": {
-      "sharp": "^0.35.3",
-      "svgo": "^4.1.0"
-    },
-    "postcss": {
-      "nanoid": "^3.3.18"
-    },
-    "deepmerge-ts": ">=8.0.2",
-    "fast-uri": "^3.1.6"
-  },
-  "allowScripts": {
-    "esbuild@0.28.1": true
-  }
+  "packageManager": "pnpm@11.11.0"
 }

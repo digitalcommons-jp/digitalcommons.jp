@@ -1,0 +1,40 @@
+---
+// Who we look for, example roles and the steps to join. Full width, no background of its own (same as the about page).
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  page: CollectionEntry<'pages'>;
+}
+
+const { audience, roles, steps } = Astro.props.page.data;
+const sections = [
+  { list: audience, ordered: false },
+  { list: roles, ordered: false },
+  { list: steps, ordered: true },
+].flatMap((s) => (s.list ? [{ ...s, list: s.list }] : []));
+---
+
+{
+  sections.length > 0 && (
+    <section class="row about">
+      <div class="container-cc about-inner">
+        {sections.map(({ list, ordered }) => {
+          const List = ordered ? 'ol' : 'ul';
+          return (
+            <div>
+              <h2 class="item-row-label">{list.title}</h2>
+              {list.note && <p class="text-muted">{list.note}</p>}
+              <div class="prose">
+                <List>
+                  {list.items.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </List>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  )
+}

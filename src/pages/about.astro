@@ -1,0 +1,18 @@
+---
+import { getEntry } from 'astro:content';
+import Layout from '~/components/frame/Layout.astro';
+import Hero from '~/components/04_page/01_hero.astro';
+import About from '~/components/08_about/03_about.astro';
+import Members from '~/components/08_about/05_members.astro';
+import Overview from '~/components/08_about/07_overview.astro';
+
+const page = (await getEntry('pages', 'about'))!;
+---
+
+<Layout metadata={{ title: page.data.title, description: page.data.description }} wave={false}>
+  <!-- hero, about and members continue the same page background (no seams); the overview is a card. -->
+  <Hero page={page} />
+  <About page={page} />
+  <Members page={page} />
+  <Overview page={page} />
+</Layout>

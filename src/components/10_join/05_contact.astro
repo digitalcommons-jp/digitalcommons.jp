@@ -1,0 +1,42 @@
+---
+// Card at the bottom of the join page. Left: how to follow us (the overview column). Right: how to apply (the donation column).
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  page: CollectionEntry<'pages'>;
+}
+
+const { follow, contact } = Astro.props.page.data;
+---
+
+{
+  (follow || contact) && (
+    <section class="row rigid-card overview">
+      {follow && (
+        <div class="overview-info">
+          <h2 class="item-row-label">{follow.title}</h2>
+          <p class="text-muted">{follow.text}</p>
+          <dl class="overview-list">
+            {follow.items.map((i) => (
+              <>
+                <dt>{i.href ? <a href={i.href}>{i.label}</a> : i.label}</dt>
+                <dd>{i.text}</dd>
+              </>
+            ))}
+          </dl>
+        </div>
+      )}
+      {contact && (
+        <div class="overview-donate">
+          <h2 class="overview-donate-title">{contact.title}</h2>
+          <p class="text-muted">{contact.text}</p>
+          <p>
+            <a href={contact.href} class="btn-primary">
+              {contact.button}
+            </a>
+          </p>
+        </div>
+      )}
+    </section>
+  )
+}

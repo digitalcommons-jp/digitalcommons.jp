@@ -1,0 +1,23 @@
+---
+// Contact form card. Dummy: it is not wired to anything yet (no action, submit does nothing).
+---
+
+<section class="row rigid-card overview">
+  <div class="overview-info">
+    <form class="form" onsubmit="return false">
+      <label class="form-field">
+        <span class="form-label">お名前</span>
+        <input class="form-input" type="text" name="name" autocomplete="name" />
+      </label>
+      <label class="form-field">
+        <span class="form-label">メールアドレス</span>
+        <input class="form-input" type="email" name="email" autocomplete="email" />
+      </label>
+      <label class="form-field">
+        <span class="form-label">本文</span>
+        <textarea class="form-input" name="message" rows="8"></textarea>
+      </label>
+      <p><button type="submit" class="btn-primary">送信する</button></p>
+    </form>
+  </div>
+</section>

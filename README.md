@@ -5,9 +5,9 @@ Digital Commons Japan のサイト。Astro + 素の CSS（Tailwind は使って�
 ## 開発
 
 ```sh
-npm install
-npm run dev      # localhost:4321
-npm run build    # dist/ に静的出力
+pnpm install
+pnpm dev      # localhost:4321
+pnpm build    # dist/ に静的出力
 ```
 
 Node.js >= 22.22.3
@@ -57,12 +57,12 @@ scripts/deploy.sh             # ビルドして /opt/dc/dist に rsync
 
 ### ミラー（Codeberg Pages）
 
-**Codeberg Actions**（`.forgejo/workflows/deploy.yml`）が、main への push で `npm ci && npm run build` を実行し、[git-pages action](https://codeberg.org/git-pages/action) で `dist/` を公開する。
+**Codeberg Actions**（`.forgejo/workflows/deploy.yml`）が、main への push で `pnpm install --frozen-lockfile && pnpm build` を実行し、[git-pages action](https://codeberg.org/git-pages/action) で `dist/` を公開する。
 
 手動:
 
 ```sh
-npm run build
+pnpm build
 # dist/ の中身を pages ブランチへ push
 ```
 
@@ -97,20 +97,20 @@ apex 配信時は `base` を `/`（既定）のままにする。
 ## 0. 基本の流れ
 
 ```sh
-npm install        # 初回のみ
-npm run dev        # http://localhost:4321/ で確認しながら編集（保存すると自動反映）
-npm run check      # 提出前に型をチェック
-npm run build      # 本番ビルド（dist/）。エラーが出ないことを確認
+pnpm install        # 初回のみ
+pnpm dev        # http://localhost:4321/ で確認しながら編集（保存すると自動反映）
+pnpm check      # 提出前に型をチェック
+pnpm build      # 本番ビルド（dist/）。エラーが出ないことを確認
 ```
 
-編集 → ブラウザで確認 → `npm run check` → commit / push。push すると Codeberg Actions が自動デプロイする。
+編集 → ブラウザで確認 → `pnpm check` → commit / push。push すると Codeberg Actions が自動デプロイする。
 
 ## 1. どこに何があるか
 
 | やりたいこと                                 | 触るファイル                                                                       |
 | -------------------------------------------- | ---------------------------------------------------------------------------------- |
 | 見た目（色・余白・サイズ・レイアウト）       | `src/assets/styles/style.css`（**ほぼ全部ここ**）                                  |
-| 色・フォントの変数                           | `src/components/head/CustomStyles.astro`                                           |
+| 色（パレット）                               | `src/assets/styles/style.css` の先頭（`--primary` ほか）                         |
 | ブレークポイント                             | `style.css` の先頭 `@custom-media`                                                 |
 | 全ページ共通の枠（`<head>`・ヘッダ・フッタ） | `src/components/frame/Layout.astro`                                                |
 | ヘッダ / フッタ / ロゴ                       | `src/components/frame/`（`01_header` `03_main` `05_footer`）, `shared/Logo*.astro` |
@@ -139,32 +139,32 @@ npm run build      # 本番ビルド（dist/）。エラーが出ないことを
 
 ### 色・フォント
 
-`CustomStyles.astro` の変数を変える。サイトの強調色は 1 色のみ。
+`style.css` の先頭のパレットを変える。主な色は `--primary`（ボタン、リンク、ラベル、hero のイラスト）で、これを変えるとサイト全体の色が変わる。薄い面や選択色などは、`--primary` の透明度違い（`--primary-muted`、`-light`、`-soft`、`-faint`）なので、一緒に追従する。2 色目は `--secondary`（いまは桃色。薄い変種 `--secondary-soft` がページの背景）、3 色目は `--tertiary`（いまは、見出しとロゴの黄色のマーカー）。同じ透明度違いの変種を持つ。
 
 ```css
---aw-color-primary: rgb(15 118 110); /* これを変えるとサイト全体の色が変わる */
+--primary: var(--teal); /* 元の色は --teal（#00ab00） */
+--secondary: var(--peach);
+--tertiary: var(--yellow);
 ```
 
 フォントは Fira Sans（`astro.config.ts` で自前ホスト）。日本語はシステムの日本語ゴシックにフォールバックする。
 
 ### ブレークポイント（mobile / tablet / desktop の切替幅）
 
-`style.css` 先頭の 3 つだけが定義。**幅を変えるときはここだけ**。
+`style.css` 先頭の 1 つだけが定義。**幅を変えるときはここだけ**。
 
 ```css
-@custom-media --bp-sm (min-width: 36rem); /* 576px */
-@custom-media --bp-md (min-width: 48rem); /* 768px */
-@custom-media --bp-lg (min-width: 64rem); /* 1024px */
+@custom-media --bp-md (min-width: 42rem); /* 672px */
 ```
 
-使い方は `@media (--bp-md) { ... }`（「768px 以上」）。モバイル用のスタイルを先に書き、広い画面で上書きする（mobile-first）。**`@media (min-width: 48rem)` のように直接書かない。**
+使い方は `@media (--bp-md) { ... }`（「672px 以上」）。モバイル用のスタイルを先に書き、広い画面で上書きする（mobile-first）。**`@media (min-width: 42rem)` のように直接書かない。**
 CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様なので、`@custom-media` を使っている。
 
 ## 3. このサイトの CSS ルール（CCD）
 
 [ARC.md](./ARC.md) の「CCD」に詳細がある。文字セル（Character-Cell）の整数倍で寸法を揃える設計。実作業で守ること:
 
-- **単位は `rem` のみ。`px` を書かない。**（576px は `36rem`）
+- **単位は `rem` のみ。`px` を書かない。**（672px は `42rem`）
 - 横方向の寸法は `calc(N * var(--cc-w))`。`--cc-w` は 1 文字幅 = `0.5rem`（全角 1 字 = 2 セル）。
 - 縦方向の寸法は整数の `rem`。例外として `padding-block: 0.5rem` のみ、上下対称で使える。
 - 枠線は `border` ではなく `box-shadow: inset 0 0 0 1px ...`（箱のサイズが変わるのを防ぐ）。
@@ -191,10 +191,10 @@ CSS 変数（`var(--x)`）は `@media` の条件の中では使えない仕様�
 
 ## 5. 確認すること
 
-- 幅を変えて確認する（DevTools のレスポンシブ表示で 576 / 768 / 1024px の前後）。
+- 幅を変えて確認する（DevTools のレスポンシブ表示で 672px の前後）。
 - 本文の日本語が崩れていないか。
-- `npm run check` と `npm run build` が通るか。
-- `npm run dev` が既に動いていないか。ポート 4321 が使用中だと起動できない。
+- `pnpm check` と `pnpm build` が通るか。
+- `pnpm dev` が既に動いていないか。ポート 4321 が使用中だと起動できない。
 
 ## 6. 注意
 

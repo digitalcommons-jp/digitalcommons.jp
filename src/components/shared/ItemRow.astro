@@ -2,7 +2,7 @@
 // One full-width row for an event / project / post. Shared by the list pages and the landing page.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import { blobSvg } from '~/lib/blob';
+import { blobSvg, sliceSvg } from '~/lib/blob';
 
 interface Props {
   title: string;
@@ -19,11 +19,14 @@ interface Props {
   /** Decides which blob picture is generated (default: the title). */
   seed?: string;
   more?: { href: string; text: string };
-  /** bleed: image runs to the section edges, sides alternate. inset: text left, image right with margins. */
+  /** bleed: image runs to the section edges, on the right. inset: image on the left, with margins, over a transparent background. */
   variant?: 'bleed' | 'inset';
 }
 
 const { title, description, href, label, meta = [], details = [], image, seed, more, variant = 'bleed' } = Astro.props;
+// The picture is a link to the same page as the title (kept out of the tab order and the accessibility tree).
+const Media = href ? 'a' : 'div';
+const mediaProps = href ? { href, tabindex: -1, 'aria-hidden': true } : {};
 ---
 
 <section class:list={['row', 'fluid-section', 'item-row', `item-row-${variant}`]}>
@@ -64,17 +67,19 @@ const { title, description, href, label, meta = [], details = [], image, seed, m
       }
     </div>
     <div class="item-row-media">
-      {
-        image ? (
-          image.format === 'svg' ? (
-            <img src={image.src} alt="" width={image.width} height={image.height} loading="lazy" />
+      <Media class="item-row-media-link" {...mediaProps}>
+        {
+          image ? (
+            image.format === 'svg' ? (
+              <img src={image.src} alt="" width={image.width} height={image.height} loading="lazy" />
+            ) : (
+              <Image src={image} alt="" widths={[480, 960]} sizes="(min-width: 42rem) 40rem, 100vw" />
+            )
           ) : (
-            <Image src={image} alt="" widths={[480, 960]} sizes="(min-width: 48rem) 40rem, 100vw" />
+            <Fragment set:html={variant === 'inset' ? sliceSvg(seed ?? title) : blobSvg(seed ?? title)} />
           )
-        ) : (
-          <Fragment set:html={blobSvg(seed ?? title)} />
-        )
-      }
+        }
+      </Media>
     </div>
   </div>
 </section>

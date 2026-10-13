@@ -1,0 +1,62 @@
+---
+// Top row of a content page: the title, and the lead (default: the description). Set in the page's frontmatter:
+//   image: an uploaded picture, shown on the right. art: a word that generates a picture (used when there is no image).
+//   artPosition / artWrap (below) place it.
+// With a picture the text flows around it (the about page); without one it is the plain hero of the events / projects pages.
+// artPosition "title" (default): the picture starts at the top right of the whole block, beside the title.
+// artPosition "body": it starts at the top right of the lead text; the title is not affected.
+// artWrap (default true): the text flows around the picture. false: the text stays in a column beside it.
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { shapesSvg } from '~/lib/blob';
+
+interface Props {
+  page: CollectionEntry<'pages'>;
+}
+
+const { title, description, lead, image, art: seed, artPosition: art, artWrap: wrap } = Astro.props.page.data;
+const paragraphs = (lead ?? description).split(/\n\s*\n/);
+const hasPicture = Boolean(image || seed);
+---
+
+{
+  hasPicture ? (
+    <section class="row hero">
+      <div class="container-cc hero-inner">
+        <div class:list={['hero-block', 'hero-flow', !wrap && 'is-nowrap']}>
+          {art === 'title' && (
+            <div class="hero-art" aria-hidden="true">
+              {image ? <Image src={image} alt="" widths={[480, 960]} sizes="40rem" /> : <Fragment set:html={shapesSvg(seed!)} />}
+            </div>
+          )}
+          <h1 class="hero-title">
+            <span class="hero-marker">{title}</span>
+          </h1>
+          <div class="hero-copy">
+            {art === 'body' && (
+              <div class="hero-art" aria-hidden="true">
+                {image ? <Image src={image} alt="" widths={[480, 960]} sizes="40rem" /> : <Fragment set:html={shapesSvg(seed!)} />}
+              </div>
+            )}
+            {paragraphs.map((p) => (
+              <p class="text-muted">{p}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <section class="row hero">
+      <div class="container-cc hero-inner">
+        <div class="hero-block">
+          <h1 class="hero-title">
+            <span class="hero-marker">{title}</span>
+          </h1>
+          {paragraphs.map((p) => (
+            <p class="text-muted">{p}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

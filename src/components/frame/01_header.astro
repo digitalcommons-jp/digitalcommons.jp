@@ -1,129 +1,17 @@
 ---
+import SiteHeader from '~/components/frame/SiteHeader.tsx';
 import LogoBlock from '~/components/shared/LogoBlock.astro';
-import LogoHorizon from '~/components/shared/LogoHorizon.astro';
 import { t } from '~/i18n';
 import { nav } from '~/lib/nav';
 
 // `btn` items render as buttons in the header bar and as plain links inside the hamburger panel.
-const items = nav.map((i) => ({ text: t(i.key), href: i.href, btn: i.btn }));
-
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
+const items = nav.map((i) => ({ text: t(i.key), href: i.href, btn: i.btn, current: isCurrent(i.href) }));
+const labels = { site: t('site.name'), nav: t('nav.main'), menu: t('nav.menu'), ja: t('lang.ja'), en: t('lang.en') };
 ---
 
 <div class="site-header-spacer" aria-hidden="true"></div>
-<header class="site-header" data-site-header>
-  <div class="container-cc header-inner">
-    <!-- Block logo at the top of the page; after the header has hidden and comes back, it shows the one-line logo. -->
-    <a href="/" class="logo-link" aria-label={t('site.name')}>
-      <span class="logo-swap logo-swap-block" aria-hidden="true"><LogoBlock /></span>
-      <span class="logo-swap logo-swap-horizon" aria-hidden="true"><LogoHorizon /></span>
-    </a>
-
-    <!-- Items overflow into the hamburger from the left (see script). Without JS all items stay in the bar. -->
-    <nav class="nav-bar" aria-label={t('nav.main')} data-nav-bar>
-      <ul class="nav-items" data-nav-items>
-        {
-          items.map((i) => (
-            <li class:list={['nav-item', i.btn && 'nav-item-action']} data-btn={i.btn}>
-              <a href={i.href} class={i.btn} aria-current={!i.btn && isCurrent(i.href) ? 'page' : undefined}>
-                {i.text}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <details class="mobile-menu" data-nav-menu hidden>
-      <summary aria-label={t('nav.menu')}>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <path d="M4 7h16M4 12h16M4 17h16"></path>
-        </svg>
-      </summary>
-      <nav class="mobile-menu-panel" aria-label={t('nav.main')}>
-        <ul data-nav-panel></ul>
-      </nav>
-    </details>
-  </div>
-</header>
-
-<script>
-  // Compact the header once the page is scrolled; slide it away while scrolling down and back in while
-  // scrolling up. It stays visible near the top, while the menu is open, and while something inside has focus.
-  const header = document.querySelector<HTMLElement>('[data-site-header]');
-  let lastY = window.scrollY;
-  const update = () => {
-    const y = Math.max(0, window.scrollY);
-    header?.classList.toggle('is-compact', y > 16);
-    const delta = y - lastY;
-    if (Math.abs(delta) >= 4) {
-      const pinned = y < 80 || header?.querySelector('details[open]') || header?.matches(':focus-within');
-      const hide = delta > 0 && !pinned;
-      header?.classList.toggle('is-hidden', hide);
-      // Once the header has slid away, it comes back with the one-line logo (until the page is at the top again).
-      if (hide) header?.classList.add('is-horizon');
-      lastY = y;
-    }
-    if (y < 80) header?.classList.remove('is-horizon');
-  };
-  update();
-  window.addEventListener('scroll', update, { passive: true });
-  header?.addEventListener('focusin', () => header.classList.remove('is-hidden'));
-
-  // Fit the nav items into the bar; whatever does not fit moves, leftmost first,
-  // into the hamburger panel. Opening the hamburger moves every item into it.
-  const inner = header?.querySelector<HTMLElement>('.header-inner');
-  const list = header?.querySelector<HTMLElement>('[data-nav-items]');
-  const menu = header?.querySelector<HTMLDetailsElement>('[data-nav-menu]');
-  const panel = header?.querySelector<HTMLElement>('[data-nav-panel]');
-
-  if (inner && list && menu && panel) {
-    const items = Array.from(list.children) as HTMLElement[];
-
-    const place = (li: HTMLElement, inPanel: boolean) => {
-      const a = li.querySelector('a');
-      if (a) a.className = inPanel ? '' : (li.dataset.btn ?? '');
-      (inPanel ? panel : list).append(li);
-    };
-
-    const fits = () => {
-      const cs = getComputedStyle(inner);
-      const avail = inner.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-      const widths = Array.from(inner.children)
-        .map((el) => el.getBoundingClientRect().width)
-        .filter((w) => w > 0);
-      const gap = parseFloat(cs.columnGap) || 0;
-      return widths.reduce((x, w) => x + w, 0) + gap * (widths.length - 1) <= avail + 0.5;
-    };
-
-    const layout = () => {
-      if (menu.open) return;
-      items.forEach((li) => place(li, false));
-      menu.hidden = true;
-      if (fits()) return;
-      menu.hidden = false;
-      for (const li of items) {
-        if (fits()) break;
-        place(li, true);
-      }
-    };
-
-    menu.addEventListener('toggle', () => {
-      if (menu.open) items.forEach((li) => place(li, true));
-      else layout();
-    });
-    new ResizeObserver(layout).observe(inner);
-    document.fonts?.ready.then(layout);
-    layout();
-  }
-</script>
+<SiteHeader client:load items={items} labels={labels}>
+  <LogoBlock slot="logo" />
+</SiteHeader>

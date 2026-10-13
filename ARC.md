@@ -24,7 +24,7 @@ src/
 │   └── config.yml.ts    config.yml を ?raw で返すエンドポイント
 ├── components/        → 下記
 ├── content/           コンテンツ（content.config.ts のコレクション）
-│   ├── pages/           固定ページ（about / join / privacy）
+│   ├── pages/           固定ページ（about / join / contact / privacy）
 │   ├── posts/           記事（イベント記事含む）
 │   ├── projects/        プロジェクト（長期的な取り組み・成果物）
 │   └── settings/        site.yml（サイト名・説明・連絡先）
@@ -47,7 +47,6 @@ src/
 components/
 ├── head/              <head> 内の非表示部品（Layout が使用）
 │   ├── CommonMeta.astro
-│   ├── CustomStyles.astro
 │   ├── Favicons.astro
 │   └── Metadata.astro
 ├── frame/             全ページ共通の枠。Layout が <head> と下の 3 つを組み立てる
@@ -57,8 +56,8 @@ components/
 │   └── 05_footer.astro
 ├── shared/            ページ横断で再利用する部品
 │   ├── PageHero.astro     一覧ページの先頭行（タイトル）
-│   ├── ItemRow.astro      イベント・プロジェクト・記事の 1 行（全幅・margin 0）
-│   └── LogoHorizon.astro  ヘッダが使用
+│   ├── ItemRow.astro      イベント・プロジェクト・記事の 1 行
+│   └── LogoBlock.astro    ヘッダのロゴ（digital / commons の 2 行）
 │
 ├── 00_home/           pages/index.astro（上から並べる行。各部品は最外側が全幅の `<section class="row">`）
 │   ├── 01_hero.astro
@@ -75,21 +74,30 @@ components/
 ├── 03_tag/            pages/tags/[tag].astro
 │   ├── 01_hero.astro
 │   └── 03_list.astro
-├── 04_page/           pages/[slug].astro（about / join / privacy など Markdown 固定ページ共通）
-│   └── 01_article.astro
+├── 04_page/           pages/[slug].astro（privacy など Markdown 固定ページ共通。hero は about / join / contact も使う）
+│   ├── 01_hero.astro      タイトル + 説明文（lead）。frontmatter の image / art があれば右に図（位置は artPosition、回り込みは artWrap。アップロード画像、または種から生成する DiceBear Shapes）
+│   └── 03_article.astro   Markdown 本文
 ├── 05_not-found/      pages/404.astro
 │   └── 01_message.astro
 ├── 06_projects/       pages/projects.astro
 │   ├── 01_hero.astro
 │   └── 03_list.astro
-└── 07_past-events/    pages/events/past.astro
-    ├── 01_hero.astro
-    └── 03_list.astro
+├── 07_past-events/    pages/events/past.astro
+│   ├── 01_hero.astro
+│   └── 03_list.astro
+├── 08_about/          pages/about.astro
+│   ├── 03_about.astro     mission + approaches（全幅・背景なし）
+│   ├── 05_members.astro   運営メンバー（アバター / 名前・担当・SNS / PGP 鍵の帯。全幅・背景なし）
+│   └── 07_overview.astro  団体概要（カード）
+├── 09_contact/        pages/contact.astro
+└── 10_join/           pages/join.astro（hero は 04_page/01_hero）
+    ├── 03_guide.astro     audience / roles / steps（全幅・背景なし。steps は番号付き）
+    └── 05_contact.astro   follow（左）+ contact（右）のカード
 ```
 
 ### セクションの種類（用語）
 
-- **fluid_section**（`.fluid-section`）: 画面の幅に応じてレイアウトが変わるセクション。モバイル（768px 未満）では full-width（margin 0・角丸なし）、デスクトップ（768px 以上）では card（margin 1rem・角丸 1rem）。スクロールでは変わらない（以前あった、スクロールに応じた切り替えは廃止した）。`shared/ItemRow.astro` の行がこれ。
+- **fluid_section**（`.fluid-section`）: 画面の幅に応じてレイアウトが変わるセクション。モバイル（672px 未満）では full-width（margin 0・角丸なし）、デスクトップ（672px 以上）では card（margin 1rem・角丸 1rem）。スクロールでは変わらない（以前あった、スクロールに応じた切り替えは廃止した）。`shared/ItemRow.astro` の行がこれ。
 - **rigid_section**: レイアウトが動かないセクション。
   - **rigid_card**（`.rigid-card`）: 常にカードの形（margin 1rem、角丸 1rem。幅は問わない）。`01_events/05_event_navigation.astro` がこれ。
   - hero / page-hero は、常に full-width で動かない。
@@ -102,7 +110,9 @@ components/
 | `/events`                                           | `pages/events.astro`       | `01_events/*`                                 |
 | `/posts/<id>`                                       | `pages/posts/[slug].astro` | `02_post/*`                                   |
 | `/tags/<tag>`                                       | `pages/tags/[tag].astro`   | `03_tag/*`                                    |
-| `/about` `/join` `/privacy` | `pages/[slug].astro`       | `04_page/*`（本文は `content/pages/*.md`） |
+| `/privacy`                                          | `pages/[slug].astro`       | `04_page/*`（本文は `content/pages/*.md`） |
+| `/join`                                             | `pages/join.astro`         | `04_page/01_hero` + `10_join/*`（内容は `content/pages/join.md` の frontmatter） |
+| `/about`                                            | `pages/about.astro`        | `08_about/*`（内容は `content/pages/about.md` の frontmatter） |
 | `/events/past`                                      | `pages/events/past.astro`  | `07_past-events/*`                             |
 | `/projects`                                         | `pages/projects.astro`     | `06_projects/*`                               |
 | 404                                                 | `pages/404.astro`          | `05_not-found/*`                              |
@@ -118,24 +128,37 @@ CCD（Character-Cell Design）の原則をブラウザ上で実現するため�
 
 ### 1. 基本単位
 
+セルの幅は、基準の等幅フォント **Fira Code**（Google Fonts。Astro のフォント機能で、サイトに同梱）の `1ch` で決まる。表示する文字は、比例フォント（Fira Sans）のままでよい。等幅フォントは、セルの寸法を測るための基準にだけ使う。
+
 ```css
+@property --cc-w {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 9.6px;
+}
+
 :root {
-  --cc-w: 1ch; /* JSによって実測px値に上書きされる */
+  font-family: var(--font-fira-code), monospace;
+  --cc-w: 1ch; /* Fira Code: 0.6em × 16px = 9.6px */
 }
 
 body {
-  font-size: 1rem;
-  line-height: 1;
+  font-family: var(--font-fira), ...; /* 表示するフォント（比例） */
+  line-height: 2rem; /* 日本語は 2rem 必須 */
 }
 ```
 
-横方向はすべて `var(--cc-w)`、縦方向はすべて `rem` で表現する。
+`@property` で長さ型として登録すると、`:root`（等幅フォント）で計算された `--cc-w` が、別のフォントを使う子要素にも、固定の px 値としてそのまま継承される。JS を使わずに、「表示は比例フォント、セルは等幅フォント」が成立する。Fira Code はサイトに同梱するので、どの端末でも `--cc-w` は同じ値（9.6px）になる。
+
+横方向はすべて `var(--cc-w)` の整数倍、縦方向はすべて `rem` の整数倍で表現する。
 
 #### `1lh` ではなく `rem` を使う理由
 
 `lh` はその要素自身の line-height を参照する。`font-size: 4rem` の h1 に `margin: 1lh` を適用すると `4rem` になる。body基準の1セルには `1rem` を使う。
 
-### 2. グリッドスナップ（JS）
+### 2. グリッドスナップ（JS）— 未実装
+
+> いまは未実装。Fira Code を同梱して `--cc-w` が端末によらず固定なので、必須ではない。画面の幅が、セル幅の整数倍に収まらないための端数が気になる場合に、導入する。
 
 `1ch` はフォントと環境によって非整数pxになる。CSSの `auto` / `fr` はpx空間で演算するため誤差が蓄積する。JSによるスナップでこれを解消する。
 
@@ -304,10 +327,10 @@ Menlo等:               1ch ≠ 0.5em → CJK がずれる可能性
 ```
 left    — 推奨
 right   — 許可（数値・ラベル等）
-center  — 原則禁止（文字数が奇数のとき半セルずれる）
+center  — 許可（以前は原則禁止。文字数が奇数のとき半セルずれる点は、許容する）
 justify — 禁止（文字間隔が変化しグリッドが崩れる）
 ```
 
 #### レスポンシブ
 
-レスポンシブ対応はセル数の再配分で行う。フォントサイズの縮小による対応は禁止。
+レスポンシブ対応はセル数の再配分で行う。表示する文字のサイズ（`font-size`）は、画面幅に応じて可変にしてよい（以前は、禁止。例: hero の見出しの `clamp()`）。ただし、行の高さ（`line-height`）は整数 rem に丸める（`round(up, 1.2em, 1rem)` など）。余白と幅は、変わらず、セル（横）と rem（縦）の整数倍。

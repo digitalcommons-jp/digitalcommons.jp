@@ -6,7 +6,7 @@
 //   node scripts/sequoia-prune.mjs          # list what would be deleted (default, changes nothing)
 //   node scripts/sequoia-prune.mjs --yes    # delete those records, then drop them from the state
 //
-// Run `npm run prepare:sequoia` first. Credentials are the ones `sequoia auth` saved.
+// Run `pnpm prepare:sequoia` first. Credentials are the ones `sequoia auth` saved.
 // Overrides (tests): SEQUOIA_STATE, SEQUOIA_CONTENT, SEQUOIA_CONFIG, SEQUOIA_CREDENTIALS.
 import fs from 'node:fs';
 import os from 'node:os';
@@ -24,7 +24,7 @@ if (!fs.existsSync(statePath)) {
 }
 if (!fs.existsSync(contentDir)) {
   console.error(
-    `sequoia-prune: ${contentDir} does not exist -- run "npm run prepare:sequoia" first (refusing: every post would look deleted)`
+    `sequoia-prune: ${contentDir} does not exist -- run "pnpm prepare:sequoia" first (refusing: every post would look deleted)`
   );
   process.exit(1);
 }
@@ -59,7 +59,7 @@ if (!apply) {
 const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf-8'));
 const entry = Object.values(credentials).find((c) => c.pdsUrl === config.pdsUrl) ?? Object.values(credentials)[0];
 if (!entry?.password) {
-  console.error('sequoia-prune: no app-password credentials found; run "npx sequoia-cli auth"');
+  console.error('sequoia-prune: no app-password credentials found; run "pnpm exec sequoia-cli auth"');
   process.exit(1);
 }
 const pds = (entry.pdsUrl ?? config.pdsUrl).replace(/\/$/, '');

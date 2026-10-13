@@ -9,8 +9,7 @@ const { page } = Astro.props;
 const { Content } = await render(page);
 ---
 
-<article class="container-cc container-cc-narrow section-lg">
-  <h1 class="heading-1">{page.data.title}</h1>
+<article class="container-cc page-body">
   <div class="prose">
     <Content />
   </div>

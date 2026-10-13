@@ -1,10 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '~/components/frame/Layout.astro';
-import Article from '~/components/04_page/01_article.astro';
+import Hero from '~/components/04_page/01_hero.astro';
+import Article from '~/components/04_page/03_article.astro';
+import Overview from '~/components/04_page/05_overview.astro';
 
 export async function getStaticPaths() {
-  const pages = await getCollection('pages');
+  // 'about', 'join' and 'contact' have their own pages (pages/about.astro, pages/join.astro, pages/contact.astro).
+  const pages = (await getCollection('pages')).filter((p) => !['about', 'join', 'contact'].includes(p.data.slug));
   return pages.map((page) => ({ params: { slug: page.data.slug }, props: { page } }));
 }
 
@@ -12,5 +15,7 @@ const { page } = Astro.props;
 ---
 
 <Layout metadata={{ title: page.data.title, description: page.data.description }}>
+  <Hero page={page} />
   <Article page={page} />
+  <Overview page={page} />
 </Layout>

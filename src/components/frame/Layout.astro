@@ -5,20 +5,23 @@ import { Font } from 'astro:assets';
 
 import CommonMeta from '~/components/head/CommonMeta.astro';
 import Favicons from '~/components/head/Favicons.astro';
-import CustomStyles from '~/components/head/CustomStyles.astro';
 import Metadata from '~/components/head/Metadata.astro';
 import Header from '~/components/frame/01_header.astro';
 import Main from '~/components/frame/03_main.astro';
 import Footer from '~/components/frame/05_footer.astro';
 import { getSetting } from '~/lib/content';
+import { waveMask } from '~/lib/wave';
 
 import type { MetaData as MetaDataType } from '~/types';
 
 export interface Props {
   metadata?: MetaDataType;
+  /** The landing page draws its own fixed wave; every other page gets a generated one. */
+  wave?: boolean;
 }
 
-const { metadata = {} } = Astro.props;
+const { metadata = {}, wave = true } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const site = await getSetting('site');
 ---
 
@@ -28,7 +31,7 @@ const site = await getSetting('site');
     <CommonMeta />
     <Favicons />
     <Font cssVariable="--font-fira" preload />
-    <CustomStyles />
+    <Font cssVariable="--font-fira-code" preload />
     <Metadata {...metadata} />
     <link rel="alternate" type="application/rss+xml" title={site.name} href="/feed.xml" />
     <meta name="fediverse:creator" content={site.fediverse} />
@@ -36,10 +39,24 @@ const site = await getSetting('site');
   </head>
 
   <body>
+    {wave && <div class="page-wave" style={`--wave-mask: ${waveMask(path)}`} aria-hidden="true" />}
     <Header />
     <Main>
       <slot />
     </Main>
     <Footer />
+    <script is:inline>
+      // Rubber-band scrolling past the bottom shows the canvas: switch it to the footer color there (see style.css).
+      (() => {
+        const root = document.documentElement;
+        const update = () => {
+          const max = root.scrollHeight - innerHeight;
+          root.dataset.edge = max > 0 && scrollY >= max - 1 ? 'bottom' : '';
+        };
+        addEventListener('scroll', update, { passive: true });
+        addEventListener('resize', update);
+        update();
+      })();
+    </script>
   </body>
 </html>

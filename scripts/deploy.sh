@@ -22,23 +22,23 @@ dir="${DEPLOY_DIR:-/opt/dc/dist}"
 extra=()
 [ "${1:-}" = "--dry-run" ] && extra+=(--dry-run --itemize-changes)
 
-npm run build
+pnpm build
 
 # standard.site: publish on a throw-away copy of the posts (prepare:sequoia), then put
 # the verification <link> tags into the built pages. Needs `sequoia auth` done as this user.
 # State lives in .sequoia-state.json (gitignored) -- keep it: losing it makes the next run
 # publish the same posts again.
 if [ "${SEQUOIA:-0}" = 1 ]; then
-  npm run --silent prepare:sequoia
+  pnpm --silent prepare:sequoia
   if [ "${1:-}" = "--dry-run" ]; then
-    npx sequoia-cli publish --dry-run
+    pnpm exec sequoia-cli publish --dry-run
     node scripts/sequoia-prune.mjs
-    npx sequoia-cli inject --dry-run
+    pnpm exec sequoia-cli inject --dry-run
   else
-    npx sequoia-cli publish
+    pnpm exec sequoia-cli publish
     # Sequoia never deletes. Unpublishing is a separate, explicit step (PRUNE=1).
     if [ "${PRUNE:-0}" = 1 ]; then node scripts/sequoia-prune.mjs --yes; else node scripts/sequoia-prune.mjs; fi
-    npx sequoia-cli inject
+    pnpm exec sequoia-cli inject
   fi
 fi
 rsync -rlpcz --delete --exclude '.gitkeep' \

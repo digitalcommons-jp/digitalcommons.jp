@@ -6,6 +6,7 @@ import { loadEnv } from 'vite';
 
 import { unified } from '@astrojs/markdown-remark';
 
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import compress from 'astro-compress';
 
@@ -51,9 +52,20 @@ export default defineConfig({
       subsets: ['latin'],
       fallbacks: ['sans-serif'],
     },
+    {
+      // The CCD reference font: only its 1ch (the cell width) is used, as --cc-w; it is not shown as text.
+      provider: fontProviders.fontsource(),
+      name: 'Fira Code',
+      cssVariable: '--font-fira-code',
+      weights: ['400'],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['monospace'],
+    },
   ],
 
   integrations: [
+    react(),
     sitemap({ filter: (page) => !CMS_PATH || !page.includes(CMS_PATH) }),
     cms,
     compress({
