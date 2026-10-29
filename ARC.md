@@ -346,7 +346,7 @@ pnpm dev      # localhost:4321
 pnpm build    # static output into dist/
 ```
 
-Node.js >= 22.22.3
+Node.js >= 26.13.0
 
 ## Deployment
 

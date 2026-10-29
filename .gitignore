@@ -37,5 +37,5 @@ src/assets/images/nez.png
 PLAN-media.md
 ARC.md
 
-# Codeberg (Forgejo) workflow, not used on GitHub
+# Forgejo workflow, not used on GitHub
 .forgejo/

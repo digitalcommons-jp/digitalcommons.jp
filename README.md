@@ -1,6 +1,6 @@
 # digitalcommons.jp
 
-The website of Digital Commons Japan, a non-profit exploring and practicing a better relationship between people and technology.
+The website of Digital Commons JP, a non-profit exploring and practicing a better relationship between people and information technology.
 
 Website: https://digitalcommons.jp/
 
@@ -20,7 +20,7 @@ pnpm dev      # http://localhost:4321
 pnpm build    # static output into dist/
 ```
 
-Requires Node.js >= 22.22.3. For the project layout, conventions, and editing guide, see [ARC.md](./ARC.md).
+Requires Node.js >= 26.13.0. For the project layout, conventions, and editing guide, see [ARC.md](./ARC.md).
 
 ## License
 
