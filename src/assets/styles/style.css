@@ -1935,10 +1935,12 @@ a.follow-tile:hover {
   margin-block-start: 1rem;
 }
 
-/* "[GitHub icon] 2026-10-30 updated": small, muted, at the bottom of the hero text. */
+/* "[GitHub icon] 2026-10-30 updated": small, muted, at the bottom right of the hero (below the picture, if any). */
 .edit-link {
+  clear: both;
   margin-block: 0;
   font-size: 0.875rem;
+  text-align: right;
 }
 
 .edit-link a {
