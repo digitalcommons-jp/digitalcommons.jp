@@ -35,9 +35,7 @@ src/assets/images/nez.png
 
 # Private planning notes
 PLAN-media.md
-
-# Identity-document host (bundled build, maintained elsewhere)
-byo-host.mjs
+ARC.md
 
 # Codeberg (Forgejo) workflow, not used on GitHub
 .forgejo/
