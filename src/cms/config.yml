@@ -137,7 +137,7 @@ collections:
         required: false
         fields:
           - { name: name, label: 名前, widget: string }
-          - { name: languages, label: 話せる言語（例: EN, FR）, widget: string, required: false }
+          - { name: languages, label: "話せる言語（例: EN, FR）", widget: string, required: false }
           - { name: bluesky, label: Bluesky の URL, widget: string, required: false }
           - { name: mastodon, label: Mastodon の URL, widget: string, required: false }
           - { name: didwebvh, label: did:webvh の URL, widget: string, required: false }
