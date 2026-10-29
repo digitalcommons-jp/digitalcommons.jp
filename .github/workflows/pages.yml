@@ -30,6 +30,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm build
+        env:
+          CMS_PATH: ${{ secrets.CMS_PATH }}
 
       - uses: actions/configure-pages@v6
 
