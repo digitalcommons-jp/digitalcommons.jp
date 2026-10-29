@@ -1,13 +1,9 @@
 # Sveltia CMS config. This file is public: no secrets here.
 # Local editing: open the CMS (secret path: CMS_PATH in .env) in Chrome/Edge and choose "Work with Local Repository".
 backend:
-  name: gitea
-  repo: digitalcommons/site
+  name: github
+  repo: digitalcommons-jp/digitalcommons.jp
   branch: main
-  base_url: https://codeberg.org
-  api_root: https://codeberg.org/api/v1
-  # Public client (PKCE, no secret). Its redirect URI is https://digitalcommons.jp/<CMS_PATH>.
-  app_id: 2a48ad7c-a11f-4919-8b8f-92665f30904f
 
 site_url: https://digitalcommons.jp
 app_title: digital commons

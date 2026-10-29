@@ -374,6 +374,7 @@ Hashtag links in GoToSocial posts have the form `https://digitalcommons.jp/tags/
 
 - Location: not `/` but an unguessable secret path. `CMS_PATH` in `.env` (never committed; generate with `openssl rand -hex 12`). It is used only at build time, and builds without `CMS_PATH` do not include the CMS. **Build the CMS-enabled site locally, where `.env` is.**
 - Config: `src/cms/config.yml`
+- Backend: GitHub `digitalcommons-jp/digitalcommons.jp` (branch `main`). Sign in with a personal access token that has write access to the repository; saving a post commits to `main`, which triggers the Pages deployment.
 - Posts: `src/content/posts/*.md`
 
 ## Customization
