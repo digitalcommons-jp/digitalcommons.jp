@@ -1,0 +1,11 @@
+allowBuilds:
+  core-js: false
+  esbuild: true
+
+overrides:
+  yaml: ">=2.8.3"
+  "astro-compress>sharp": ^0.35.3
+  "astro-compress>svgo": ^4.1.0
+  "postcss>nanoid": ^3.3.18
+  deepmerge-ts: ">=8.0.2"
+  fast-uri: ^3.1.6
