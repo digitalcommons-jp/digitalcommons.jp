@@ -17,30 +17,30 @@
     "prune:sequoia": "node scripts/sequoia-prune.mjs"
   },
   "dependencies": {
-    "@astrojs/react": "^7.0.1",
+    "@astrojs/react": "^7.1.1",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.3",
-    "@sveltia/cms": "^0.227.0",
-    "astro": "^7.3.1"
+    "@astrojs/sitemap": "^3.7.4",
+    "@sveltia/cms": "^0.253.1",
+    "astro": "^7.4.2"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/markdown-remark": "^7.3.4",
     "@dicebear/core": "^10.7.0",
     "@dicebear/styles": "^10.6.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "astro-compress": "^2.4.3",
     "boring-avatars": "^2.0.4",
-    "js-yaml": "^4.3.2",
-    "lucide-static": "^1.59.0",
+    "js-yaml": "^5.5.0",
+    "lucide-static": "^1.63.0",
     "potrace": "^2.1.8",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "sequoia-cli": "^0.5.7",
-    "sharp": "^0.35.3",
-    "typescript": "^5.9.3",
-    "vite": "8.3.4"
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3",
+    "vite": "8.3.5"
   },
-  "packageManager": "pnpm@11.11.0"
+  "packageManager": "pnpm@12.16.1"
 }
