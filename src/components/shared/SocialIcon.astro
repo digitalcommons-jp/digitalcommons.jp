@@ -1,9 +1,11 @@
 ---
-// Icon of a social service, drawn with currentColor. didwebvh is a PNG (white on black), so it is shown as a mask.
+// Icon of a social service, drawn with currentColor. didwebvh (white on black) and chat (the Delta Chat logo, black on
+// transparent) are PNGs, so they are shown as masks.
+import deltachat from '~/assets/deltachat-icon.png';
 import didwebvh from '~/assets/didwebvh-icon.png';
 
 interface Props {
-  icon: 'rss' | 'bluesky' | 'mastodon' | 'didwebvh';
+  icon: 'rss' | 'bluesky' | 'mastodon' | 'didwebvh' | 'mail' | 'chat';
 }
 
 const { icon } = Astro.props;
@@ -12,6 +14,8 @@ const { icon } = Astro.props;
 {
   icon === 'didwebvh' ? (
     <span class="icon-didwebvh" style={`--icon: url(${didwebvh.src})`} aria-hidden="true" />
+  ) : icon === 'chat' ? (
+    <span class="icon-deltachat" style={`--icon: url(${deltachat.src})`} aria-hidden="true" />
   ) : (
     <svg
       width="24"
@@ -24,6 +28,14 @@ const { icon } = Astro.props;
       stroke-linejoin="round"
       aria-hidden="true"
     >
+      {
+        icon === 'mail' && (
+          <>
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </>
+        )
+      }
       {icon === 'rss' && <path d="M4 19a1 1 0 1 0 2 0a1 1 0 1 0-2 0M4 4a16 16 0 0 1 16 16M4 11a9 9 0 0 1 9 9" />}
       {
         icon === 'bluesky' && (

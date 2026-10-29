@@ -15,7 +15,7 @@ const projects = (await getProjects()).filter((p) => p.id !== hero?.id);
       title={p.data.title}
       description={p.data.description}
       href={p.data.url}
-      meta={[t(`project.status.${p.data.status}`)]}
+      head={{ kind: 'project', phase: p.data.phase }}
       details={[
         { label: t('project.goal'), value: p.data.goal },
         { label: t('project.deliverable'), value: p.data.deliverable },

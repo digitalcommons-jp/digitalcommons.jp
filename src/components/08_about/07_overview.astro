@@ -1,13 +1,16 @@
 ---
 // General information (団体概要) and a donation appeal. Desktop: one card in two columns. Mobile: two separate cards.
 import type { CollectionEntry } from 'astro:content';
+import Donate from '~/components/shared/Donate.astro';
 import { t } from '~/i18n';
+import { getDonation } from '~/lib/content';
 
 interface Props {
   page: CollectionEntry<'pages'>;
 }
 
-const { overview = [], donation } = Astro.props.page.data;
+const { overview = [] } = Astro.props.page.data;
+const donation = await getDonation();
 ---
 
 {
@@ -26,17 +29,7 @@ const { overview = [], donation } = Astro.props.page.data;
           </dl>
         </div>
       )}
-      {donation && (
-        <div class="overview-donate">
-          <h2 class="overview-donate-title">{donation.title}</h2>
-          <p class="text-muted">{donation.text}</p>
-          <p>
-            <a href={donation.href} class="btn-primary">
-              {donation.button}
-            </a>
-          </p>
-        </div>
-      )}
+      <Donate />
     </section>
   )
 }

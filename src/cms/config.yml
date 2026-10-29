@@ -95,7 +95,7 @@ collections:
       - { name: deliverable, label: 成果物, widget: string }
       - { name: pickup, label: ピックアップ（プロジェクトページの先頭に大きく表示）, widget: boolean, default: false }
       - { name: date, label: 開始日, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
-      - { name: status, label: 状態, widget: select, options: [ongoing, done], default: ongoing }
+      - { name: phase, label: 状態, widget: select, options: [{ label: メンバー募集中, value: prepare }, { label: 進行中, value: build }, { label: 完了, value: close }], default: prepare }
       - { name: url, label: リンク先 URL, widget: string, required: false }
       - { name: image, label: 画像, widget: image, required: false }
       - { name: body, label: 本文, widget: markdown, required: false }
@@ -141,10 +141,12 @@ collections:
         required: false
         fields:
           - { name: name, label: 名前, widget: string }
-          - { name: role, label: 担当, widget: string }
+          - { name: languages, label: 話せる言語（例: EN, FR）, widget: string, required: false }
           - { name: bluesky, label: Bluesky の URL, widget: string, required: false }
           - { name: mastodon, label: Mastodon の URL, widget: string, required: false }
           - { name: didwebvh, label: did:webvh の URL, widget: string, required: false }
+          - { name: chat, label: チャットの URL, widget: string, required: false }
+          - { name: email, label: メールアドレス, widget: string, required: false }
           - name: pgp
             label: PGP 鍵
             widget: object
@@ -169,53 +171,13 @@ collections:
           - { name: label, label: 項目, widget: string }
           - { name: value, label: 内容, widget: string }
       # 以下は「参加する」ページだけが使う。
-      - name: audience
-        label: どんな人を探しているか
-        widget: object
-        required: false
-        fields:
-          - { name: title, label: 見出し, widget: string }
-          - { name: note, label: 見出しの下の注記, widget: string, required: false }
-          - { name: items, label: 項目, widget: list, field: { name: item, label: 内容, widget: string } }
-      - name: roles
-        label: 役割の例
-        widget: object
-        required: false
-        fields:
-          - { name: title, label: 見出し, widget: string }
-          - { name: note, label: 見出しの下の注記, widget: string, required: false }
-          - { name: items, label: 項目, widget: list, field: { name: item, label: 内容, widget: string } }
-      - name: steps
-        label: 参加までの流れ（番号付きで表示）
-        widget: object
-        required: false
-        fields:
-          - { name: title, label: 見出し, widget: string }
-          - { name: note, label: 見出しの下の注記, widget: string, required: false }
-          - { name: items, label: 項目, widget: list, field: { name: item, label: 内容, widget: string } }
-      - name: contact
-        label: お申し込み・お問い合わせ
-        widget: object
-        required: false
-        fields:
-          - { name: title, label: 見出し, widget: string }
-          - { name: text, label: 説明, widget: text }
-          - { name: button, label: ボタンの文言, widget: string }
-          - { name: href, label: ボタンのリンク先, widget: string }
       - name: follow
-        label: 最新情報を受け取る
+        label: フォローする（ページ下のカードの左列。アイコンは RSS・Bluesky・Mastodon。右列は「活動を支えませんか」）
         widget: object
         required: false
         fields:
           - { name: title, label: 見出し, widget: string }
           - { name: text, label: 説明, widget: text }
-          - name: items
-            label: 方法
-            widget: list
-            fields:
-              - { name: label, label: 名前, widget: string }
-              - { name: text, label: 説明, widget: text }
-              - { name: href, label: リンク先（名前をリンクにする場合）, widget: string, required: false }
       - { name: body, label: 本文, widget: markdown, required: false }
 
   - name: settings

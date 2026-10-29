@@ -1,134 +1,133 @@
-# ARC — src/ の構成
+# ARC — structure of src/
 
-`src/` のファイル配置と命名規則。構成を変えたらここも更新する。
+File layout and naming rules for `src/`. Update this file whenever the structure changes.
 
-## 命名規則
+## Naming rules
 
-- **ページ部品はページごとのフォルダに置く**: `src/components/NN_<page>/`。フォルダ番号は `00` から連番。
-- **ファイル名の番号は奇数のみ**（`01_` `03_` `05_` …）。ページ上から下への視覚的な並び順をそのままファイル名に反映する。
-- **偶数は予約**: 後から例外的な部品を差し込むための空き番号。通常は使わない。
-- ページに属さない部品は番号なしのフォルダ（`head/` `frame/` `shared/`）。
-- ルーティングは Astro の制約で `src/pages/` に残す。`pages/*.astro` は `Layout` + 部品を並べるだけの薄いファイル。
+- **Page parts live in one folder per page**: `src/components/NN_<page>/`. Folder numbers run sequentially from `00`.
+- **File-name numbers are odd only** (`01_` `03_` `05_` …). The visual order of the page, top to bottom, is reflected directly in the file names.
+- **Even numbers are reserved**: free slots for inserting exceptional parts later. Normally unused.
+- Parts that belong to no page go in unnumbered folders (`head/` `frame/` `shared/`).
+- Routing stays in `src/pages/` because of an Astro constraint. `pages/*.astro` are thin files that only arrange `Layout` + parts.
 
-## 全体
+## Overview
 
 ```
 src/
-├── assets/            静的アセット（Vite が処理）
+├── assets/            static assets (processed by Vite)
 │   ├── favicons/        favicon.ico / favicon.svg / apple-touch-icon.png
-│   ├── images/          nez-trace.svg（hero のイラスト。購入した PIXTA 素材をトレース。元の nez.png / nez.jpg は git 管理外）
-│   └── styles/style.css 全スタイル（パレット・トークン・コンポーネント class）
-├── cms/               Sveltia CMS（秘密パス CMS_PATH で配信）
-│   ├── admin.astro      管理画面ページ（astro.config.ts の injectRoute で配信）
-│   ├── config.yml       CMS 定義（コレクション・フィールド）
-│   └── config.yml.ts    config.yml を ?raw で返すエンドポイント
-├── components/        → 下記
-├── content/           コンテンツ（content.config.ts のコレクション）
-│   ├── pages/           固定ページ（about / join / contact / privacy）
-│   ├── posts/           記事（イベント記事含む）
-│   ├── projects/        プロジェクト（長期的な取り組み・成果物）
-│   └── settings/        site.yml（サイト名・説明・連絡先）
-├── i18n/ja.ts         UI 文言（キー → 日本語）
-├── i18n/index.ts      t() と formatDate()
+│   ├── images/          nez-trace.svg (hero illustration, traced from a purchased PIXTA asset; the original nez.png / nez.jpg are not in git)
+│   └── styles/style.css all styles (palette, tokens, component classes)
+├── cms/               Sveltia CMS (served at the secret path CMS_PATH)
+│   ├── admin.astro      admin page (injected as a route by astro.config.ts)
+│   ├── config.yml       CMS definition (collections, fields)
+│   └── config.yml.ts    endpoint that returns config.yml via ?raw
+├── components/        → see below
+├── content/           content (collections of content.config.ts)
+│   ├── pages/           fixed pages (about / join / contact / privacy)
+│   ├── posts/           posts (including event posts)
+│   ├── projects/        projects (long-term efforts and deliverables)
+│   └── settings/        site.yml (site name, description, contact)
+├── i18n/ja.ts         UI strings (key → Japanese)
+├── i18n/index.ts      t() and formatDate()
 ├── lib/
 │   ├── content.ts       getPosts / getEvents / getTags / getSetting …
-│   ├── calendar.ts      jstParts / monthGrid（イベントカレンダー用）
-│   ├── nav.ts           メインメニューの定義（ヘッダーとフッターが共用）
-│   └── markdown.ts      rehype プラグイン（表を横スクロール可能にする。astro.config.ts から読込）
-├── pages/             ルーティングのみ
-├── content.config.ts  コレクション schema
-├── env.d.ts           型参照
-└── types.d.ts         `~/types`（MetaData）
+│   ├── calendar.ts      jstParts / monthGrid (for the event calendar)
+│   ├── nav.ts           main menu definition (shared by header and footer)
+│   └── markdown.ts      rehype plugin (makes tables horizontally scrollable; loaded from astro.config.ts)
+├── pages/             routing only
+├── content.config.ts  collection schemas
+├── env.d.ts           type references
+└── types.d.ts         `~/types` (MetaData)
 ```
 
 ## components/
 
 ```
 components/
-├── head/              <head> 内の非表示部品（Layout が使用）
+├── head/              invisible parts inside <head> (used by Layout)
 │   ├── CommonMeta.astro
 │   ├── Favicons.astro
 │   └── Metadata.astro
-├── frame/             全ページ共通の枠。Layout が <head> と下の 3 つを組み立てる
-│   ├── Layout.astro       全ページを包むテンプレート（番号なし）
+├── frame/             frame shared by all pages. Layout assembles <head> and the three parts below
+│   ├── Layout.astro       template wrapping every page (unnumbered)
 │   ├── 01_header.astro
 │   ├── 03_main.astro      <main><slot/></main>
 │   └── 05_footer.astro
-├── shared/            ページ横断で再利用する部品
-│   ├── PageHero.astro     一覧ページの先頭行（タイトル）
-│   ├── ItemRow.astro      イベント・プロジェクト・記事の 1 行
-│   └── LogoBlock.astro    ヘッダのロゴ（digital / commons の 2 行）
+├── shared/            parts reused across pages
+│   ├── PageHero.astro     first row of list pages (title)
+│   ├── ItemRow.astro      one row for an event / project / post (header + heading + description; the header is ItemHead)
+│   ├── Donate.astro       "Support our activities" (right column of the about / join cards; copy comes from `donation` in about.md)
+│   ├── ItemHead.astro     one-line header of a project / event card (icon for the kind + status: recruiting members / in progress / done / date held)
+│   └── LogoBlock.astro    header logo (two lines: digital / commons)
 │
-├── 00_home/           pages/index.astro（上から並べる行。各部品は最外側が全幅の `<section class="row">`）
+├── 00_home/           pages/index.astro (rows stacked top to bottom; each part's outermost element is a full-width `<section class="row">`)
 │   ├── 01_hero.astro
 │   ├── 03_event.astro
 │   └── 05_project.astro
-├── 01_events/         pages/events.astro
-│   ├── 01_hero.astro      直近の開催予定 1 件
-│   ├── 03_list.astro      残りの開催予定（日付の新しい順）
-│   └── 05_event_navigation.astro  過去のイベントへのリンク + 当月カレンダー
 ├── 02_post/           pages/posts/[slug].astro
-│   ├── 01_header.astro    日付・タグ・タイトル
-│   ├── 03_event-details.astro  イベント記事のみ表示
-│   └── 05_body.astro      Markdown 本文
+│   ├── 01_header.astro    date, tags, title
+│   ├── 03_event-details.astro  shown for event posts only
+│   └── 05_body.astro      Markdown body
 ├── 03_tag/            pages/tags/[tag].astro
 │   ├── 01_hero.astro
 │   └── 03_list.astro
-├── 04_page/           pages/[slug].astro（privacy など Markdown 固定ページ共通。hero は about / join / contact も使う）
-│   ├── 01_hero.astro      タイトル + 説明文（lead）。frontmatter の image / art があれば右に図（位置は artPosition、回り込みは artWrap。アップロード画像、または種から生成する DiceBear Shapes）
-│   └── 03_article.astro   Markdown 本文
+├── 04_page/           pages/[slug].astro (shared by Markdown fixed pages such as privacy; the hero is also used by about / join / contact)
+│   ├── 01_hero.astro      title + lead text. If the frontmatter has image / art, a figure is shown on the right (position: artPosition, text wrap: artWrap; an uploaded image, or DiceBear Shapes generated from a seed)
+│   └── 03_article.astro   Markdown body
 ├── 05_not-found/      pages/404.astro
 │   └── 01_message.astro
-├── 06_projects/       pages/projects.astro
-│   ├── 01_hero.astro
-│   └── 03_list.astro
+├── 06_actions/        pages/actions.astro (projects are the parents; upcoming events follow as cards)
+│   ├── 01_hero.astro      one featured project
+│   ├── 03_list.astro      remaining projects
+│   ├── 05_events.astro    upcoming events (cards, soonest first)
+│   └── 07_event_navigation.astro  link to past events + calendar of the current month (rigid_card)
 ├── 07_past-events/    pages/events/past.astro
 │   ├── 01_hero.astro
 │   └── 03_list.astro
 ├── 08_about/          pages/about.astro
-│   ├── 03_about.astro     mission + approaches（全幅・背景なし）
-│   ├── 05_members.astro   運営メンバー（アバター / 名前・担当・SNS / PGP 鍵の帯。全幅・背景なし）
-│   └── 07_overview.astro  団体概要（カード）
-├── 09_contact/        pages/contact.astro
-└── 10_join/           pages/join.astro（hero は 04_page/01_hero）
-    ├── 03_guide.astro     audience / roles / steps（全幅・背景なし。steps は番号付き）
-    └── 05_contact.astro   follow（左）+ contact（右）のカード
+│   ├── 03_about.astro     mission + approaches (full width, no background)
+│   ├── 05_members.astro   members (two columns on desktop. Each member: avatar / name, with the language label and SNS to its right, and a PGP key band below. No background)
+│   └── 07_overview.astro  organization overview (card)
+├── 09_contact/        pages/contact.astro (consultation: hero + Markdown body (04_page/03_article) + consultation form)
+└── 10_join/           pages/join.astro (the hero is 04_page/01_hero)
+    ├── 03_guide.astro     the whole Markdown body (a section per `##`, keyword labels, forms, `<div class="card">` cards. Full width, no background)
+    └── 05_follow.astro    card with Follow (left; content is `follow` in join.md) + Support our activities (right; shared/Donate)
 ```
 
-### セクションの種類（用語）
+### Section kinds (terminology)
 
-- **fluid_section**（`.fluid-section`）: 画面の幅に応じてレイアウトが変わるセクション。モバイル（672px 未満）では full-width（margin 0・角丸なし）、デスクトップ（672px 以上）では card（margin 1rem・角丸 1rem）。スクロールでは変わらない（以前あった、スクロールに応じた切り替えは廃止した）。`shared/ItemRow.astro` の行がこれ。
-- **rigid_section**: レイアウトが動かないセクション。
-  - **rigid_card**（`.rigid-card`）: 常にカードの形（margin 1rem、角丸 1rem。幅は問わない）。`01_events/05_event_navigation.astro` がこれ。
-  - hero / page-hero は、常に full-width で動かない。
+- **fluid_section** (`.fluid-section`): a section whose layout changes with the screen width. On mobile (under 672px) it is full-width (margin 0, no rounded corners); on desktop (672px and up) it is a card (margin 1rem, radius 1rem). It does not change on scroll (the former scroll-dependent switching was removed). The rows in `shared/ItemRow.astro` are this kind.
+- **rigid_section**: a section whose layout does not move.
+  - **rigid_card** (`.rigid-card`): always a card (margin 1rem, radius 1rem, regardless of width). `06_actions/07_event_navigation.astro` is this kind.
+  - hero / page-hero are always full-width and do not move.
 
-### ページとルートの対応
+### Pages and routes
 
-| URL                                                 | route                      | 部品                                          |
-| --------------------------------------------------- | -------------------------- | --------------------------------------------- |
-| `/`                                                 | `pages/index.astro`        | `00_home/*`                                   |
-| `/events`                                           | `pages/events.astro`       | `01_events/*`                                 |
-| `/posts/<id>`                                       | `pages/posts/[slug].astro` | `02_post/*`                                   |
-| `/tags/<tag>`                                       | `pages/tags/[tag].astro`   | `03_tag/*`                                    |
-| `/privacy`                                          | `pages/[slug].astro`       | `04_page/*`（本文は `content/pages/*.md`） |
-| `/join`                                             | `pages/join.astro`         | `04_page/01_hero` + `10_join/*`（内容は `content/pages/join.md` の frontmatter） |
-| `/about`                                            | `pages/about.astro`        | `08_about/*`（内容は `content/pages/about.md` の frontmatter） |
-| `/events/past`                                      | `pages/events/past.astro`  | `07_past-events/*`                             |
-| `/projects`                                         | `pages/projects.astro`     | `06_projects/*`                               |
-| 404                                                 | `pages/404.astro`          | `05_not-found/*`                              |
-| `/feed.xml`                                         | `pages/feed.xml.ts`        | なし（RSS）                                   |
+| URL                | route                      | parts                                         |
+| ------------------ | -------------------------- | --------------------------------------------- |
+| `/`                | `pages/index.astro`        | `00_home/*`                                   |
+| `/actions`         | `pages/actions.astro`      | `06_actions/*`                                |
+| `/posts/<id>`      | `pages/posts/[slug].astro` | `02_post/*`                                   |
+| `/tags/<tag>`      | `pages/tags/[tag].astro`   | `03_tag/*`                                    |
+| `/privacy`         | `pages/[slug].astro`       | `04_page/*` (body is `content/pages/*.md`)    |
+| `/join`            | `pages/join.astro`         | `04_page/01_hero` + `10_join/*` (sections come from the body of `content/pages/join.md`; forms are written as HTML in the body; the cards below use `follow` (frontmatter) + `shared/Donate`) |
+| `/about`           | `pages/about.astro`        | `08_about/*` (content is the frontmatter of `content/pages/about.md`) |
+| `/events/past`     | `pages/events/past.astro`  | `07_past-events/*`                            |
+| 404                | `pages/404.astro`          | `05_not-found/*`                              |
+| `/feed.xml`        | `pages/feed.xml.ts`        | none (RSS)                                    |
 
 ---
 
-## CCD — Character-Cell Design（寸法の設計規則）
+## CCD — Character-Cell Design (dimension rules)
 
-### 概要
+### Overview
 
-CCD（Character-Cell Design）の原則をブラウザ上で実現するための実装仕様。
+Implementation spec for realizing the principles of CCD (Character-Cell Design) in the browser.
 
-### 1. 基本単位
+### 1. Base unit
 
-セルの幅は、基準の等幅フォント **Fira Code**（Google Fonts。Astro のフォント機能で、サイトに同梱）の `1ch` で決まる。表示する文字は、比例フォント（Fira Sans）のままでよい。等幅フォントは、セルの寸法を測るための基準にだけ使う。
+The cell width is determined by `1ch` of the reference monospace font **Fira Code** (Google Fonts, bundled with the site via Astro's font feature). The characters actually displayed can stay in a proportional font (Fira Sans). The monospace font is used only as the ruler for cell dimensions.
 
 ```css
 @property --cc-w {
@@ -143,49 +142,49 @@ CCD（Character-Cell Design）の原則をブラウザ上で実現するため�
 }
 
 body {
-  font-family: var(--font-fira), ...; /* 表示するフォント（比例） */
-  line-height: 2rem; /* 日本語は 2rem 必須 */
+  font-family: var(--font-fira), ...; /* displayed font (proportional) */
+  line-height: 2rem; /* 2rem is required for Japanese */
 }
 ```
 
-`@property` で長さ型として登録すると、`:root`（等幅フォント）で計算された `--cc-w` が、別のフォントを使う子要素にも、固定の px 値としてそのまま継承される。JS を使わずに、「表示は比例フォント、セルは等幅フォント」が成立する。Fira Code はサイトに同梱するので、どの端末でも `--cc-w` は同じ値（9.6px）になる。
+Registering `--cc-w` as a length with `@property` makes the value computed on `:root` (monospace font) inherit as a fixed px value into children that use another font. This gives "proportional font for display, monospace font for cells" without JS. Fira Code is bundled with the site, so `--cc-w` has the same value (9.6px) on every device.
 
-横方向はすべて `var(--cc-w)` の整数倍、縦方向はすべて `rem` の整数倍で表現する。
+Everything horizontal is an integer multiple of `var(--cc-w)`; everything vertical is an integer multiple of `rem`.
 
-#### `1lh` ではなく `rem` を使う理由
+#### Why `rem` instead of `1lh`
 
-`lh` はその要素自身の line-height を参照する。`font-size: 4rem` の h1 に `margin: 1lh` を適用すると `4rem` になる。body基準の1セルには `1rem` を使う。
+`lh` refers to the element's own line-height. Applying `margin: 1lh` to an h1 with `font-size: 4rem` gives `4rem`. Use `1rem` for one body-based cell.
 
-### 2. グリッドスナップ（JS）— 未実装
+### 2. Grid snapping (JS) — not implemented
 
-> いまは未実装。Fira Code を同梱して `--cc-w` が端末によらず固定なので、必須ではない。画面の幅が、セル幅の整数倍に収まらないための端数が気になる場合に、導入する。
+> Not implemented at the moment. Fira Code is bundled and `--cc-w` is fixed across devices, so it is not required. Introduce it if the remainder left by screen widths that are not integer multiples of the cell width becomes a concern.
 
-`1ch` はフォントと環境によって非整数pxになる。CSSの `auto` / `fr` はpx空間で演算するため誤差が蓄積する。JSによるスナップでこれを解消する。
+`1ch` can be a non-integer px value depending on font and environment. CSS `auto` / `fr` compute in px space, so errors accumulate. Snapping in JS resolves this.
 
-#### 処理フロー
+#### Flow
 
 ```
-1. ruler要素で 1ch の実測px値を取得
-2. --cc-w をその値に更新（CSSが再計算される）
-3. 全要素のインラインwidthをリセット
-4. requestAnimationFrame で新 --cc-w 適用後のレイアウトを測定
-5. 全ブロックのwidthを chPx の整数倍にスナップ
-6. paddingBlockEnd を調整して下端を remPx の整数倍にスナップ
-7. コンテナを chPx 整合で中央寄せ
-8. グリッド列幅を明示計算・設定
+1. Measure the px value of 1ch with a ruler element
+2. Update --cc-w to that value (CSS recomputes)
+3. Reset the inline width of every element
+4. Measure the layout after the new --cc-w with requestAnimationFrame
+5. Snap the width of every block to an integer multiple of chPx
+6. Adjust paddingBlockEnd to snap the bottom edge to an integer multiple of remPx
+7. Center the container consistently with chPx
+8. Compute and set the grid column widths explicitly
 ```
 
-#### グリッド列の計算
+#### Grid column calculation
 
 ```js
-// 等分割 (data-cols="N")
+// equal split (data-cols="N")
 const colPx = Math.floor((elW - gapsPx) / cols / chPx) * chPx;
 
-// 左固定 (data-left-cols="N")
+// fixed left (data-left-cols="N")
 const rightPx = Math.floor((innerPx - leftPx - gapPx) / chPx) * chPx;
 ```
 
-#### ブロック終端スナップ
+#### Block-end snapping
 
 ```js
 const remainder = blockHeight % remPx;
@@ -194,60 +193,60 @@ if (remainder > 0.01) {
 }
 ```
 
-ブロック終端をremグリッドに揃えることで、次のブロックの開始位置が保証される。
+Aligning the block end to the rem grid guarantees where the next block starts.
 
-#### パフォーマンス
+#### Performance
 
-- 初回: ロード時1回のみ
-- リサイズ: デバウンス100ms後
-- スクロール: 登録なし
+- Initial: once on load
+- Resize: after a 100ms debounce
+- Scroll: not registered
 
-### 3. タイポグラフィ
+### 3. Typography
 
-#### line-height の選択
+#### Choosing line-height
 
-line-height は可読性を優先して選ぶ。ブロック終端の整合はJSが保証する。
+Choose line-height for readability first. The JS guarantees block-end alignment.
 
 ```
-TUI向けmonospace（低 x-height）  → line-height: 1rem で成立
-コード向けmonospace（高 x-height）→ line-height: 2rem 推奨
-proportional serif/sans          → line-height: 2rem 以上
-CJK                              → line-height: 2rem 必須
+TUI-oriented monospace (low x-height)   → line-height: 1rem works
+Code-oriented monospace (high x-height) → line-height: 2rem recommended
+proportional serif/sans                 → line-height: 2rem or more
+CJK                                     → line-height: 2rem required
 ```
 
-`1rem` から試し、視覚的に成立する最小の整数remを選ぶ。
+Start from `1rem` and pick the smallest integer rem that looks right.
 
-#### セル占有の定義
+#### Definition of cell occupancy
 
-「セルを占有する」= ラインボックス境界の整合。グリフ（ink）の整合ではない。ink overflow はレイアウト違反ではない。
+"Occupying a cell" = alignment of line-box boundaries, not of glyphs (ink). Ink overflow is not a layout violation.
 
-### 4. スペーシング
+### 4. Spacing
 
-横方向: `calc(N * var(--cc-w))`
-縦方向: `calc(N * 1rem)`
+Horizontal: `calc(N * var(--cc-w))`
+Vertical: `calc(N * 1rem)`
 
-#### 0.5rem 例外
+#### The 0.5rem exception
 
-縦方向のみ許可。上下対称に使用し合計が整数セルになること。
+Vertical only. Use it symmetrically so the total is a whole number of cells.
 
 ```css
-padding-block: 0.5rem; /* ✓ 合計 1rem */
-padding-block-start: 0.5rem; /* ✗ 非対称 */
+padding-block: 0.5rem; /* ✓ total 1rem */
+padding-block-start: 0.5rem; /* ✗ asymmetric */
 ```
 
-背景: `1lh > 1ch`（等幅フォントは縦長）。縦 padding を整数remにすると視覚的に過大になるため、0.5rem で対称的に詰められるようにしている。
+Background: `1lh > 1ch` (monospace fonts are tall). Integer-rem vertical padding looks visually too large, so 0.5rem lets it be tightened symmetrically.
 
-### 5. ボーダー
+### 5. Borders
 
-`border` はbox modelに影響しセルサイズが崩れる。`box-shadow: inset` を使う。
+`border` affects the box model and breaks cell sizes. Use `box-shadow: inset`.
 
 ```css
 box-shadow: inset 0 0 0 1px currentColor;
 ```
 
-### 6. レイアウト
+### 6. Layout
 
-#### コンテナ
+#### Container
 
 ```css
 .container {
@@ -257,38 +256,38 @@ box-shadow: inset 0 0 0 1px currentColor;
 }
 ```
 
-#### カラム
+#### Columns
 
 ```css
-/* JSが gridTemplateColumns を明示設定 */
-[data-cols="N"]      /* 等分割Nカラム */
-[data-left-cols="N"] /* 左N列固定 + 右auto */
+/* JS sets gridTemplateColumns explicitly */
+[data-cols="N"]      /* N equal columns */
+[data-left-cols="N"] /* fixed N columns on the left + auto on the right */
 ```
 
-ガター幅もセル数で指定する。
+Gutter widths are also specified in cells.
 
-### 7. フォントモデル
+### 7. Font model
 
-#### 基準フォント
+#### Reference font
 
-1つのmonospaceフォントが `1ch` の物理pxを定義する。TUI向けに設計されたフォント（inkがem-squareに収まる設計）がCCDSに最も適合する。
+One monospace font defines the physical px of `1ch`. Fonts designed for TUIs (ink fits within the em-square) suit CCD best.
 
 ```
 Terminus, Fixedsys, Perfect DOS VGA, Unistra A
 ```
 
-コード向けフォント（JetBrains Mono, Cascadia Code等）はx-heightが高く、`line-height: 1rem` では詰まりやすい。
+Code-oriented fonts (JetBrains Mono, Cascadia Code, etc.) have a high x-height and tend to look cramped at `line-height: 1rem`.
 
-#### CJKとの整合
+#### Alignment with CJK
 
-基準フォントが `1ch = 0.5em` の関係を持つとき、CJK文字（1em）は自然に2セルに整合する。この条件はフォント依存。
+When the reference font has `1ch = 0.5em`, CJK characters (1em) naturally align to 2 cells. This condition depends on the font.
 
 ```
-ui-monospace (SF Mono): 1ch = 0.5em → CJK = 2セル ✓
-Menlo等:               1ch ≠ 0.5em → CJK がずれる可能性
+ui-monospace (SF Mono): 1ch = 0.5em → CJK = 2 cells ✓
+Menlo etc.:             1ch ≠ 0.5em → CJK may drift
 ```
 
-### 8. コンポーネント
+### 8. Components
 
 #### Button
 
@@ -314,23 +313,23 @@ Menlo等:               1ch ≠ 0.5em → CJK がずれる可能性
 }
 ```
 
-### 9. ルール
+### 9. Rules
 
-#### 端数セル禁止
+#### No fractional cells
 
-端数セルは存在しない。0.5・1.5・2.75 などの端数倍は禁止。
+Fractional cells do not exist. Fractional multiples such as 0.5, 1.5, 2.75 are forbidden.
 
-例外: 縦方向のみ 0.5 セルを許可。上下対称に使用し合計が整数セルになること。
+Exception: 0.5 cell is allowed vertically only, used symmetrically so the total is a whole number of cells.
 
-#### テキスト揃え
+#### Text alignment
 
 ```
-left    — 推奨
-right   — 許可（数値・ラベル等）
-center  — 許可（以前は原則禁止。文字数が奇数のとき半セルずれる点は、許容する）
-justify — 禁止（文字間隔が変化しグリッドが崩れる）
+left    — recommended
+right   — allowed (numbers, labels, etc.)
+center  — allowed (formerly discouraged; the half-cell drift for odd character counts is accepted)
+justify — forbidden (varying letter spacing breaks the grid)
 ```
 
-#### レスポンシブ
+#### Responsive
 
-レスポンシブ対応はセル数の再配分で行う。表示する文字のサイズ（`font-size`）は、画面幅に応じて可変にしてよい（以前は、禁止。例: hero の見出しの `clamp()`）。ただし、行の高さ（`line-height`）は整数 rem に丸める（`round(up, 1.2em, 1rem)` など）。余白と幅は、変わらず、セル（横）と rem（縦）の整数倍。
+Responsiveness is achieved by redistributing cell counts. The font size (`font-size`) of displayed text may vary with screen width (formerly forbidden; e.g. `clamp()` for the hero heading). Line height (`line-height`), however, is rounded to an integer rem (e.g. `round(up, 1.2em, 1rem)`). Margins and widths remain integer multiples of cells (horizontal) and rem (vertical).

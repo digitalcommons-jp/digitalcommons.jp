@@ -1,0 +1,37 @@
+---
+// One-line header of every card (project / event / post): an icon that tells the kind, then the project's current
+// state (メンバー募集中 / 進行中 / 完了, in the accent color), the event's facts (date, 開催), or the post's date.
+import calendar from 'lucide-static/icons/calendar.svg?raw';
+import fileText from 'lucide-static/icons/file-text.svg?raw';
+import folderKanban from 'lucide-static/icons/folder-kanban.svg?raw';
+import { t } from '~/i18n';
+
+interface Props {
+  kind: 'project' | 'event' | 'post';
+  /** Project: the current phase. */
+  phase?: 'prepare' | 'build' | 'close';
+  /** Event / post: facts after the icon (date, ...). */
+  meta?: string[];
+  /** Event: a cancelled event reads 中止 instead of 開催. */
+  cancelled?: boolean;
+}
+
+const { kind, phase, meta = [], cancelled = false } = Astro.props;
+const icon = { project: folderKanban, event: calendar, post: fileText }[kind];
+---
+
+<p class="item-head">
+  <span class="item-head-icon" aria-hidden="true" set:html={icon} />
+  {
+    kind === 'project' ? (
+      phase && <span class="item-head-state">{t(`project.phase.${phase}`)}</span>
+    ) : (
+      <>
+        {meta.map((m) => (
+          <span>{m}</span>
+        ))}
+        {kind === 'event' && <span>{cancelled ? t('event.status.cancelled') : t('event.held')}</span>}
+      </>
+    )
+  }
+</p>

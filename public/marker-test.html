@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex" />
+<title>marker test</title>
+<style>
+  :root { --black: rgb(32 36 34); --primary: #1d9c81; --peach: rgb(228 155 121); --page-bg: color-mix(in srgb, var(--peach) 12%, #fff); --accent: color-mix(in srgb, var(--peach) 80%, var(--black)); }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; color: var(--black); background: #ddd; }
+  h1 { font-size: 1rem; margin: 1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1rem; padding: 0 1rem 2rem; }
+  .pal { background: var(--page-bg); border-radius: 0.5rem; padding: 1.5rem; }
+  .tag { font-size: 0.75rem; font-weight: 700; color: var(--accent); margin-bottom: 0.75rem; }
+  .title { font-size: 2rem; font-weight: 800; line-height: 1.5; margin: 0 0 1rem; }
+  .marker { box-shadow: inset 0 -0.2em 0 color-mix(in srgb, var(--mk) var(--op), transparent); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  p { line-height: 1.8; font-size: 0.9375rem; }
+  .btn { padding: 0.5rem 1.25rem; border-radius: 62.4375rem; font: inherit; font-weight: 700; border: 0; background: var(--primary); color: #fff; }
+  .cal { display: flex; gap: 0.5rem; margin-top: 1rem; }
+  .cal span { width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 62.4375rem; font-weight: 700; font-size: 0.875rem; }
+  .cal .ev { box-shadow: inset 0 0 0 0.125rem var(--ev); color: var(--ev); }
+  .cal .ev.hover { background: var(--ev); color: #fff; }
+  .note { font-size: 0.6875rem; opacity: .6; margin-top: 0.75rem; }
+</style></head><body>
+<h1>marker test (temporary: delete public/marker-test.html when done)</h1>
+<div class="grid">
+<section class="pal" style="--mk: rgb(255 214 0); --ev: rgb(29 78 216); --op: 75%">
+  <div class="tag">今</div>
+  <h2 class="title">よりよい<span class="marker">デジタル社会</span>を<br />一緒に作りませんか</h2>
+  <p>どんな小さなことからでもはじめられます。</p>
+  <button class="btn">参加する</button>
+  <div class="cal"><span>12</span><span class="ev">14</span><span class="ev hover">21</span><span>25</span></div>
+  <div class="note">marker: rgb(255 214 0) / event: rgb(29 78 216) / opacity 75%</div>
+</section>
+<section class="pal" style="--mk: rgb(245 205 100); --ev: var(--primary); --op: 75%">
+  <div class="tag">a. バターイエロー</div>
+  <h2 class="title">よりよい<span class="marker">デジタル社会</span>を<br />一緒に作りませんか</h2>
+  <p>どんな小さなことからでもはじめられます。</p>
+  <button class="btn">参加する</button>
+  <div class="cal"><span>12</span><span class="ev">14</span><span class="ev hover">21</span><span>25</span></div>
+  <div class="note">marker: rgb(245 205 100) / event: var(--primary) / opacity 75%</div>
+</section>
+<section class="pal" style="--mk: rgb(240 190 70); --ev: var(--accent); --op: 75%">
+  <div class="tag">a2. バターイエロー(濃いめ)</div>
+  <h2 class="title">よりよい<span class="marker">デジタル社会</span>を<br />一緒に作りませんか</h2>
+  <p>どんな小さなことからでもはじめられます。</p>
+  <button class="btn">参加する</button>
+  <div class="cal"><span>12</span><span class="ev">14</span><span class="ev hover">21</span><span>25</span></div>
+  <div class="note">marker: rgb(240 190 70) / event: var(--accent) / opacity 75%</div>
+</section>
+<section class="pal" style="--mk: var(--primary); --ev: var(--primary); --op: 30%">
+  <div class="tag">b. primary 系</div>
+  <h2 class="title">よりよい<span class="marker">デジタル社会</span>を<br />一緒に作りませんか</h2>
+  <p>どんな小さなことからでもはじめられます。</p>
+  <button class="btn">参加する</button>
+  <div class="cal"><span>12</span><span class="ev">14</span><span class="ev hover">21</span><span>25</span></div>
+  <div class="note">marker: var(--primary) / event: var(--primary) / opacity 30%</div>
+</section>
+<section class="pal" style="--mk: var(--peach); --ev: var(--accent); --op: 45%">
+  <div class="tag">c. ピーチ系</div>
+  <h2 class="title">よりよい<span class="marker">デジタル社会</span>を<br />一緒に作りませんか</h2>
+  <p>どんな小さなことからでもはじめられます。</p>
+  <button class="btn">参加する</button>
+  <div class="cal"><span>12</span><span class="ev">14</span><span class="ev hover">21</span><span>25</span></div>
+  <div class="note">marker: var(--peach) / event: var(--accent) / opacity 45%</div>
+</section>
+</div></body></html>

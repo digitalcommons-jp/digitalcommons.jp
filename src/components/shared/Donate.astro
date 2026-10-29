@@ -1,0 +1,21 @@
+---
+// The donation appeal ("活動を支えませんか"): the right column of the about / join cards (.overview). The text is
+// written once, in the about page's `donation` (see getDonation).
+import { getDonation } from '~/lib/content';
+
+const donation = await getDonation();
+---
+
+{
+  donation && (
+    <div class="overview-donate">
+      <h2 class="item-row-label">{donation.title}</h2>
+      <p class="text-muted">{donation.text}</p>
+      <p>
+        <a href={donation.href} class="btn-primary">
+          {donation.button}
+        </a>
+      </p>
+    </div>
+  )
+}

@@ -1,0 +1,15 @@
+---
+import Layout from '~/components/frame/Layout.astro';
+import Hero from '~/components/06_actions/01_hero.astro';
+import List from '~/components/06_actions/03_list.astro';
+import Events from '~/components/06_actions/05_events.astro';
+import EventNavigation from '~/components/06_actions/07_event_navigation.astro';
+import { t } from '~/i18n';
+---
+
+<Layout metadata={{ title: t('actions.title') }}>
+  <Hero />
+  <List />
+  <Events />
+  <EventNavigation />
+</Layout>

@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import Layout from '~/components/frame/Layout.astro';
 import Hero from '~/components/04_page/01_hero.astro';
 import Guide from '~/components/10_join/03_guide.astro';
-import Contact from '~/components/10_join/05_contact.astro';
+import Follow from '~/components/10_join/05_follow.astro';
 
 const page = (await getEntry('pages', 'join'))!;
 ---
@@ -11,5 +11,5 @@ const page = (await getEntry('pages', 'join'))!;
 <Layout metadata={{ title: page.data.title, description: page.data.description }}>
   <Hero page={page} />
   <Guide page={page} />
-  <Contact page={page} />
+  <Follow page={page} />
 </Layout>

@@ -1,20 +1,14 @@
 ---
 import { t } from '~/i18n';
 import { nav } from '~/lib/nav';
-import { getSetting } from '~/lib/content';
+import { getSetting, getSocialLinks } from '~/lib/content';
 import { waveMask } from '~/lib/wave';
 import LogoBlock from '~/components/shared/LogoBlock.astro';
 import SocialIcon from '~/components/shared/SocialIcon.astro';
 
 const site = await getSetting('site');
 
-// '@user@host' -> https://host/@user
-const [, user, host] = site.fediverse.split('@');
-const social = [
-  { label: 'RSS', href: '/feed.xml', icon: 'rss' as const },
-  { label: 'Bluesky', href: `https://bsky.app/profile/${site.bluesky}`, icon: 'bluesky' as const },
-  { label: 'Mastodon', href: `https://${host}/@${user}`, icon: 'mastodon' as const },
-];
+const social = await getSocialLinks();
 ---
 
 <footer class="site-footer">
@@ -55,7 +49,7 @@ const social = [
 
       <ul class="footer-links">
         <li><a href="/privacy">{t('footer.privacy')}</a></li>
-        <li><a href="/contact">{t('footer.contact')}</a></li>
+        <li><a href="mailto:contact@digitalcommons.jp">{t('footer.contact')}</a></li>
       </ul>
     </div>
   </div>

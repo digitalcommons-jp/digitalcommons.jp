@@ -53,14 +53,12 @@ const projects = defineCollection({
       /** Show this project as the hero (otherwise the newest project is used). */
       pickup: z.boolean().default(false),
       date: z.coerce.date(),
-      status: z.enum(['ongoing', 'done']).default('ongoing'),
+      /** Where the project is: メンバー募集中 / 進行中 / 完了. */
+      phase: z.enum(['prepare', 'build', 'close']).default('prepare'),
       url: blank(z.string().optional()),
       image: blank(image().optional()),
     }),
 });
-
-// A titled list of short lines (the join page). `note` is a small remark under the heading.
-const list = z.object({ title: z.string(), note: z.string().optional(), items: z.array(z.string()) });
 
 const pages = defineCollection({
   loader: glob({ pattern: '*.md', base: 'src/content/pages' }),
@@ -84,10 +82,12 @@ const pages = defineCollection({
         .array(
           z.object({
             name: z.string(),
-            role: z.string(),
+            languages: z.string().optional(), // e.g. "EN, FR": shown as small labels beside the name
             bluesky: blank(z.string().optional()),
             mastodon: blank(z.string().optional()),
             didwebvh: blank(z.string().optional()),
+            chat: blank(z.string().optional()), // URL of a chat room or profile
+            email: blank(z.string().optional()), // an address (shown as a mailto: link)
             pgp: z.object({ fingerprint: z.string(), file: z.string() }).optional(),
           }),
         )
@@ -95,19 +95,14 @@ const pages = defineCollection({
       donation: z.object({ title: z.string(), text: z.string(), button: z.string(), href: z.string() }).optional(),
       overviewTitle: z.string().optional(), // heading of the overview card (default: 団体概要)
       overview: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
-      // Only the join page uses the fields below (see pages/join.astro).
-      audience: list.optional(),
-      roles: list.optional(),
-      steps: list.optional(), // shown as a numbered list
-      contact: z.object({ title: z.string(), text: z.string(), button: z.string(), href: z.string() }).optional(),
+      // Only the join page uses `follow` (see 10_join/05_follow.astro).
       follow: z
         .object({
           title: z.string(),
           text: z.string(),
-          items: z.array(z.object({ label: z.string(), text: z.string(), href: blank(z.string().optional()) })),
         })
         .optional(),
-    }),
+          }),
 });
 
 const settings = defineCollection({

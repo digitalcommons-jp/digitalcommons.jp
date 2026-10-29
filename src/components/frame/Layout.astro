@@ -53,7 +53,15 @@ const site = await getSetting('site');
           const max = root.scrollHeight - innerHeight;
           root.dataset.edge = max > 0 && scrollY >= max - 1 ? 'bottom' : '';
         };
+        // The scrollbar is only shown while scrolling (data-scrolling; see style.css).
+        let idle;
+        const wake = () => {
+          root.dataset.scrolling = '';
+          clearTimeout(idle);
+          idle = setTimeout(() => delete root.dataset.scrolling, 1000);
+        };
         addEventListener('scroll', update, { passive: true });
+        addEventListener('scroll', wake, { passive: true });
         addEventListener('resize', update);
         update();
       })();

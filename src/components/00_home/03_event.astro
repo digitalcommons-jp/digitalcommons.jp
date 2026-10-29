@@ -12,11 +12,10 @@ const picked = await getPickedEvent();
       title={picked.data.title}
       description={picked.data.description}
       href={`/posts/${picked.id}`}
-      label={t('home.events')}
-      meta={[eventWhen(picked.data.event!)]}
+      head={{ kind: 'event', meta: [eventWhen(picked.data.event!)], cancelled: picked.data.event!.status === 'cancelled' }}
       image={picked.data.image}
       seed={picked.id}
-      more={{ href: '/events', text: t('home.moreEvents') }}
+      more={{ href: '/actions', text: t('home.moreEvents') }}
     />
   )
 }

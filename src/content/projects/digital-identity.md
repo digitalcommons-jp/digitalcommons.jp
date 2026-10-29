@@ -4,7 +4,7 @@ description: 自分自身のデジタル上の「名前」を、自分で持つ�
 goal: dito という webvh ツールの開発
 deliverable: dito（webvh ツール）
 date: 2026-09-01
-status: ongoing
+phase: build
 ---
 
 （ダミー）ウェブ上の「自分」は、多くの場合、サービスの側が管理しています。このプロジェクトでは、デジタル・アイデンティティを自分で持つための仕組みについてリサーチし、webvh を扱うツール dito を開発します。

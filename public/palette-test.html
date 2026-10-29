@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>palette test</title>
+<style>
+  :root { --black: rgb(38 34 30); --white: #fff; --peach: rgb(222 155 97); --page-bg: color-mix(in srgb, var(--peach) 12%, #fff); }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; color: var(--black); background: #ddd; }
+  h1 { font-size: 1rem; margin: 1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1rem; padding: 0 1rem 2rem; }
+  .pal { background: var(--page-bg); border-radius: 0.5rem; overflow: hidden; display: flex; flex-direction: column; }
+  .pal-body { padding: 1.5rem; flex: 1; }
+  .tag { font-size: 0.75rem; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; }
+  h2 { font-size: 1.25rem; margin: 0.25rem 0 0.75rem; }
+  p { line-height: 1.8; font-size: 0.9375rem; }
+  a { color: var(--ink, var(--primary)); }
+  .row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0; }
+  .btn { padding: 0.5rem 1.25rem; border-radius: 62.4375rem; font: inherit; font-weight: 700; border: 0; cursor: pointer; }
+  .btn-p { background: var(--primary); color: var(--on, #fff); }
+  .btn-s { background: #fff; color: var(--ink, var(--primary)); box-shadow: inset 0 0 0 0.0625rem var(--primary); }
+  .card { background: #fff; border-radius: 0.75rem; padding: 1rem; margin-top: 1rem; }
+  .card .head { font-size: 0.8125rem; color: var(--accent); font-weight: 700; }
+  .card strong { display: block; margin-top: 0.25rem; }
+  .chip { display: inline-block; background: var(--primary-soft); color: var(--ink, var(--primary)); border-radius: 62.4375rem; padding: 0.125rem 0.75rem; font-size: 0.8125rem; margin-right: 0.25rem; }
+  .sw { display: flex; }
+  .sw span { flex: 1; height: 2.5rem; font-size: 0.6875rem; padding: 0.25rem 0.5rem; color: #fff; }
+  .art { display: block; width: 6rem; margin: 1rem 0 0 auto; }
+  .foot { background: rgb(238 239 224); color: color-mix(in srgb, var(--black) 66%, transparent); font-size: 0.875rem; padding: 1rem 1.5rem; }
+  .foot b { color: var(--black); }
+</style>
+</head>
+<body>
+<h1>palette test (temporary: delete public/palette-test.html when done)</h1>
+<div class="grid">
+
+<!-- A -->
+<section class="pal" style="--primary: rgb(0 138 74); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">A. 共有地の緑</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<!-- B -->
+<section class="pal" style="--primary: rgb(0 128 128); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">B. 青緑</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<!-- C -->
+<section class="pal" style="--primary: rgb(200 80 50); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: rgb(40 100 70);">
+  <div class="pal-body">
+    <div class="tag">C. 珊瑚(accent は深緑)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(62 80 160); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">D. 藍</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(125 65 150); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">E. 紫(すみれ)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(30 100 70); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">F. 深緑</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(20 110 190); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">G. 空色</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(205 60 40); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: rgb(40 60 105);">
+  <div class="pal-body">
+    <div class="tag">H. 朱(accent は紺)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(185 50 100); --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">I. ローズ</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(61 132 103); --on: #fff; --ink: rgb(61 132 103); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">H1. rgb(61 132 103)(彩度 100%、白文字 4.5)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(68 131 106); --on: #fff; --ink: rgb(68 131 106); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">H2. rgb(68 131 106)(彩度 85%、白文字 4.5)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(77 130 109); --on: #fff; --ink: rgb(77 130 109); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">H3. rgb(77 130 109)(彩度 70%、白文字 4.4)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(85 128 111); --on: #fff; --ink: rgb(85 128 111); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">H4. rgb(85 128 111)(彩度 55%、白文字 4.5)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(93 126 113); --on: #fff; --ink: rgb(93 126 113); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">H5. rgb(93 126 113)(彩度 40%、白文字 4.5)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(50 150 150); --on: #fff; --ink: rgb(50 150 150); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">J1. ティール rgb(50 150 150)(白文字 3.5)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(20 125 125); --on: #fff; --ink: rgb(20 125 125); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">J2. ティールを暗く rgb(20 125 125)(白文字 4.9)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(75 150 120); --on: #fff; --ink: rgb(75 150 120); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">J3. ミントやや暗め rgb(75 150 120)(白文字 3.5)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+<section class="pal" style="--primary: rgb(95 165 140); --on: #fff; --ink: rgb(95 165 140); --primary-soft: color-mix(in srgb, var(--primary) 18%, transparent); --accent: color-mix(in srgb, var(--peach) 80%, var(--black));">
+  <div class="pal-body">
+    <div class="tag">J4. ミント rgb(95 165 140)(白文字 2.9)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div><span class="chip">反戦</span><span class="chip">暗号化</span><span class="chip">データ主権</span></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary);color:#fff">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+
+</div>
+</body>
+</html>

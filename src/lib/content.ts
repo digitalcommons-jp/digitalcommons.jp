@@ -51,6 +51,23 @@ export async function getPickedProject() {
   return projects.find((p) => p.data.pickup) ?? projects[0];
 }
 
+/** The donation appeal ("活動を支えませんか"): written once, in the about page's `donation`. */
+export async function getDonation() {
+  return (await getEntry('pages', 'about'))?.data.donation;
+}
+
+/** RSS / Bluesky / Mastodon links of the site (footer, join page). */
+export async function getSocialLinks() {
+  const site = await getSetting('site');
+  // '@user@host' -> https://host/@user
+  const [, user, host] = site.fediverse.split('@');
+  return [
+    { label: 'RSS', href: '/feed.xml', icon: 'rss' as const },
+    { label: 'Bluesky', href: `https://bsky.app/profile/${site.bluesky}`, icon: 'bluesky' as const },
+    { label: 'Mastodon', href: `https://${host}/@${user}`, icon: 'mastodon' as const },
+  ];
+}
+
 export async function getTags(): Promise<Map<string, Post[]>> {
   const map = new Map<string, Post[]>();
   for (const post of await getPosts()) {

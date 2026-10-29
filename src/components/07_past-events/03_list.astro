@@ -13,8 +13,7 @@ const { past } = await getEvents();
         title={post.data.title}
         description={post.data.description}
         href={`/posts/${post.id}`}
-        label={t('events.past')}
-        meta={[eventWhen(post.data.event!), ...(post.data.event!.status !== 'scheduled' ? [t(`event.status.${post.data.event!.status}`)] : [])]}
+        head={{ kind: 'event', meta: [eventWhen(post.data.event!)], cancelled: post.data.event!.status === 'cancelled' }}
         image={post.data.image}
         seed={post.id}
       />

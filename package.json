@@ -33,6 +33,7 @@
     "astro-compress": "^2.4.3",
     "boring-avatars": "^2.0.4",
     "js-yaml": "^4.3.2",
+    "lucide-static": "^1.59.0",
     "potrace": "^2.1.8",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

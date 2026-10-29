@@ -1,0 +1,45 @@
+---
+// Card at the bottom of the join page. Left: how to follow us, as four icon tiles (one row, or 2 x 2 when narrow).
+// Right: the donation appeal.
+import type { CollectionEntry } from 'astro:content';
+import Donate from '~/components/shared/Donate.astro';
+import SocialIcon from '~/components/shared/SocialIcon.astro';
+import { getSocialLinks } from '~/lib/content';
+
+interface Props {
+  page: CollectionEntry<'pages'>;
+}
+
+const { follow } = Astro.props.page.data;
+// The fourth tile is a placeholder (no link yet).
+const links = [...(await getSocialLinks()), { label: '準備中', href: undefined, icon: 'mail' as const }];
+---
+
+{
+  follow && (
+    <section class="row rigid-card overview">
+      <div class="overview-info">
+        <h3 class="item-row-label">{follow.title}</h3>
+        <p class="text-muted">{follow.text}</p>
+        <div class="follow-links">
+          <ul class="follow-grid">
+            {links.map((l) => (
+              <li>
+                {l.href ? (
+                  <a href={l.href} class="follow-tile" aria-label={l.label}>
+                    <SocialIcon icon={l.icon} />
+                  </a>
+                ) : (
+                  <span class="follow-tile is-placeholder" role="img" aria-label={l.label}>
+                    <SocialIcon icon={l.icon} />
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <Donate />
+    </section>
+  )
+}

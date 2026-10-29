@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex" />
+<title>peach test</title>
+<style>
+  :root { --black: rgb(32 36 34); --primary: #1d9c81; --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent); }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; color: var(--black); background: #ddd; }
+  h1 { font-size: 1rem; margin: 1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; padding: 0 1rem 2rem; }
+  .pal { --page-bg: color-mix(in srgb, var(--peach) 12%, #fff); --accent: color-mix(in srgb, var(--peach) 80%, var(--black)); background: var(--page-bg); border-radius: 0.5rem; overflow: hidden; display: flex; flex-direction: column; }
+  .pal-body { padding: 1.5rem; flex: 1; }
+  .tag { font-size: 0.75rem; font-weight: 700; color: var(--accent); }
+  h2 { font-size: 1.25rem; margin: 0.25rem 0 0.75rem; }
+  p { line-height: 1.8; font-size: 0.9375rem; }
+  a { color: var(--primary); }
+  .row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0; }
+  .btn { padding: 0.5rem 1.25rem; border-radius: 62.4375rem; font: inherit; font-weight: 700; border: 0; }
+  .btn-p { background: var(--primary); color: #fff; }
+  .btn-s { background: #fff; color: var(--primary); box-shadow: inset 0 0 0 0.0625rem var(--primary); }
+  .card { background: rgb(255 255 255 / 0.65); border-radius: 0.75rem; padding: 1rem; margin-top: 1rem; }
+  .card .head { font-size: 0.8125rem; color: var(--accent); font-weight: 700; }
+  .card strong { display: block; margin-top: 0.25rem; }
+  .art { display: block; width: 6rem; margin: 1rem 0 0 auto; }
+  .sw { display: flex; }
+  .sw span { flex: 1; height: 2.5rem; font-size: 0.6875rem; padding: 0.25rem 0.5rem; color: #fff; }
+  .foot { background: color-mix(in srgb, var(--primary) 5%, var(--page-bg)); color: color-mix(in srgb, var(--black) 66%, transparent); font-size: 0.875rem; padding: 1rem 1.5rem; }
+  .foot b { color: var(--black); }
+</style></head><body>
+<h1>peach test (temporary: delete public/peach-test.html when done)</h1>
+<div class="grid">
+<section class="pal" style="--peach: rgb(224 148 112)">
+  <div class="pal-body">
+    <div class="tag">今(案2) rgb(224 148 112)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <div class="card"><div class="head">2026年未定 · 開催</div><strong>デジタル権の勉強会</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span><span style="background:var(--page-bg);color:var(--black)">page</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+<section class="pal" style="--peach: rgb(232 150 120)">
+  <div class="pal-body">
+    <div class="tag">A. 鮮やか寄り rgb(232 150 120)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <div class="card"><div class="head">2026年未定 · 開催</div><strong>デジタル権の勉強会</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span><span style="background:var(--page-bg);color:var(--black)">page</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+<section class="pal" style="--peach: rgb(236 160 128)">
+  <div class="pal-body">
+    <div class="tag">B. 明るくやわらかい rgb(236 160 128)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <div class="card"><div class="head">2026年未定 · 開催</div><strong>デジタル権の勉強会</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span><span style="background:var(--page-bg);color:var(--black)">page</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+<section class="pal" style="--peach: rgb(226 140 125)">
+  <div class="pal-body">
+    <div class="tag">C. 珊瑚寄り rgb(226 140 125)</div>
+    <h2>よりよいデジタル社会を一緒に作りませんか</h2>
+    <p>どんな小さなことからでもはじめられます。<a href="#">詳しくはこちら</a>から。</p>
+    <div class="row"><button class="btn btn-p">参加する</button><button class="btn btn-s">相談する</button></div>
+    <div class="card"><div class="head">進行中 · 2026年</div><strong>デジタル ID プロジェクト</strong></div>
+    <div class="card"><div class="head">2026年未定 · 開催</div><strong>デジタル権の勉強会</strong></div>
+    <svg class="art" viewBox="0 0 100 60"><path d="M5 50 Q25 5 50 30 T95 10" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="sw"><span style="background:var(--primary)">primary</span><span style="background:var(--accent)">accent</span><span style="background:var(--peach)">secondary</span><span style="background:var(--page-bg);color:var(--black)">page</span></div>
+  <div class="foot"><b>digital commons</b> · お問い合わせ · ©</div>
+</section>
+</div></body></html>

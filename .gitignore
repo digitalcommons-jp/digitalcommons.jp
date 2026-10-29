@@ -5,19 +5,18 @@ dist/
 # dependencies
 node_modules/
 
+# Local deploy and publishing scripts
+scripts/
+
 # logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
 # environment variables
 .env
 .env.production
-
-# macOS-specific files
-.DS_Store
 
 # pnpm-specific files: pnpm is supported for local use (see .pnpmrc), but
 # package-lock.json is the tracked lockfile and npm is what CI, Docker and
@@ -31,7 +30,14 @@ pnpm-workspace.yaml
 .social-state.json
 .publish.lock
 
-
-
 # Purchased PIXTA originals (not for redistribution): only the traced SVG is committed
 src/assets/images/nez.png
+
+# Private planning notes
+PLAN-media.md
+
+# Identity-document host (bundled build, maintained elsewhere)
+byo-host.mjs
+
+# Codeberg (Forgejo) workflow, not used on GitHub
+.forgejo/

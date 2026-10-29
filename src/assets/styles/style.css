@@ -21,30 +21,35 @@
 
 :root {
   --white: rgb(255 255 255);
-  --black: rgb(0 0 0);
-  --teal: #00ab00; /* raw color of the primary */
-  --blue: rgb(29 78 216);
-  --peach: rgb(222 155 97); /* raw color of the secondary (its soft variant is the page background) */
-  --yellow: rgb(255 214 0); /* raw color of the tertiary */
+  --black: rgb(32 36 34); /* not pure black: a soft dark gray with a hint of the primary's green (text, and the base of every translucent black) */
+  --teal: #1d9c81; /* raw color of the primary */
+  --peach: rgb(228 155 121); /* raw color of the secondary (its soft variant is the page background) */
+  --yellow: rgb(240 190 70); /* raw color of the tertiary (butter yellow) */
 
   /* White at lower opacity: translucent cards on the page background. */
   /* Page background: --secondary-soft over white, as an opaque color (so it does not change with the canvas color). */
-  --page-bg: color-mix(in srgb, var(--secondary) 12%, var(--white));
+  --page-bg: color-mix(in srgb, var(--secondary) 8%, var(--white));
   /* Footer color as an opaque color (primary at 5% over the page background), also used for the bottom edge. */
   --footer-bg: color-mix(in srgb, var(--primary) 5%, var(--page-bg));
   --white-65: color-mix(in srgb, var(--white) 65%, transparent);
   --white-85: color-mix(in srgb, var(--white) 85%, transparent);
 
   /* Black at lower opacity: hover backgrounds, lines, muted text. */
+  /* Header hover background: the footer color, paler still. */
+  --header-hover: color-mix(in srgb, var(--footer-bg) 50%, var(--white));
   --black-6: color-mix(in srgb, var(--black) 6%, transparent);
   --black-8: color-mix(in srgb, var(--black) 8%, transparent);
   --black-12: color-mix(in srgb, var(--black) 12%, transparent);
   --black-30: color-mix(in srgb, var(--black) 30%, transparent);
   --black-66: color-mix(in srgb, var(--black) 66%, transparent);
 
-  /* Primary / secondary. --primary is the main color (buttons, links, labels, the hero illustration);
-   * --secondary is the second color (its soft variant is the page background); --tertiary is the third (the yellow
-   * marker). Each variant is the same color at lower opacity, so changing a base color recolors all of its variants. */
+  /* Colors by role. Each base color has variants at lower opacity (-muted 75%, -light 20%, -soft 12%, -faint 5%), so
+   * changing a base color recolors all of its variants.
+   * --primary (blue-green) is the color of what you can act on: buttons, links, focus rings, the hero illustration.
+   * --secondary (peach) is the second color; its soft variant is the page background.
+   * --accent (a darker peach) is the color of emphasis: small labels, the current phase and the icons of a card, the
+   * calendar's event days, the text selection.
+   * --tertiary (butter yellow) is the third color: the marker under the hero title. */
   --primary: var(--teal);
   --primary-muted: color-mix(in srgb, var(--primary) 75%, transparent);
   --primary-light: color-mix(in srgb, var(--primary) 20%, transparent);
@@ -57,15 +62,20 @@
   --secondary-soft: color-mix(in srgb, var(--secondary) 12%, transparent);
   --secondary-faint: color-mix(in srgb, var(--secondary) 5%, transparent);
 
+  --accent: color-mix(in srgb, var(--secondary) 80%, var(--black));
+  --accent-light: color-mix(in srgb, var(--accent) 20%, transparent);
+
   --tertiary: var(--yellow);
   --tertiary-muted: color-mix(in srgb, var(--tertiary) 75%, transparent);
   --tertiary-light: color-mix(in srgb, var(--tertiary) 20%, transparent);
   --tertiary-soft: color-mix(in srgb, var(--tertiary) 12%, transparent);
   --tertiary-faint: color-mix(in srgb, var(--tertiary) 5%, transparent);
+
+  --marker: var(--tertiary-muted); /* the highlight under the hero title */
 }
 
 ::selection {
-  background-color: var(--primary-light);
+  background-color: var(--accent-light);
 }
 
 /* CCD cell width. --cc-w is the 1ch of the reference monospace font (Fira Code), measured on :root and registered as a
@@ -119,6 +129,15 @@ html {
   /* The canvas is what rubber-band scrolling shows past the page edges: white above the page (the header color),
      the footer color below it (set by the script in Layout.astro). The peach page background is painted by body. */
   background: var(--white);
+}
+
+/* The scrollbar thumb is shown only while scrolling (data-scrolling is set by the script in Layout.astro). */
+html {
+  scrollbar-color: transparent transparent;
+}
+
+html[data-scrolling] {
+  scrollbar-color: auto;
 }
 
 html[data-edge='bottom'] {
@@ -221,11 +240,13 @@ h3 {
 }
 
 /*
- * Block logo. Width tracks --logo-width; each line is scaled to fill 100% of
- * it by the fit script in LogoBlock.astro (glyphs stay undistorted).
+ * Block logo. Width tracks --logo-width; each line's font-size is that width divided by the word's width in em, so
+ * both lines fill 100% of it (glyphs stay undistorted). The em widths are Fira Sans 600 (measured at 1000px):
+ * "digital" 2.909, "commons" 4.38. Change the font and they must be measured again.
  * line-height on .logo-line-1 controls the gap under line 1.
  */
 .logo-block {
+  container-type: inline-size; /* cqw below = the width of this block */
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -238,17 +259,17 @@ h3 {
   display: block;
   width: 100%;
   line-height: 1;
-  overflow: visible; /* scaled text isn't clipped while fitting */
-  /*box-shadow: inset 0 -0.2em 0 var(--tertiary-muted); /* same marker as the one-line logo */
+  /*box-shadow: inset 0 -0.2em 0 var(--marker); /* same marker as the one-line logo */
 }
 
 .logo-block .logo-line-1 {
+  font-size: calc(100cqw / 2.909);
   line-height: 0.92;
 }
 
 .logo-block .logo-line-2 {
   opacity: 0.92;
-  font-size: 0.68em; /* fallback proportion until the fit script runs */
+  font-size: calc(100cqw / 4.38);
 }
 
 /* ---------------------------------------------------------------
@@ -382,6 +403,8 @@ h3 {
  * ------------------------------------------------------------- */
 
 .hero {
+  --wave-band: 4rem;
+  --wave-drop: -1rem; /* how far the white area runs below the hero (negative: it ends above the hero's bottom edge, inside its bottom padding) */
   position: relative;
   display: flex;
   align-items: center;
@@ -389,16 +412,20 @@ h3 {
   isolation: isolate;
 }
 
-/* White area behind the header and the hero. Its lower edge is a wave running from the upper right (about 70% of the
-   height) down to the lower left; the page background (--secondary-soft) shows below it. */
+/* White area behind the header and the whole hero (title and text): a plain block with the wave below it, in a band of
+   its own (--wave-band), so the text never crosses the wave. The page background shows below the wave. */
 .hero::before {
   content: '';
   position: absolute;
   z-index: -1;
-  inset: calc(-1 * var(--header-h-large)) 0 0;
+  inset: calc(-1 * var(--header-h-large)) 0 calc(-1 * var(--wave-drop));
   background: var(--white);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V68.0C90 81.7 80 58.9 66 68.0S42 95.4 28 86.3S10 100.0 0 100.0Z'/%3E%3C/svg%3E") left top / max(100%, var(--wave-w)) 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V68.0C90 81.7 80 58.9 66 68.0S42 95.4 28 86.3S10 100.0 0 100.0Z'/%3E%3C/svg%3E") left top / max(100%, var(--wave-w)) 100% no-repeat;
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - var(--wave-band)) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V10.0C90 23.7 80 0.9 66 10.0S42 95.4 28 86.3S10 100.0 0 100.0Z'/%3E%3C/svg%3E") left bottom / max(100%, var(--wave-w)) var(--wave-band) no-repeat;
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - var(--wave-band)) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H100V10.0C90 23.7 80 0.9 66 10.0S42 95.4 28 86.3S10 100.0 0 100.0Z'/%3E%3C/svg%3E") left bottom / max(100%, var(--wave-w)) var(--wave-band) no-repeat;
 }
 
 /* Other pages: the same white area behind the header, with a wave generated per page (lib/wave.ts). */
@@ -440,7 +467,6 @@ h3 {
 @media (--bp-md) {
   .hero-body {
     grid-template-columns: 1fr auto;
-    align-items: center;
     gap: calc(4 * var(--cc-w));
   }
 }
@@ -480,16 +506,11 @@ h3 {
   display: flow-root;
 }
 
-.hero-flow .hero-title {
-  margin-block-end: 2rem;
-}
-
 .hero-flow .hero-copy {
   display: block;
 }
 
 .hero-flow .hero-copy p {
-  font-size: 1.25rem;
   margin-block-end: 1rem;
 }
 
@@ -511,6 +532,18 @@ h3 {
   .hero-flow.is-nowrap .hero-copy p {
     display: flow-root;
   }
+
+  /* Only here (the text stays in its column) the picture may hang over the wave: its last 4rem do not count toward the
+     hero's height. When the text flows around the picture a negative margin would also let the text run into it. */
+  .hero-flow.is-nowrap .hero-art {
+    margin-block-end: -4rem;
+  }
+}
+
+/* The lead text under every hero title (the about page's size is the standard). */
+.hero-block p.text-muted,
+.page-hero p.text-muted {
+  font-size: 1.25rem;
 }
 
 .hero-title {
@@ -520,12 +553,13 @@ h3 {
   line-height: round(up, 1.2em, 1rem);
   letter-spacing:-0.1rem;
   color:#333;
+  margin-block-end: 2rem;
 }
 
-/* Yellow marker under the title, one band per line: an inline box whose fragments each get their own shadow. */
+/* Yellow marker (tertiary) under the title, one band per line: an inline box whose fragments each get their own shadow. */
 
 .hero-marker {
-  box-shadow: inset 0 -0.2em 0 var(--tertiary-muted);
+  box-shadow: inset 0 -0.2em 0 var(--marker);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   font-family:"Mobo-bold"
@@ -608,17 +642,20 @@ h3 {
 
 .nav-bar {
   flex-shrink: 0;
+  /* Overhang of each pill past its text: half of the gap between the texts, so neighbouring pills just touch. */
+  --pill-x: calc(2.75 * var(--cc-w) - 0.25rem);
 }
 
 .nav-items {
+  position: relative; /* for .nav-underline */
   display: flex;
   align-items: center;
   /* One long bar: canvas background, round ends. Its padding equals the pills' overhang, so the bar's ends line up
    * with the outer edges of the first and last pill, and the gaps between the pills' round corners are filled. */
-  padding-inline: calc(2 * var(--cc-w));
+  padding-inline: var(--pill-x);
   border-radius: 62.4375rem;
   background: var(--white);
-  gap: calc(4.5 * var(--cc-w)); /* = the two pill paddings (2 cells each): neighbouring pills touch, never overlap */
+  gap: calc(5.5 * var(--cc-w) - 0.5rem); /* = 2 * --pill-x */
   font-weight: 600;
   font-size:0.9rem;
 }
@@ -640,25 +677,45 @@ h3 {
   justify-content: center;
   height: 3rem;
   padding-block: 0;
-  padding-inline: calc(2 * var(--cc-w));
-  margin-inline: calc(-2 * var(--cc-w));
+  padding-inline: var(--pill-x);
+  margin-inline: calc(-1 * var(--pill-x));
   border-radius: 62.4375rem;
   font-weight: inherit;
   line-height: inherit;
   box-shadow: none;
-  transition: background 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
-/* Plain links: transparent (the bar is the canvas); on hover a slightly darker pill shows up. */
+/* Plain links: transparent (the bar is the canvas); on hover a pale pill (--header-hover) shows up. */
 .nav-bar .nav-item a:not(.btn-primary, .btn-secondary):hover {
-  background-image: linear-gradient(
-    color-mix(in srgb, var(--black) 6%, transparent),
-    color-mix(in srgb, var(--black) 6%, transparent)
-  );
+  background-image: linear-gradient(var(--header-hover), var(--header-hover));
 }
 
-.nav-item a[aria-current='page'] {
-  color: var(--primary);
+/* The underline of the bar (placed and slid by SiteHeader.tsx): under the current page's item, sliding to the hovered
+ * one. It spans the straight part of the pill's bottom edge (the pill is 3rem tall and fully round: each end curve is
+ * 1.5rem). */
+.nav-underline {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 0;
+  height: 0.125rem;
+  background: var(--black);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The current page is marked by dimming the others (the bar and the hamburger panel); hovering un-dims. */
+.nav-bar .nav-item a:not([aria-current='page']),
+.mobile-menu-panel a:not([aria-current='page']) {
+  color: color-mix(in srgb, var(--black) 55%, transparent);
+}
+
+.nav-bar .nav-item a:not([aria-current='page']):hover,
+.mobile-menu-panel a:not([aria-current='page']):hover {
+  color: var(--black);
 }
 
 .mobile-menu[hidden] {
@@ -686,7 +743,7 @@ h3 {
 }
 
 .mobile-menu summary:hover {
-  background: color-mix(in srgb, var(--black) 6%, transparent);
+  background: var(--header-hover);
 }
 
 .mobile-menu summary {
@@ -765,10 +822,13 @@ h3 {
   font-weight: 500;
   white-space: nowrap;
   padding: 0.5rem 1rem;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .mobile-menu-panel a:hover {
-  background: color-mix(in srgb, var(--black) 6%, transparent);
+  background: var(--header-hover);
 }
 
 /* ---------------------------------------------------------------
@@ -907,13 +967,13 @@ h3 {
   width: calc(4 * var(--cc-w));
   height: calc(4 * var(--cc-w));
   border-radius: 62.4375rem;
-  box-shadow: inset 0 0 0 0.125rem var(--blue);
-  color: var(--blue);
+  box-shadow: inset 0 0 0 0.125rem var(--accent);
+  color: var(--accent);
   font-weight: 700;
 }
 
 .calendar-event:hover {
-  background: var(--blue);
+  background: var(--accent);
   color: var(--white);
 }
 
@@ -1072,7 +1132,31 @@ h3 {
 
 .item-row-label {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--accent);
+}
+
+.item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--black) 66%, transparent);
+}
+
+.item-head-icon {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.item-head-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.item-head-state {
+  color: var(--accent);
 }
 
 .item-row-details {
@@ -1241,6 +1325,39 @@ h3 {
   background: var(--black-6);
 }
 
+/* A member's icons: the service name shows above the icon on hover / keyboard focus (CSS only, from aria-label). */
+.member-social li {
+  display: flex; /* no line box around the icon: it sits in the middle of the name's row */
+}
+
+.member-social a {
+  position: relative;
+}
+
+.member-social a::after {
+  content: attr(aria-label);
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  margin-block-end: 0.125rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--black);
+  color: var(--white);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.member-social a:hover::after,
+.member-social a:focus-visible::after {
+  opacity: 1;
+}
+
 .footer-links a {
   display: inline-block;
   white-space: nowrap; /* never wrap a menu label */
@@ -1271,7 +1388,7 @@ h3 {
 
   .footer-menus {
     grid-template-columns: auto auto;
-    gap: 2rem;
+    gap: calc(4 * var(--cc-w) + 1rem); /* the two hover pills overhang 2 cells each; 1rem is left between them */
   }
 }
 
@@ -1279,7 +1396,7 @@ h3 {
   font-size: 4rem;
   font-weight: 700;
   line-height: 4rem;
-  color: var(--primary);
+  color: var(--accent);
 }
 
 /* Event details (post page) */
@@ -1415,6 +1532,15 @@ h3 {
   mask-mode: luminance;
 }
 
+.icon-deltachat {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / 145% no-repeat; /* the logo has empty margins; scaled so the bubble fills the box */
+  mask: var(--icon) center / 145% no-repeat;
+}
+
 .about,
 .members {
   padding-block: 3rem;
@@ -1423,6 +1549,49 @@ h3 {
 .about-inner {
   display: grid;
   gap: 4rem;
+}
+
+.guide-body h2 {
+  font-size: 1.25rem;
+}
+
+/* A "#" before each heading, like the Markdown it is written in (decoration only: the empty alt text hides it from screen readers). */
+.guide-body h2::before {
+  content: '#' / '';
+  margin-inline-end: 0.5em;
+  color: color-mix(in srgb, var(--black) 45%, transparent);
+  user-select: none;
+}
+
+.guide-body > h2:not(:first-child) {
+  margin-block-start: 4rem;
+}
+
+.guide-body > h2 + p {
+  margin-block-start: 0.5rem;
+  color: color-mix(in srgb, var(--black) 66%, transparent);
+}
+
+/* Keywords: `inline code` in this section is a pill label; ### is the category above a row of labels. */
+.guide-body h3 {
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--black) 66%, transparent);
+}
+
+.guide-body > h3 + p {
+  margin-block-start: 0.5rem;
+}
+
+.guide-body code {
+  display: inline-block;
+  margin-block: 0.25rem;
+  margin-inline-end: 0.5rem;
+  padding-inline: calc(2 * var(--cc-w));
+  border-radius: 62.4375rem;
+  background: var(--white-65);
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.75rem;
 }
 
 .about-mission-text {
@@ -1437,7 +1606,8 @@ h3 {
   margin-block-start: 1rem;
 }
 
-.about-approach-title {
+.about-approach-title,
+.members-title {
   font-size: 1.25rem;
   font-weight: 700;
 }
@@ -1455,28 +1625,23 @@ h3 {
   margin-block-start: 2rem;
 }
 
-/* Mobile: avatar + info on the first line, the key band on the second. Desktop: three columns. */
+/* Desktop: the members sit side by side in two columns. */
+@media (--bp-md) {
+  .member-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem calc(4 * var(--cc-w));
+  }
+}
+
+/* Avatar | info (name, social links, the key band below them). */
 .member {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas:
-    'avatar info'
-    'key key';
   align-items: center;
   gap: 1rem calc(3 * var(--cc-w));
 }
 
-@media (--bp-md) {
-  .member {
-    /* The key band takes the width of its text but never more than what is left after the info column's minimum
-       (12rem); on narrow screens the fingerprint wraps between its groups instead of squeezing the info column. */
-    grid-template-columns: auto minmax(12rem, 1fr) minmax(min-content, max-content);
-    grid-template-areas: 'avatar info key';
-  }
-}
-
 .member-avatar {
-  grid-area: avatar;
   width: 6rem;
   height: 6rem;
 }
@@ -1488,27 +1653,46 @@ h3 {
 }
 
 .member-info {
-  grid-area: info;
+  min-width: 0;
 }
 
-.member-name {
+/* The name with the language labels and the social icons to its right. */
+.member-head {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 1rem;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
 }
 
 .member-social {
-  margin-block-start: 0.5rem;
+  margin-block-start: 0;
+  margin-inline-start: 0.75rem; /* a little more air between the labels and the icons */
+}
+
+/* Spoken languages: small labels. */
+.member-langs {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.member-langs li {
+  padding: 0.0625rem 0.5rem;
+  border-radius: 62.4375rem;
+  background: var(--primary-light);
+  color: var(--black);
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 .member-key {
-  grid-area: key;
   display: flex;
+  width: fit-content;
+  max-width: 100%;
+  margin-block-start: 0.75rem;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem calc(3 * var(--cc-w));
-  border-radius: 1rem;
+  gap: 0.5rem;
+  padding: 0.5rem calc(2 * var(--cc-w));
+  border-radius: 0.75rem;
   background: var(--white-65);
   color: color-mix(in srgb, var(--black) 66%, transparent);
   transition: background 0.2s ease;
@@ -1522,13 +1706,15 @@ h3 {
 
 .member-key svg {
   flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .member-key-fingerprint {
   flex: 1;
   min-width: 0;
   font-family: var(--font-fira-code), monospace;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   overflow-wrap: break-word; /* wrap between the groups; break a group only when it does not fit */
 }
 
@@ -1563,10 +1749,11 @@ h3 {
   background: var(--white);
 }
 
-.overview-donate-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 2rem;
+/* The overview / follow / donation card: plain headings (not the accent). */
+.overview .item-row-label {
+  font-size: 1rem;
+  font-weight: 800;
+  color: inherit; /* (.item-row-label itself is the accent color) */
 }
 
 /* Desktop: one card in two columns; the text keeps the container's alignment. */
@@ -1605,6 +1792,44 @@ h3 {
     padding-inline-start: calc(3 * var(--cc-w));
     padding-inline-end: calc(var(--edge) - 1rem);
   }
+}
+
+.follow-links {
+  container-type: inline-size; /* the grid below follows the width of this column, not the screen */
+}
+
+.follow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@container (min-width: 24rem) {
+  .follow-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.follow-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  border-radius: 1rem;
+  transition: background 0.2s ease;
+}
+
+.follow-tile svg {
+  width: 3rem;
+  height: 3rem;
+}
+
+a.follow-tile:hover {
+  background: var(--black-6);
+}
+
+.follow-tile.is-placeholder {
+  color: color-mix(in srgb, var(--black) 30%, transparent);
 }
 
 .overview-list {
@@ -1649,4 +1874,63 @@ h3 {
 .form-input:focus {
   outline: none;
   box-shadow: inset 0 0 0 0.125rem var(--primary);
+}
+
+/* Join page: the group-chat form written as HTML inside join.md. An email field with its button on one row; PGP key hidden in a <details>. */
+.prose .card {
+  display: grid;
+  gap: 1rem;
+  padding: 3rem calc(3 * var(--cc-w));
+  border-radius: 1rem;
+  background: var(--white-85);
+  box-shadow: 0 0.0625rem 0.5rem var(--black-6);
+}
+
+.prose .card > * {
+  margin: 0;
+}
+
+.guide-body .card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* The email field and its button are one white pill; the field has no border or background of its own. */
+.join-form-row {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 62.4375rem;
+  background: var(--white);
+  box-shadow: 0 0.0625rem 0.5rem var(--black-6);
+}
+
+.join-form-row:focus-within {
+  box-shadow: 0 0 0 0.125rem var(--primary);
+}
+
+.join-form-row .form-input {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  height: 3rem;
+  padding-block: 0;
+  padding-inline: 1.5rem 1rem;
+  border-radius: 62.4375rem;
+  background: none;
+  box-shadow: none;
+}
+
+.join-form-row .btn-primary {
+  flex-shrink: 0;
+}
+
+.join-form-pgp summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.join-form-pgp .form-field {
+  margin-block-start: 1rem;
 }

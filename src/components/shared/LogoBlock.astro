@@ -1,5 +1,5 @@
 ---
-// Block logo: two stacked lines, each scaled to fill the block width.
+// Block logo: two stacked lines, each sized by CSS to fill the block width.
 // Styles live in src/assets/styles/style.css (.logo-block).
 // Usage: <LogoBlock /> — or <LogoBlock line1="..." line2="..." />.
 interface Props {
@@ -10,59 +10,7 @@ interface Props {
 const { line1 = 'digital', line2 = 'commons' } = Astro.props;
 ---
 
-<span class="logo-block logo" aria-label={`${line1} ${line2}`} data-logo-block data-fit>
+<span class="logo-block logo" aria-label={`${line1} ${line2}`}>
   <span class="logo-line logo-line-1">{line1}</span>
   <span class="logo-line logo-line-2">{line2}</span>
 </span>
-
-<script>
-  // Scale font-size so the natural text width equals the block width.
-  function fitLine(el: HTMLElement, target: number) {
-    const range = document.createRange();
-    range.selectNodeContents(el);
-    const natural = range.getBoundingClientRect().width;
-    if (!natural) return;
-
-    const current = parseFloat(getComputedStyle(el).fontSize);
-    const next = (current * target) / natural;
-    el.style.fontSize = `${next}px`;
-  }
-
-  function fitLogo(block: HTMLElement) {
-    const target = block.getBoundingClientRect().width;
-    if (!target) return;
-    const line1 = block.querySelector<HTMLElement>('.logo-line-1');
-    const line2 = block.querySelector<HTMLElement>('.logo-line-2');
-    if (line1) fitLine(line1, target);
-    if (line2) fitLine(line2, target);
-  }
-
-  function fitAll() {
-    document.querySelectorAll<HTMLElement>('[data-logo-block]').forEach(fitLogo);
-  }
-
-  const ready = () => {
-    if (document.fonts?.ready) document.fonts.ready.then(fitAll);
-    else window.addEventListener('load', fitAll);
-  };
-  ready();
-  document.addEventListener('astro:page-load', ready);
-
-  let t: number | undefined;
-  window.addEventListener('resize', () => {
-    window.clearTimeout(t);
-    t = window.setTimeout(fitAll, 100);
-  });
-
-  // Re-fit when the block width itself changes (dev tools, container queries, …)
-  const ro = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      fitLogo(entry.target as HTMLElement);
-    }
-  });
-  const observe = () => {
-    document.querySelectorAll<HTMLElement>('[data-logo-block]').forEach((el) => ro.observe(el));
-  };
-  observe();
-  document.addEventListener('astro:page-load', observe);
-</script>

@@ -1,0 +1,21 @@
+---
+// Upcoming events as cards, below the projects. Soonest first.
+import ItemRow from '~/components/shared/ItemRow.astro';
+import { eventWhen, getEvents } from '~/lib/content';
+
+const { upcoming } = await getEvents();
+---
+
+{
+  upcoming.map((post) => (
+    <ItemRow
+      variant="inset"
+      title={post.data.title}
+      description={post.data.description}
+      href={`/posts/${post.id}`}
+      head={{ kind: 'event', meta: [eventWhen(post.data.event!)], cancelled: post.data.event!.status === 'cancelled' }}
+      image={post.data.image}
+      seed={post.id}
+    />
+  ))
+}

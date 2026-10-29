@@ -40,6 +40,8 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'never',
 
+  redirects: { '/events': '/actions', '/projects': '/actions' },
+
   // Native Fonts API: Astro downloads Fira Sans at build time and self-hosts it
   // (no request to a font CDN from the browser). Consumed via `--font-fira`.
   fonts: [
@@ -102,6 +104,8 @@ export default defineConfig({
   },
 
   vite: {
+    // Dev only: hosts other than localhost that may reach the dev server.
+    server: { allowedHosts: ['debian.lan'] },
     // Dev only: source maps so DevTools shows `style.css:<line>` (needed for Workspace saving).
     css: {
       devSourcemap: true,

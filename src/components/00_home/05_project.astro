@@ -4,7 +4,7 @@ import { t } from '~/i18n';
 import { getPickedProject } from '~/lib/content';
 
 const latest = await getPickedProject();
-const more = { href: '/projects', text: t('home.moreProjects') };
+const more = { href: '/actions', text: t('home.moreProjects') };
 ---
 
 {
@@ -14,8 +14,7 @@ const more = { href: '/projects', text: t('home.moreProjects') };
       title={latest.data.title}
       description={latest.data.description}
       href={latest.data.url}
-      label={t('home.projects')}
-      meta={[t(`project.status.${latest.data.status}`)]}
+      head={{ kind: 'project', phase: latest.data.phase }}
       details={[
         { label: t('project.goal'), value: latest.data.goal },
         { label: t('project.deliverable'), value: latest.data.deliverable },
@@ -25,6 +24,12 @@ const more = { href: '/projects', text: t('home.moreProjects') };
       more={more}
     />
   ) : (
-    <ItemRow variant="inset" title={t('home.projects')} description={t('projects.empty')} more={more} />
+    <ItemRow
+      variant="inset"
+      head={{ kind: 'project' }}
+      title={t('home.projects')}
+      description={t('projects.empty')}
+      more={more}
+    />
   )
 }
