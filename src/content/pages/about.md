@@ -31,7 +31,7 @@ members:
     chat: ''
     email: mail@example.com
     pgp:
-      fingerprint: AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3334
+      fingerprint: AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3335
       file: /keys/aoi-sato.asc
   - name: nonami
     languages: JP
