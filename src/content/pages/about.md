@@ -52,9 +52,9 @@ overview:
   - label: 名称
     value: digital commons
   - label: 設立
-    value: 20XX年X月（ダミー）
+    value: 2026年10月
   - label: 所在地
-    value: 東京都（ダミー）
+    value: 東京都
   - label: 連絡先
     value: info@digitalcommons.jp
 follow: null
