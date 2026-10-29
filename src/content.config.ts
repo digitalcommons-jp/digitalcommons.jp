@@ -75,33 +75,30 @@ const pages = defineCollection({
       artPosition: blank(z.enum(['title', 'body']).default('title')),
       artWrap: blank(z.boolean().default(true)),
       // Only the about page uses the fields below (see pages/about.astro).
-      lead: z.string().optional(), // hero text (any page; default: description); paragraphs are separated by a blank line
-      mission: z.object({ title: z.string(), text: z.string() }).optional(),
-      approaches: z.array(z.object({ title: z.string(), text: z.string() })).optional(),
-      members: z
+      lead: blank(z.string().optional()), // hero text (any page; default: description); paragraphs are separated by a blank line
+      mission: blank(z.object({ title: z.string(), text: z.string() }).optional()),
+      approaches: blank(z.array(z.object({ title: z.string(), text: z.string() })).optional()),
+      members: blank(
+        z
         .array(
           z.object({
             name: z.string(),
-            languages: z.string().optional(), // e.g. "EN, FR": shown as small labels beside the name
+            languages: blank(z.string().optional()), // e.g. "EN, FR": shown as small labels beside the name
             bluesky: blank(z.string().optional()),
             mastodon: blank(z.string().optional()),
             didwebvh: blank(z.string().optional()),
             chat: blank(z.string().optional()), // URL of a chat room or profile
             email: blank(z.string().optional()), // an address (shown as a mailto: link)
-            pgp: z.object({ fingerprint: z.string(), file: z.string() }).optional(),
+            pgp: blank(z.object({ fingerprint: z.string(), file: z.string() }).optional()),
           }),
         )
         .optional(),
-      donation: z.object({ title: z.string(), text: z.string(), button: z.string(), href: z.string() }).optional(),
-      overviewTitle: z.string().optional(), // heading of the overview card (default: 団体概要)
-      overview: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
+      ),
+      donation: blank(z.object({ title: z.string(), text: z.string(), button: z.string(), href: z.string() }).optional()),
+      overviewTitle: blank(z.string().optional()), // heading of the overview card (default: 団体概要)
+      overview: blank(z.array(z.object({ label: z.string(), value: z.string() })).optional()),
       // Only the join page uses `follow` (see 10_join/05_follow.astro).
-      follow: z
-        .object({
-          title: z.string(),
-          text: z.string(),
-        })
-        .optional(),
+      follow: blank(z.object({ title: z.string(), text: z.string() }).optional()),
           }),
 });
 
