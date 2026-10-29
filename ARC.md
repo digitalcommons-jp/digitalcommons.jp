@@ -350,38 +350,25 @@ Node.js >= 26.13.0
 
 ## Deployment
 
-### Production (VPS "v2")
+The site is hosted on **GitHub Pages**. Pushing to `main` runs `.github/workflows/pages.yml`, which builds with `pnpm build` (Node 26, `pnpm install --frozen-lockfile`) and publishes `dist/`. Nothing else needs to be done.
 
-**The build happens locally; only `dist/` is sent to v2. Nothing is built on the server.**
+- Custom domain: `digitalcommons.jp`, set in the repository's Pages settings. DNS is managed in Cloudflare: four `A` and four `AAAA` records on the apex pointing at GitHub Pages (`185.199.108.153`–`185.199.111.153`, `2606:50c0:8000::153`–`8003::153`), in "DNS only" mode.
+- `pnpm-lock.yaml` and `pnpm-workspace.yaml` are tracked: CI installs with `--frozen-lockfile`, so update the lockfile whenever dependencies change.
+- `public/` is copied to the site root as-is. GitHub Pages ignores `_headers`, so custom response headers are not available.
 
-```sh
-scripts/deploy.sh --dry-run   # only show what would change
-scripts/deploy.sh             # build and rsync to /opt/dc/dist
-```
+### Identity documents
 
-- Site files: `/opt/dc/dist` (served by Caddy).
-- **The source of truth for the Caddyfile is `~/dev/v2/Caddyfile`** (identical to `/etc/caddy/Caddyfile` on v2). Several projects on v2 share one Caddyfile, so this repository does not carry it. To change the `digitalcommons.jp` block, edit `~/dev/v2/Caddyfile` and distribute it with `~/did.md/deploy.sh client`.
-- **The identity documents (`.well-known/did.json`, `did.jsonl`, `did-witness.json`) live apart from the site**: `/var/lib/dc-host/root/.well-known/`. `dc-host.service` (`byo-host`, `127.0.0.1:8796`) is the only writer; Caddy only serves them read-only. Writes (`PUT/POST/DELETE/OPTIONS`) are forwarded to byo-host.
-- So redeploying the site never overwrites or deletes the identity files (`scripts/deploy.sh` also `--exclude`s them to be safe).
-- `public/.well-known/` in the repository holds only `atproto-did` (a fixed string). Identity documents are not managed in the repository.
-- **Publishing to and withdrawing from standard.site**: `SEQUOIA=1 scripts/deploy.sh` publishes posts with `social: true`. Sequoia never deletes, so when a post is removed, set to draft, or set to `social: false`, `scripts/sequoia-prune.mjs` removes the `site.standard.document` on the PDS (by default it only lists them; to actually delete, run `PRUNE=1 SEQUOIA=1 scripts/deploy.sh`). It never deletes anything other than `site.standard.document` records in its own repository.
+`public/.well-known/` holds the files that identify the domain:
 
-### Path routing (investigation of conflicts with GoToSocial)
+- `did.json` and `did.jsonl` (did:web / did:webvh documents; public data only)
+- `atproto-did` (AT Protocol handle verification)
+- `site.standard.publication` (standard.site publication record)
 
-Result of checking a running GoToSocial (gts.superseriousbusiness.org) on 2026-10-01.
+GitHub Pages serves static files only, so updating an identity document means committing the new file and letting the workflow deploy it. Pages sends `application/json` for `did.json` and `application/octet-stream` for the extension-less or `.jsonl` files; Pages adds `Access-Control-Allow-Origin: *` by itself.
 
-| Path                                                                                  | GoToSocial                                | Routed to                                      |
-| ------------------------------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------- |
-| `/.well-known/webfinger` `host-meta` `nodeinfo`, `/nodeinfo/*`                        | yes                                       | GoToSocial                                     |
-| `/@*` `/users/*` `/api/*` `/oauth/*` `/auth/*` `/fileserver/*` `/settings/*` `/login` | yes                                       | GoToSocial                                     |
-| **`/about`**                                                                          | **yes (conflict)**                        | **Astro** (not in the allowlist)               |
-| **`/admin`**                                                                          | redirects to `/settings/admin` (conflict) | **Astro** (CMS entry; not in the allowlist)    |
-| **`/tags/<x>`**                                                                       | **yes (conflict)**                        | **Astro** (see the note below)                 |
-| `/robots.txt`                                                                         | yes                                       | Astro (outside the allowlist)                  |
-| `/.well-known/site.standard.publication`                                              | no                                        | Astro                                          |
-| `/join` `/actions` `/privacy` `/feed.xml` `/posts/*`                                  | no                                        | Astro                                          |
+### Links from GoToSocial
 
-**Note**: hashtag links in GoToSocial posts have the form `https://digitalcommons.jp/tags/<name>`. These land on the Astro tag page (`/tags/<tag>`). If there is no such tag, the result is a 404. If that bothers you, move the site's tag pages to another path (e.g. `/topics/`).
+Hashtag links in GoToSocial posts have the form `https://digitalcommons.jp/tags/<name>` and land on the Astro tag page (`/tags/<tag>`). If there is no such tag, the result is a 404.
 
 ## Sveltia CMS
 
