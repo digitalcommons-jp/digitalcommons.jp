@@ -48,6 +48,8 @@ export const ja = {
   '404.title': 'ページが見つかりません',
   '404.body': 'お探しのページは存在しないか、移動した可能性があります。',
   '404.back': 'トップへ戻る',
+  'page.edit': 'GitHub でこのページを編集する',
+  'page.updated': 'updated',
 } as const;
 
 export type UiKey = keyof typeof ja;

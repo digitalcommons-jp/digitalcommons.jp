@@ -9,12 +9,14 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { shapesSvg } from '~/lib/blob';
+import EditLink from '~/components/shared/EditLink.astro';
 
 interface Props {
   page: CollectionEntry<'pages'>;
 }
 
 const { title, description, lead, image, art: seed, artPosition: art, artWrap: wrap } = Astro.props.page.data;
+const filePath = Astro.props.page.filePath;
 const paragraphs = (lead ?? description).split(/\n\s*\n/);
 const hasPicture = Boolean(image || seed);
 ---
@@ -41,6 +43,7 @@ const hasPicture = Boolean(image || seed);
             {paragraphs.map((p) => (
               <p class="text-muted">{p}</p>
             ))}
+            <EditLink filePath={filePath} />
           </div>
         </div>
       </div>
@@ -55,6 +58,7 @@ const hasPicture = Boolean(image || seed);
           {paragraphs.map((p) => (
             <p class="text-muted">{p}</p>
           ))}
+          <EditLink filePath={filePath} />
         </div>
       </div>
     </section>

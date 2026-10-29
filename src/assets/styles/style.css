@@ -1934,3 +1934,27 @@ a.follow-tile:hover {
 .join-form-pgp .form-field {
   margin-block-start: 1rem;
 }
+
+/* "[GitHub icon] 2026-10-30 updated": small, muted, at the bottom of the hero text. */
+.edit-link {
+  margin-block: 0;
+  font-size: 0.875rem;
+}
+
+.edit-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(1 * var(--cc-w));
+  color: color-mix(in srgb, var(--black) 66%, transparent);
+  text-decoration: none;
+}
+
+.edit-link a:hover {
+  color: var(--primary);
+}
+
+.edit-link svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}

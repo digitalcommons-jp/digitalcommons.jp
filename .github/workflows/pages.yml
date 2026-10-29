@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the edit link shows each file's last commit date
 
       - uses: pnpm/action-setup@v6
 
