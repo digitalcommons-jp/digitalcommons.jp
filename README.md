@@ -1,6 +1,6 @@
 # digitalcommons.jp
 
-The website of Digital Commons Japan. Built with Astro and plain CSS (no Tailwind; it started from the AstroWind template). Production runs on the VPS "v2"; a mirror runs on Codeberg Pages.
+The website of Digital Commons Japan. Built with Astro and plain CSS (no Tailwind; it started from the AstroWind template). Production runs on the VPS "v2".
 
 ## Development
 
@@ -17,7 +17,6 @@ Node.js >= 22.22.3
 |        | URL                                             |
 | ------ | ----------------------------------------------- |
 | Production | https://digitalcommons.jp/                  |
-| Mirror | https://digico.codeberg.page/digitalcommons.jp/ |
 | CMS    | a secret path (see "Sveltia CMS" below)         |
 
 ## Deployment
@@ -55,23 +54,10 @@ Result of checking a running GoToSocial (gts.superseriousbusiness.org) on 2026-1
 
 **Note**: hashtag links in GoToSocial posts have the form `https://digitalcommons.jp/tags/<name>`. These land on the Astro tag page (`/tags/<tag>`). If there is no such tag, the result is a 404. If that bothers you, move the site's tag pages to another path (e.g. `/topics/`).
 
-### Mirror (Codeberg Pages)
-
-**Codeberg Actions** (`.forgejo/workflows/deploy.yml`) runs `pnpm install --frozen-lockfile && pnpm build` on every push to main and publishes `dist/` with the [git-pages action](https://codeberg.org/git-pages/action).
-
-Manually:
-
-```sh
-pnpm build
-# push the contents of dist/ to the pages branch
-```
-
 ## Sveltia CMS
 
 - Location: not `/` but an unguessable secret path. `CMS_PATH` in `.env` (never committed; generate with `openssl rand -hex 12`). It is used only at build time, and builds without `CMS_PATH` do not include the CMS. **Build the CMS-enabled site locally, where `.env` is.**
 - Config: `src/cms/config.yml`
-- Backend: Codeberg `digico/digitalcommons.jp`
-- Login: Codeberg OAuth (`app_id` is set; the redirect URI is also this secret path) or an access token
 - Posts: `src/content/posts/*.md`
 
 ## Customization
@@ -79,16 +65,6 @@ pnpm build
 - Site settings: `astro.config.ts` (`site`) and `src/content/settings/site.yml`
 - Top page: `src/pages/index.astro`
 - Editing the front end (HTML / CSS): see "Manual for admins" below
-
-## DNS for the mirror (when switching to Codeberg Pages)
-
-| Name                                      | Type | Value                                               |
-| ----------------------------------------- | ---- | --------------------------------------------------- |
-| `@`                                       | A    | `217.197.84.141`                                    |
-| `@`                                       | AAAA | `2a0a:4580:103f:c0de::2`                            |
-| `_git-pages-repository.digitalcommons.jp` | TXT  | `https://codeberg.org/digico/digitalcommons.jp.git` |
-
-When serving from the apex, leave `base` at `/` (the default).
 
 ---
 
@@ -103,7 +79,7 @@ pnpm check      # type-check before submitting
 pnpm build      # production build (dist/). Make sure it reports no errors
 ```
 
-Edit → check in the browser → `pnpm check` → commit / push. Pushing triggers an automatic deployment by Codeberg Actions.
+Edit → check in the browser → `pnpm check` → commit / push.
 
 ## 1. Where things are
 
