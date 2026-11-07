@@ -28,7 +28,9 @@ src/
 │   ├── posts/           posts (including event posts)
 │   ├── projects/        projects (long-term efforts and deliverables)
 │   └── settings/        site.yml (site name, description, contact)
+│   └── en/              English mirror of the four folders above (same file names and frontmatter keys; not loaded by any collection yet)
 ├── i18n/ja.ts         UI strings (key → Japanese)
+├── i18n/en.ts         UI strings (key → English; typed to require every key of ja.ts)
 ├── i18n/index.ts      t() and formatDate()
 ├── lib/
 │   ├── content.ts       getPosts / getEvents / getTags / getSetting …
