@@ -1,14 +1,14 @@
 ---
-import { t } from '~/i18n';
+import { i18n, switchPath } from '~/i18n';
 import { nav } from '~/lib/nav';
-import { getSetting, getSocialLinks } from '~/lib/content';
+import { getSocialLinks } from '~/lib/content';
 import { waveMask } from '~/lib/wave';
 import LogoBlock from '~/components/shared/LogoBlock.astro';
 import SocialIcon from '~/components/shared/SocialIcon.astro';
 
-const site = await getSetting('site');
-
-const social = await getSocialLinks();
+const { lang, t, link } = i18n(Astro);
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const social = await getSocialLinks(lang);
 ---
 
 <footer class="site-footer">
@@ -17,10 +17,10 @@ const social = await getSocialLinks();
     <div>
       <div class="footer-brand">
         <LogoBlock />
-        <!-- Language switch (like the header's): the current language is filled. Not wired up yet. -->
+        <!-- Language switch (like the header's): the current language is filled. -->
         <ul class="footer-lang">
-          <li><button type="button" lang="en" aria-label={t('lang.en')}>en</button></li>
-          <li><button type="button" lang="ja" aria-label={t('lang.ja')} aria-current="true">jp</button></li>
+          <li><a href={switchPath(path, 'en')} lang="en" hreflang="en" aria-label={t('lang.en')} aria-current={lang === 'en' ? 'true' : undefined}>en</a></li>
+          <li><a href={switchPath(path, 'ja')} lang="ja" hreflang="ja" aria-label={t('lang.ja')} aria-current={lang === 'ja' ? 'true' : undefined}>jp</a></li>
         </ul>
       </div>
       <ul class="footer-social">
@@ -41,14 +41,14 @@ const social = await getSocialLinks();
         {
           nav.map((i) => (
             <li>
-              <a href={i.href}>{t(i.key)}</a>
+              <a href={link(i.href)}>{t(i.key)}</a>
             </li>
           ))
         }
       </ul>
 
       <ul class="footer-links">
-        <li><a href="/privacy">{t('footer.privacy')}</a></li>
+        <li><a href={link('/privacy')}>{t('footer.privacy')}</a></li>
         <li><a href="mailto:contact@digitalcommons.jp">{t('footer.contact')}</a></li>
       </ul>
     </div>

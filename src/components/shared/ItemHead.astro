@@ -4,7 +4,9 @@
 import calendar from 'lucide-static/icons/calendar.svg?raw';
 import fileText from 'lucide-static/icons/file-text.svg?raw';
 import folderKanban from 'lucide-static/icons/folder-kanban.svg?raw';
-import { t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { t } = i18n(Astro);
 
 interface Props {
   kind: 'project' | 'event' | 'post';

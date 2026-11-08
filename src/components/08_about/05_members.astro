@@ -2,8 +2,10 @@
 // Staff members, two columns on desktop: each is avatar | name with language labels and social links beside it, and the PGP key band below them. No background of its own.
 import type { CollectionEntry } from 'astro:content';
 import SocialIcon from '~/components/shared/SocialIcon.astro';
-import { t } from '~/i18n';
 import { memberAvatar } from '~/lib/avatar';
+import { i18n } from '~/i18n';
+
+const { t } = i18n(Astro);
 
 interface Props {
   page: CollectionEntry<'pages'>;

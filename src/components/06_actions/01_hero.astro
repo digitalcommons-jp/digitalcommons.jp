@@ -2,10 +2,12 @@
 // The picked project (see getPickedProject) is the page hero. With no projects, a plain title hero is shown.
 import ItemHead from '~/components/shared/ItemHead.astro';
 import PageHero from '~/components/shared/PageHero.astro';
-import { t } from '~/i18n';
 import { getPickedProject } from '~/lib/content';
+import { i18n } from '~/i18n';
 
-const pick = await getPickedProject();
+const { lang, t } = i18n(Astro);
+
+const pick = await getPickedProject(lang);
 const project = pick?.data;
 ---
 

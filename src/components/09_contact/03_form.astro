@@ -1,23 +1,26 @@
 ---
 // Contact form card. Dummy: it is not wired to anything yet (no action, submit does nothing).
+import { i18n } from '~/i18n';
+
+const { t } = i18n(Astro);
 ---
 
 <section class="row rigid-card overview">
   <div class="overview-info">
     <form class="form" onsubmit="return false">
       <label class="form-field">
-        <span class="form-label">お名前</span>
+        <span class="form-label">{t('form.name')}</span>
         <input class="form-input" type="text" name="name" autocomplete="name" />
       </label>
       <label class="form-field">
-        <span class="form-label">メールアドレス</span>
+        <span class="form-label">{t('form.email')}</span>
         <input class="form-input" type="email" name="email" autocomplete="email" />
       </label>
       <label class="form-field">
-        <span class="form-label">本文</span>
+        <span class="form-label">{t('form.message')}</span>
         <textarea class="form-input" name="message" rows="8"></textarea>
       </label>
-      <p><button type="submit" class="btn-primary">送信する</button></p>
+      <p><button type="submit" class="btn-primary">{t('form.send')}</button></p>
     </form>
   </div>
 </section>

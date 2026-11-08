@@ -52,4 +52,11 @@ export const en: Record<UiKey, string> = {
   '404.back': 'Back to the top page',
   'page.edit': 'Edit this page on GitHub',
   'page.updated': 'updated',
+  'home.intro':
+    'digital commons is a nonprofit that explores and practices a better relationship between people and technology. We focus in particular on spreading open source culture and defending human rights, starting with the right to privacy.',
+  'follow.soon': 'Coming soon',
+  'form.name': 'Name',
+  'form.email': 'Email address',
+  'form.message': 'Message',
+  'form.send': 'Send',
 };

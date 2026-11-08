@@ -1,9 +1,11 @@
 ---
 import ItemRow from '~/components/shared/ItemRow.astro';
-import { t } from '~/i18n';
 import { eventWhen, getEvents } from '~/lib/content';
+import { i18n } from '~/i18n';
 
-const { past } = await getEvents();
+const { lang, t, link } = i18n(Astro);
+
+const { past } = await getEvents(lang);
 ---
 
 {
@@ -12,8 +14,8 @@ const { past } = await getEvents();
       <ItemRow
         title={post.data.title}
         description={post.data.description}
-        href={`/posts/${post.id}`}
-        head={{ kind: 'event', meta: [eventWhen(post.data.event!)], cancelled: post.data.event!.status === 'cancelled' }}
+        href={link(`/posts/${post.id}`)}
+        head={{ kind: 'event', meta: [eventWhen(post.data.event!, lang)], cancelled: post.data.event!.status === 'cancelled' }}
         image={post.data.image}
         seed={post.id}
       />

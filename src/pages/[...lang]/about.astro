@@ -1,12 +1,16 @@
 ---
-import { getEntry } from 'astro:content';
 import Layout from '~/components/frame/Layout.astro';
 import Hero from '~/components/04_page/01_hero.astro';
 import About from '~/components/08_about/03_about.astro';
 import Members from '~/components/08_about/05_members.astro';
 import Overview from '~/components/08_about/07_overview.astro';
+import { getPage } from '~/lib/content';
+import { i18n, langPaths } from '~/i18n';
 
-const page = (await getEntry('pages', 'about'))!;
+export const getStaticPaths = langPaths;
+
+const { lang } = i18n(Astro);
+const page = (await getPage('about', lang))!;
 ---
 
 <Layout metadata={{ title: page.data.title, description: page.data.description }} wave={false}>

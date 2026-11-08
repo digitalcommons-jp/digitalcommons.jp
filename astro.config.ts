@@ -68,7 +68,9 @@ export default defineConfig({
 
   integrations: [
     react(),
-    sitemap({ filter: (page) => !CMS_PATH || !page.includes(CMS_PATH) }),
+    sitemap({
+      i18n: { defaultLocale: 'ja', locales: { ja: 'ja-JP', en: 'en-US' } },
+      filter: (page) => !CMS_PATH || !page.includes(CMS_PATH) }),
     cms,
     compress({
       // csso off on purpose: its parser doesn't understand the media range

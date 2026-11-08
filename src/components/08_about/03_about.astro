@@ -1,7 +1,9 @@
 ---
 // Mission (goals) and the pillars (approaches). Full width, no background of its own: it continues the page background.
 import type { CollectionEntry } from 'astro:content';
-import { t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { t } = i18n(Astro);
 
 interface Props {
   page: CollectionEntry<'pages'>;

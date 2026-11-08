@@ -50,6 +50,13 @@ export const ja = {
   '404.back': 'トップへ戻る',
   'page.edit': 'GitHub でこのページを編集する',
   'page.updated': 'updated',
+  'home.intro':
+    'digital commons は、人間とテクノロジーのよりよい付きあい方の模索と実践をする非営利団体です。特にオープンソース文化の普及とプライバシー権をはじめとする人権の擁護に取り組んでいます。',
+  'follow.soon': '準備中',
+  'form.name': 'お名前',
+  'form.email': 'メールアドレス',
+  'form.message': '本文',
+  'form.send': '送信する',
 } as const;
 
 export type UiKey = keyof typeof ja;

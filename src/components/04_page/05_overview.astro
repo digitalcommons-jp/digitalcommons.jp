@@ -1,7 +1,9 @@
 ---
 // Key/value card below the article (e.g. the operator on the privacy page). Same card as the about page's overview.
 import type { CollectionEntry } from 'astro:content';
-import { t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { t } = i18n(Astro);
 
 interface Props {
   page: CollectionEntry<'pages'>;

@@ -4,7 +4,11 @@ import Hero from '~/components/06_actions/01_hero.astro';
 import List from '~/components/06_actions/03_list.astro';
 import Events from '~/components/06_actions/05_events.astro';
 import EventNavigation from '~/components/06_actions/07_event_navigation.astro';
-import { t } from '~/i18n';
+import { i18n, langPaths } from '~/i18n';
+
+export const getStaticPaths = langPaths;
+
+const { t } = i18n(Astro);
 ---
 
 <Layout metadata={{ title: t('actions.title') }}>

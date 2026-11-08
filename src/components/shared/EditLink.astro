@@ -1,7 +1,9 @@
 ---
 // "[GitHub icon] 2026-10-30 updated": links to GitHub's edit page for the file behind the page, so anyone can propose a change.
 import { editUrl, lastUpdated } from '~/lib/edit';
-import { t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { t } = i18n(Astro);
 
 interface Props {
   filePath: string | undefined;

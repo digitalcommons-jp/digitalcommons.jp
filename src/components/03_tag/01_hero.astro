@@ -1,6 +1,8 @@
 ---
 import PageHero from '~/components/shared/PageHero.astro';
-import { t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { t } = i18n(Astro);
 
 interface Props {
   tag: string;

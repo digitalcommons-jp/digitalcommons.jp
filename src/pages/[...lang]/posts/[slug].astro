@@ -4,10 +4,16 @@ import Header from '~/components/02_post/01_header.astro';
 import EventDetails from '~/components/02_post/03_event-details.astro';
 import Body from '~/components/02_post/05_body.astro';
 import { getPosts } from '~/lib/content';
+import { langs } from '~/i18n';
 
 export async function getStaticPaths() {
-  const posts = await getPosts();
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  const paths = [];
+  for (const lang of langs) {
+    for (const post of await getPosts(lang)) {
+      paths.push({ params: { lang: lang === 'ja' ? undefined : lang, slug: post.id }, props: { post } });
+    }
+  }
+  return paths;
 }
 
 const { post } = Astro.props;

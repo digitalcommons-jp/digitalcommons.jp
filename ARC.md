@@ -8,7 +8,7 @@ File layout and naming rules for `src/`, the CCD dimension rules, deployment, an
 - **File-name numbers are odd only** (`01_` `03_` `05_` …). The visual order of the page, top to bottom, is reflected directly in the file names.
 - **Even numbers are reserved**: free slots for inserting exceptional parts later. Normally unused.
 - Parts that belong to no page go in unnumbered folders (`head/` `frame/` `shared/`).
-- Routing stays in `src/pages/` because of an Astro constraint. `pages/*.astro` are thin files that only arrange `Layout` + parts.
+- Routing stays in `src/pages/` because of an Astro constraint. Every page lives under `src/pages/[...lang]/`: Japanese at `/…`, English at `/en/…` (each page's `getStaticPaths` emits both; `404.astro` is Japanese only). `pages/*.astro` are thin files that only arrange `Layout` + parts.
 
 ## Overview
 
@@ -28,10 +28,10 @@ src/
 │   ├── posts/           posts (including event posts)
 │   ├── projects/        projects (long-term efforts and deliverables)
 │   └── settings/        site.yml (site name, description, contact)
-│   └── en/              English mirror of the four folders above (same file names and frontmatter keys; not loaded by any collection yet)
+│   └── en/              English mirror of the four folders above (same file names and frontmatter keys; collections `en_posts` / `en_projects` / `en_pages` / `en_settings`)
 ├── i18n/ja.ts         UI strings (key → Japanese)
 ├── i18n/en.ts         UI strings (key → English; typed to require every key of ja.ts)
-├── i18n/index.ts      t() and formatDate()
+├── i18n/index.ts      i18n(Astro) → { lang, t, formatDate, link } for the page's language; langOf / localePath / switchPath
 ├── lib/
 │   ├── content.ts       getPosts / getEvents / getTags / getSetting …
 │   ├── calendar.ts      jstParts / monthGrid (for the event calendar)
@@ -105,6 +105,8 @@ components/
   - hero / page-hero are always full-width and do not move.
 
 ### Pages and routes
+
+Every route except 404 also exists under `/en` (e.g. `/en/about`), served from `content/en/*`; the file is at `pages/[...lang]/<same path>`. The language is read from the URL (`langOf`); components get it from `i18n(Astro)`. The header and footer language switches link to the same page in the other language.
 
 | URL                | route                      | parts                                         |
 | ------------------ | -------------------------- | --------------------------------------------- |

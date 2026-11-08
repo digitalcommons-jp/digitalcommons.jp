@@ -10,6 +10,7 @@ import Header from '~/components/frame/01_header.astro';
 import Main from '~/components/frame/03_main.astro';
 import Footer from '~/components/frame/05_footer.astro';
 import { getSetting } from '~/lib/content';
+import { i18n, langs, switchPath } from '~/i18n';
 import { waveMask } from '~/lib/wave';
 
 import type { MetaData as MetaDataType } from '~/types';
@@ -22,18 +23,23 @@ export interface Props {
 
 const { metadata = {}, wave = true } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const site = await getSetting('site');
+const { lang, link } = i18n(Astro);
+const site = await getSetting('site', lang);
+// Every page exists in both languages (except the tag pages and the 404, which are noindex).
+const alternates = metadata.robots?.index === false ? [] : langs.map((l) => ({ lang: l, href: new URL(switchPath(path, l), Astro.site).href }));
 ---
 
 <!doctype html>
-<html lang="ja">
+<html lang={lang}>
   <head>
     <CommonMeta />
     <Favicons />
     <Font cssVariable="--font-fira" preload />
     <Font cssVariable="--font-fira-code" preload />
     <Metadata {...metadata} />
-    <link rel="alternate" type="application/rss+xml" title={site.name} href="/feed.xml" />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    {alternates.length > 0 && <link rel="alternate" hreflang="x-default" href={alternates[0].href} />}
+    <link rel="alternate" type="application/rss+xml" title={site.name} href={link('/feed.xml')} />
     <meta name="fediverse:creator" content={site.fediverse} />
     <slot name="head" />
   </head>

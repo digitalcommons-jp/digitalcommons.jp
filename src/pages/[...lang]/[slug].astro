@@ -1,14 +1,19 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '~/components/frame/Layout.astro';
 import Hero from '~/components/04_page/01_hero.astro';
 import Article from '~/components/04_page/03_article.astro';
 import Overview from '~/components/04_page/05_overview.astro';
+import { getPages } from '~/lib/content';
+import { langs } from '~/i18n';
 
 export async function getStaticPaths() {
   // 'about', 'join' and 'contact' have their own pages (pages/about.astro, pages/join.astro, pages/contact.astro).
-  const pages = (await getCollection('pages')).filter((p) => !['about', 'join', 'contact'].includes(p.data.slug));
-  return pages.map((page) => ({ params: { slug: page.data.slug }, props: { page } }));
+  const paths = [];
+  for (const lang of langs) {
+    const pages = (await getPages(lang)).filter((p) => !['about', 'join', 'contact'].includes(p.data.slug));
+    for (const page of pages) paths.push({ params: { lang: lang === 'ja' ? undefined : lang, slug: page.data.slug }, props: { page } });
+  }
+  return paths;
 }
 
 const { page } = Astro.props;

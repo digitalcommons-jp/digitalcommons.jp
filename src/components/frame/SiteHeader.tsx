@@ -11,6 +11,9 @@ interface Props {
   items: NavItem[];
   logo?: ReactNode; // the <LogoBlock slot="logo" /> passed by 01_header.astro
   labels: { site: string; nav: string; menu: string; ja: string; en: string };
+  lang: 'ja' | 'en'; // language of the page
+  home: string; // the logo's link: the top page in this language
+  switchHref: string; // the same page in the other language
 }
 
 const EASE = 'cubic-bezier(0.2, 0.7, 0.2, 1)';
@@ -19,7 +22,7 @@ const EASE = 'cubic-bezier(0.2, 0.7, 0.2, 1)';
 // while the menu is open, and while something inside has focus.
 // "Floating" (is-compact: no logo, centered nav bar, shadow) starts when the page is scrolled UP, never on the way
 // down, and ends when the page is back at the top.
-export default function SiteHeader({ items, logo, labels }: Props) {
+export default function SiteHeader({ items, logo, labels, lang: pageLang, home, switchHref }: Props) {
   const headerRef = useRef<HTMLElement>(null);
   const navBarRef = useRef<HTMLElement>(null);
   const logoAreaRef = useRef<HTMLDivElement>(null);
@@ -32,8 +35,8 @@ export default function SiteHeader({ items, logo, labels }: Props) {
   const [inPanel, setInPanel] = useState(false); // false = all items in the bar (also the no-JS / server state)
   const [menuOpen, setMenuOpen] = useState(false);
   const [closing, setClosing] = useState(false);
-  // Language switch (placeholder): a click swaps the current language and the other one (no navigation yet).
-  const [lang, setLang] = useState<'jp' | 'en'>('jp');
+  // Language switch: a link to the same page in the other language. The button shows the labels 'jp' / 'en'.
+  const lang = pageLang === 'ja' ? 'jp' : 'en';
   const other = lang === 'jp' ? 'en' : 'jp';
 
   // Mirrors of the state for the scroll / document listeners, which must see changes synchronously.
@@ -253,18 +256,18 @@ export default function SiteHeader({ items, logo, labels }: Props) {
     <header className={cls} ref={headerRef} onFocus={() => setHidden(false)}>
       <div className="container-cc header-inner">
         <div className="logo-area" ref={logoAreaRef}>
-          <a href="/" className="logo-link" aria-label={labels.site}>
+          <a href={home} className="logo-link" aria-label={labels.site}>
             {logo}
           </a>
           {/* Language switch: shows the current language (data-lang) and, on hover, the one it would switch to
-              (data-other). The labels are drawn by CSS. For now a click only swaps the two; it does not navigate yet. */}
-          <button
-            type="button"
+              (data-other). The labels are drawn by CSS. */}
+          <a
+            href={switchHref}
+            hrefLang={pageLang === 'ja' ? 'en' : 'ja'}
             className="lang-toggle"
             data-lang={lang}
             data-other={other}
             aria-label={other === 'en' ? labels.en : labels.ja}
-            onClick={() => setLang(other)}
           />
         </div>
 

@@ -2,8 +2,11 @@
 // The donation appeal ("活動を支えませんか"): the right column of the about / join cards (.overview). The text is
 // written once, in the about page's `donation` (see getDonation).
 import { getDonation } from '~/lib/content';
+import { i18n } from '~/i18n';
 
-const donation = await getDonation();
+const { lang } = i18n(Astro);
+
+const donation = await getDonation(lang);
 ---
 
 {

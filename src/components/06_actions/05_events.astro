@@ -2,8 +2,11 @@
 // Upcoming events as cards, below the projects. Soonest first.
 import ItemRow from '~/components/shared/ItemRow.astro';
 import { eventWhen, getEvents } from '~/lib/content';
+import { i18n } from '~/i18n';
 
-const { upcoming } = await getEvents();
+const { lang, link } = i18n(Astro);
+
+const { upcoming } = await getEvents(lang);
 ---
 
 {
@@ -12,8 +15,8 @@ const { upcoming } = await getEvents();
       variant="inset"
       title={post.data.title}
       description={post.data.description}
-      href={`/posts/${post.id}`}
-      head={{ kind: 'event', meta: [eventWhen(post.data.event!)], cancelled: post.data.event!.status === 'cancelled' }}
+      href={link(`/posts/${post.id}`)}
+      head={{ kind: 'event', meta: [eventWhen(post.data.event!, lang)], cancelled: post.data.event!.status === 'cancelled' }}
       image={post.data.image}
       seed={post.id}
     />

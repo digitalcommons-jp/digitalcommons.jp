@@ -1,10 +1,13 @@
 ---
-import { t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { t, link } = i18n(Astro);
+
 ---
 
 <section class="container-cc page-body">
   <p class="not-found-code">404</p>
   <h1 class="heading-2">{t('404.title')}</h1>
   <p class="text-muted">{t('404.body')}</p>
-  <p><a href="/" class="btn">{t('404.back')}</a></p>
+  <p><a href={link('/')} class="btn">{t('404.back')}</a></p>
 </section>

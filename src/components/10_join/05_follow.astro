@@ -5,6 +5,9 @@ import type { CollectionEntry } from 'astro:content';
 import Donate from '~/components/shared/Donate.astro';
 import SocialIcon from '~/components/shared/SocialIcon.astro';
 import { getSocialLinks } from '~/lib/content';
+import { i18n } from '~/i18n';
+
+const { lang, t } = i18n(Astro);
 
 interface Props {
   page: CollectionEntry<'pages'>;
@@ -12,7 +15,7 @@ interface Props {
 
 const { follow } = Astro.props.page.data;
 // The fourth tile is a placeholder (no link yet).
-const links = [...(await getSocialLinks()), { label: '準備中', href: undefined, icon: 'mail' as const }];
+const links = [...(await getSocialLinks(lang)), { label: t('follow.soon'), href: undefined, icon: 'mail' as const }];
 ---
 
 {

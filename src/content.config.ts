@@ -23,8 +23,9 @@ const eventSchema = z.object({
   status: z.enum(['scheduled', 'cancelled', 'done']).default('scheduled'),
 });
 
-const posts = defineCollection({
-  loader: glob({ pattern: '*.md', base: 'src/content/posts' }),
+const posts = (base: string) =>
+  defineCollection({
+  loader: glob({ pattern: '*.md', base }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -41,8 +42,9 @@ const posts = defineCollection({
     }),
 });
 
-const projects = defineCollection({
-  loader: glob({ pattern: '*.md', base: 'src/content/projects' }),
+const projects = (base: string) =>
+  defineCollection({
+  loader: glob({ pattern: '*.md', base }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -60,8 +62,9 @@ const projects = defineCollection({
     }),
 });
 
-const pages = defineCollection({
-  loader: glob({ pattern: '*.md', base: 'src/content/pages' }),
+const pages = (base: string) =>
+  defineCollection({
+  loader: glob({ pattern: '*.md', base }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -102,9 +105,20 @@ const pages = defineCollection({
           }),
 });
 
-const settings = defineCollection({
-  loader: glob({ pattern: '*.yml', base: 'src/content/settings' }),
+const settings = (base: string) =>
+  defineCollection({
+  loader: glob({ pattern: '*.yml', base }),
   schema: z.any(),
 });
 
-export const collections = { posts, projects, pages, settings };
+// Japanese is the default and lives in src/content/<name>; English mirrors it in src/content/en/<name> as `en_<name>`.
+export const collections = {
+  posts: posts('src/content/posts'),
+  projects: projects('src/content/projects'),
+  pages: pages('src/content/pages'),
+  settings: settings('src/content/settings'),
+  en_posts: posts('src/content/en/posts'),
+  en_projects: projects('src/content/en/projects'),
+  en_pages: pages('src/content/en/pages'),
+  en_settings: settings('src/content/en/settings'),
+};

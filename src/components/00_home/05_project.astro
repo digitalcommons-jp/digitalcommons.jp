@@ -1,10 +1,12 @@
 ---
 import ItemRow from '~/components/shared/ItemRow.astro';
-import { t } from '~/i18n';
 import { getPickedProject } from '~/lib/content';
+import { i18n } from '~/i18n';
 
-const latest = await getPickedProject();
-const more = { href: '/actions', text: t('home.moreProjects') };
+const { lang, t, link } = i18n(Astro);
+
+const latest = await getPickedProject(lang);
+const more = { href: link('/actions'), text: t('home.moreProjects') };
 ---
 
 {

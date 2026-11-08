@@ -4,8 +4,12 @@ import Hero from '~/components/00_home/01_hero.astro';
 import Event from '~/components/00_home/03_event.astro';
 import Project from '~/components/00_home/05_project.astro';
 import { getSetting } from '~/lib/content';
+import { i18n, langPaths } from '~/i18n';
 
-const site = await getSetting('site');
+export const getStaticPaths = langPaths;
+
+const { lang } = i18n(Astro);
+const site = await getSetting('site', lang);
 ---
 
 <Layout metadata={{ title: site.name, ignoreTitleTemplate: true }} wave={false}>

@@ -1,6 +1,8 @@
 ---
 import { eventWhen, isEvent, type Post } from '~/lib/content';
-import { formatDate, t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { lang, t, formatDate } = i18n(Astro);
 
 interface Props {
   post: Post;
@@ -15,7 +17,7 @@ const { event } = post.data;
     <dl class="event-details">
       <dt>{t('event.start')}</dt>
       <dd>
-        {eventWhen(event)}
+        {eventWhen(event, lang)}
         {!event.when && event.end && ` 〜 ${formatDate(event.end, true)}`}
         {event.status !== 'scheduled' && `（${t(`event.status.${event.status}`)}）`}
       </dd>

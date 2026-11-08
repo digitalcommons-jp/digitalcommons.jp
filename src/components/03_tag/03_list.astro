@@ -1,7 +1,9 @@
 ---
 import ItemRow from '~/components/shared/ItemRow.astro';
-import { formatDate } from '~/i18n';
 import type { Post } from '~/lib/content';
+import { i18n } from '~/i18n';
+
+const { formatDate, link } = i18n(Astro);
 
 interface Props {
   posts: Post[];
@@ -15,7 +17,7 @@ const { posts } = Astro.props;
     <ItemRow
       title={p.data.title}
       description={p.data.description}
-      href={`/posts/${p.id}`}
+      href={link(`/posts/${p.id}`)}
       head={{ kind: 'post', meta: [formatDate(p.data.date)] }}
       image={p.data.image}
       seed={p.id}

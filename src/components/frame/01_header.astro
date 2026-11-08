@@ -1,17 +1,25 @@
 ---
 import SiteHeader from '~/components/frame/SiteHeader.tsx';
 import LogoBlock from '~/components/shared/LogoBlock.astro';
-import { t } from '~/i18n';
+import { i18n, switchPath } from '~/i18n';
 import { nav } from '~/lib/nav';
 
 // `btn` items render as buttons in the header bar and as plain links inside the hamburger panel.
+const { lang, t, link } = i18n(Astro);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === (href.replace(/\/$/, '') || '/');
-const items = nav.map((i) => ({ text: t(i.key), href: i.href, btn: i.btn, current: isCurrent(i.href) }));
+const items = nav.map((i) => ({ text: t(i.key), href: link(i.href), btn: i.btn, current: isCurrent(link(i.href)) }));
 const labels = { site: t('site.name'), nav: t('nav.main'), menu: t('nav.menu'), ja: t('lang.ja'), en: t('lang.en') };
 ---
 
 <div class="site-header-spacer" aria-hidden="true"></div>
-<SiteHeader client:load items={items} labels={labels}>
+<SiteHeader
+  client:load
+  items={items}
+  labels={labels}
+  lang={lang}
+  home={link('/')}
+  switchHref={switchPath(path, lang === 'ja' ? 'en' : 'ja')}
+>
   <LogoBlock slot="logo" />
 </SiteHeader>

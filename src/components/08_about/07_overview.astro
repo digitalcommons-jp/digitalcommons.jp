@@ -2,15 +2,17 @@
 // General information (団体概要) and a donation appeal. Desktop: one card in two columns. Mobile: two separate cards.
 import type { CollectionEntry } from 'astro:content';
 import Donate from '~/components/shared/Donate.astro';
-import { t } from '~/i18n';
 import { getDonation } from '~/lib/content';
+import { i18n } from '~/i18n';
+
+const { lang, t } = i18n(Astro);
 
 interface Props {
   page: CollectionEntry<'pages'>;
 }
 
 const { overview = [] } = Astro.props.page.data;
-const donation = await getDonation();
+const donation = await getDonation(lang);
 ---
 
 {

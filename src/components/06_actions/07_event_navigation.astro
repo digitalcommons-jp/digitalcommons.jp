@@ -1,10 +1,12 @@
 ---
 // Below the upcoming list: link to past events, and a minimal calendar of the current month.
-import { t } from '~/i18n';
 import { getEvents } from '~/lib/content';
 import { jstParts, monthGrid } from '~/lib/calendar';
+import { i18n } from '~/i18n';
 
-const { upcoming, past } = await getEvents();
+const { lang, t, link } = i18n(Astro);
+
+const { upcoming, past } = await getEvents(lang);
 const { year, month } = jstParts(new Date());
 
 // day of month -> first event of that day
@@ -23,7 +25,7 @@ const weeks = monthGrid(year, month);
     <div class="event-navigation-text">
       <h2 class="heading-2">{t('events.pastTitle')}</h2>
       <p>
-        <a href="/events/past" class="link-more">{t('events.pastLink')}</a>
+        <a href={link('/events/past')} class="link-more">{t('events.pastLink')}</a>
       </p>
     </div>
     <table class="calendar" aria-label={t('events.calendar')}>
@@ -41,7 +43,7 @@ const weeks = monthGrid(year, month);
                 <td>
                   {day &&
                     (eventOn.has(day) ? (
-                      <a href={`/posts/${eventOn.get(day)}`} class="calendar-event">
+                      <a href={link(`/posts/${eventOn.get(day)}`)} class="calendar-event">
                         {day}
                       </a>
                     ) : (

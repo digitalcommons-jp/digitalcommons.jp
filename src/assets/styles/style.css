@@ -1286,8 +1286,9 @@ h3 {
   box-shadow: inset 0 0 0 0.0625rem currentColor; /* one outline around both buttons */
 }
 
-.footer-lang button {
+.footer-lang :is(button, a) {
   display: block;
+  text-align: center;
   width: 100%;
   min-width: 2rem;
   padding: 0.1rem 0.5rem;
@@ -1298,7 +1299,7 @@ h3 {
 }
 
 /* The current language: the footer's colors, inverted. */
-.footer-lang button[aria-current] {
+.footer-lang :is(button, a)[aria-current] {
   background: color-mix(in srgb, var(--black) 66%, transparent);
   color: var(--footer-bg);
 }

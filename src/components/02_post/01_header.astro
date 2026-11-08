@@ -1,6 +1,8 @@
 ---
 import type { Post } from '~/lib/content';
-import { formatDate, t } from '~/i18n';
+import { i18n } from '~/i18n';
+
+const { t, formatDate, link } = i18n(Astro);
 
 interface Props {
   post: Post;
@@ -21,7 +23,7 @@ const { title, date, updated, tags } = Astro.props.post.data;
     }
     {
       tags.map((tag) => (
-        <a href={`/tags/${tag}`} class="tag">
+        <a href={link(`/tags/${tag}`)} class="tag">
           {tag}
         </a>
       ))

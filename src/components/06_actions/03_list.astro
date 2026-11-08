@@ -1,11 +1,13 @@
 ---
 // Every project except the hero one, newest first.
 import ItemRow from '~/components/shared/ItemRow.astro';
-import { t } from '~/i18n';
 import { getPickedProject, getProjects } from '~/lib/content';
+import { i18n } from '~/i18n';
 
-const hero = await getPickedProject();
-const projects = (await getProjects()).filter((p) => p.id !== hero?.id);
+const { lang, t } = i18n(Astro);
+
+const hero = await getPickedProject(lang);
+const projects = (await getProjects(lang)).filter((p) => p.id !== hero?.id);
 ---
 
 {
