@@ -2,8 +2,7 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
-// Sveltia CMS writes an empty optional field as '' (or null for an empty object). Treat those as
-// "not set" so a post saved with blank optional fields still builds.
+// An empty optional field ('' or null for an empty object) means "not set", so a post with blank optional fields still builds.
 const blank = <T extends z.ZodTypeAny>(schema: T) =>
   z.preprocess((v) => (v === '' || v === null ? undefined : v), schema);
 

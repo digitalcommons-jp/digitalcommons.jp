@@ -2,7 +2,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { defineConfig, fontProviders } from 'astro/config';
-import { loadEnv } from 'vite';
 
 import { unified } from '@astrojs/markdown-remark';
 
@@ -13,27 +12,6 @@ import compress from 'astro-compress';
 import { responsiveTablesRehypePlugin } from './src/lib/markdown';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// The CMS lives at a secret, unguessable path (CMS_PATH in .env, never committed): there is
-// no /admin. Without CMS_PATH the CMS is simply not built.
-const CMS_PATH = (loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '').CMS_PATH ?? '').replace(
-  /^\/+|\/+$/g,
-  ''
-);
-const cms = {
-  name: 'cms-secret-path',
-  hooks: {
-    'astro:config:setup': ({
-      injectRoute,
-    }: {
-      injectRoute: (route: { pattern: string; entrypoint: string }) => void;
-    }) => {
-      if (!CMS_PATH) return;
-      injectRoute({ pattern: `/${CMS_PATH}`, entrypoint: './src/cms/admin.astro' });
-      injectRoute({ pattern: `/${CMS_PATH}/config.yml`, entrypoint: './src/cms/config.yml.ts' });
-    },
-  },
-};
 
 export default defineConfig({
   site: 'https://digitalcommons.jp',
@@ -68,10 +46,7 @@ export default defineConfig({
 
   integrations: [
     react(),
-    sitemap({
-      i18n: { defaultLocale: 'ja', locales: { ja: 'ja-JP', en: 'en-US' } },
-      filter: (page) => !CMS_PATH || !page.includes(CMS_PATH) }),
-    cms,
+    sitemap({ i18n: { defaultLocale: 'ja', locales: { ja: 'ja-JP', en: 'en-US' } } }),
     compress({
       // csso off on purpose: its parser doesn't understand the media range
       // syntax Tailwind v4 emits for breakpoints (`@media (width>=48rem)`) and

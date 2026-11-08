@@ -18,10 +18,6 @@ src/
 │   ├── favicons/        favicon.ico / favicon.svg / apple-touch-icon.png
 │   ├── images/          nez-trace.svg (hero illustration, traced from a purchased PIXTA asset; the original nez.png / nez.jpg are not in git)
 │   └── styles/style.css all styles (palette, tokens, component classes)
-├── cms/               Sveltia CMS (served at the secret path CMS_PATH)
-│   ├── admin.astro      admin page (injected as a route by astro.config.ts)
-│   ├── config.yml       CMS definition (collections, fields)
-│   └── config.yml.ts    endpoint that returns config.yml via ?raw
 ├── components/        → see below
 ├── content/           content (collections of content.config.ts)
 │   ├── pages/           fixed pages (about / join / contact / privacy)
@@ -374,13 +370,6 @@ GitHub Pages serves static files only, so updating an identity document means co
 
 Hashtag links in GoToSocial posts have the form `https://digitalcommons.jp/tags/<name>` and land on the Astro tag page (`/tags/<tag>`). If there is no such tag, the result is a 404.
 
-## Sveltia CMS
-
-- Location: not `/` but an unguessable secret path. `CMS_PATH` in `.env` (never committed; generate with `openssl rand -hex 12`). It is used only at build time, and builds without `CMS_PATH` do not include the CMS. The deployed site gets the same path from the `CMS_PATH` repository secret (see `.github/workflows/pages.yml`); locally it comes from `.env`.
-- Config: `src/cms/config.yml`
-- Backend: GitHub `digitalcommons-jp/digitalcommons.jp` (branch `main`). Sign in with a personal access token that has write access to the repository; saving a post commits to `main`, which triggers the Pages deployment.
-- Posts: `src/content/posts/*.md`
-
 ## Customization
 
 - Site settings: `astro.config.ts` (`site`) and `src/content/settings/site.yml`
@@ -496,4 +485,4 @@ Add a Markdown file under `src/content/pages/`; `[slug].astro` renders it. Body 
 ### 6. Cautions
 
 - `style.css` does not use PostCSS / Tailwind. `@apply` and Tailwind classes (such as `md:flex`) do not work.
-- Posts can also be added and edited from the CMS (see "Sveltia CMS" above). Only HTML / CSS changes need code editing.
+- Posts are Markdown files in `src/content/posts/`; edit them directly (or on GitHub). Only HTML / CSS changes need code editing.
