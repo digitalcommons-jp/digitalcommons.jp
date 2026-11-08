@@ -7,16 +7,20 @@
 // artPosition "body": it starts at the top right of the lead text; the title is not affected.
 // artWrap (default true): the text flows around the picture. false: the text stays in a column beside it.
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import { render, type CollectionEntry } from 'astro:content';
 import { shapesSvg } from '~/lib/blob';
 import EditLink from '~/components/shared/EditLink.astro';
 
 interface Props {
   page: CollectionEntry<'pages'>;
+  /** Use the page's Markdown body as the lead text (instead of `lead` / `description` from the frontmatter). */
+  markdown?: boolean;
 }
 
 const { title, description, lead, image, art: seed, artPosition: art, artWrap: wrap } = Astro.props.page.data;
 const filePath = Astro.props.page.filePath;
+const { markdown = false } = Astro.props;
+const Body = markdown ? (await render(Astro.props.page)).Content : undefined;
 const paragraphs = (lead ?? description).split(/\n\s*\n/);
 const hasPicture = Boolean(image || seed);
 ---
@@ -40,9 +44,13 @@ const hasPicture = Boolean(image || seed);
                 {image ? <Image src={image} alt="" widths={[480, 960]} sizes="40rem" /> : <Fragment set:html={shapesSvg(seed!)} />}
               </div>
             )}
-            {paragraphs.map((p) => (
-              <p class="text-muted">{p}</p>
-            ))}
+            {Body ? (
+              <div class="hero-md">
+                <Body />
+              </div>
+            ) : (
+              paragraphs.map((p) => <p class="text-muted">{p}</p>)
+            )}
             <EditLink filePath={filePath} />
           </div>
         </div>
@@ -55,9 +63,13 @@ const hasPicture = Boolean(image || seed);
           <h1 class="hero-title">
             <span class="hero-marker">{title}</span>
           </h1>
-          {paragraphs.map((p) => (
-            <p class="text-muted">{p}</p>
-          ))}
+          {Body ? (
+            <div class="hero-md">
+              <Body />
+            </div>
+          ) : (
+            paragraphs.map((p) => <p class="text-muted">{p}</p>)
+          )}
           <EditLink filePath={filePath} />
         </div>
       </div>

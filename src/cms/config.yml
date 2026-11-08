@@ -116,7 +116,7 @@ collections:
       - { name: artPosition, label: 図の位置, widget: select, options: [{ label: タイトルの横, value: title }, { label: 本文の横, value: body }], default: title, required: false }
       - { name: artWrap, label: 本文を図に回り込ませる（オフなら図の横に本文を揃える）, widget: boolean, default: true, required: false }
       # 以下は「私たちについて」ページだけが使う。
-      - { name: lead, label: ヒーローの本文（空行で段落を分ける）, widget: text, required: false }
+      - { name: lead, label: ヒーローの本文（空行で段落を分ける。「私たちについて」は本文欄に書く）, widget: text, required: false }
       - name: mission
         label: ミッション
         widget: object

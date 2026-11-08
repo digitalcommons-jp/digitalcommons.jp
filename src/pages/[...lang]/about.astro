@@ -15,7 +15,7 @@ const page = (await getPage('about', lang))!;
 
 <Layout metadata={{ title: page.data.title, description: page.data.description }} wave={false}>
   <!-- hero, about and members continue the same page background (no seams); the overview is a card. -->
-  <Hero page={page} />
+  <Hero page={page} markdown />
   <About page={page} />
   <Members page={page} />
   <Overview page={page} />

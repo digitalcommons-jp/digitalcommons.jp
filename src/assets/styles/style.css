@@ -546,6 +546,12 @@ h3 {
   font-size: 1.25rem;
 }
 
+.hero-md p {
+  margin-block-end: 1rem;
+  color: color-mix(in srgb, var(--black) 66%, transparent);
+  font-size: 1.25rem;
+}
+
 .hero-title {
   /* Scales with the viewport between 2.5rem and 5rem; line-height rounds up to whole rem. */
   font-size: clamp(2.5rem, 6vw, 5rem);

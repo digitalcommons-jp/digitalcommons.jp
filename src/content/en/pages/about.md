@@ -6,14 +6,6 @@ image: ''
 art: about
 artPosition: title
 artWrap: true
-lead: |-
-  We are digital commons, a voluntary human rights organization founded to help build a better digital society.
-
-  The internet and other information and communication technologies have become indispensable infrastructure in our lives. They are right at hand, yet for us citizens they remain something like a bottomless black box. Today they are held by a handful of large corporations, and are used routinely even in wars and genocides.
-
-  We want to take that internet back and put it in everyone's hands. To that end, we work to defend digital human rights related to privacy and identity, and we carry out a range of practical activities.
-
-  The key to changing this world, and to standing up against injustice, is right at hand for us citizens. There are countless things anyone can start doing today. Won't you join us in exploring a better kind of internet together?
 mission:
   title: Mission
   text: To defend human rights in the digital society
@@ -59,3 +51,11 @@ overview:
     value: info@digitalcommons.jp
 follow: null
 ---
+
+We are digital commons, a voluntary human rights organization founded to help build a better digital society.
+
+The internet and other information and communication technologies have become indispensable infrastructure in our lives. They are right at hand, yet for us citizens they remain something like a bottomless black box. Today they are held by a handful of large corporations, and are used routinely even in wars and genocides.
+
+We want to take that internet back and put it in everyone's hands. To that end, we work to defend digital human rights related to privacy and identity, and we carry out a range of practical activities.
+
+The key to changing this world, and to standing up against injustice, is right at hand for us citizens. There are countless things anyone can start doing today. Won't you join us in exploring a better kind of internet together?
