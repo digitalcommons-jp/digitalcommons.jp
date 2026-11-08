@@ -13,25 +13,25 @@ The internet and other information and communication technologies have become in
 
 We want to take that internet back and put it in everyone's hands. To that end, we work to defend digital human rights related to privacy and identity, and we carry out a range of practical activities.
 
-The key to changing this world, and to standing up against injustice, is right at hand for us citizens. There are countless things anyone can start doing today. Won't you join us in exploring a better kind of internet together?
+The key to changing this world, and to standing up against injustice, including war, is right at hand for us citizens. There are countless things anyone can start doing today. Won't you join us in exploring a better kind of internet together?
 :::
 
 :::mission
 ## Mission
 
-To defend human rights in the digital society
+To protect human rights in the digital society
 :::
 
 :::approaches
 ## Two pillars
 
-### Spreading open source culture
+### Building open infrastructure for civic movements and daily life
 
-To turn people's eyes to the richness of the internet that lies outside the walled gardens of platforms, and to make it something anyone can use in daily life
+In cooperation with other organizations, we promote and develop free and secure digital infrastructure. We also make open source resources something anyone can use in daily life.
 
-### Practicing cybersecurity
+### Practicing and sharing knowledge on privacy and security
 
-To raise awareness of the large-scale surveillance that happens every day, and to learn from one another the techniques for defending our own privacy and identity
+We pool our knowledge and skills about digital rights related to privacy and identity, and push back against the large-scale surveillance that governments and corporations carry out every day.
 :::
 
 :::members
