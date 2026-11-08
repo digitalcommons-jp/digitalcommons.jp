@@ -5,8 +5,6 @@ slug: about
 ---
 
 :::hero{art="about" position="title" wrap="true"}
-# About us
-
 We are digital commons, a voluntary human rights organization founded to help build a better digital society.
 
 The internet and other information and communication technologies have become indispensable infrastructure in our lives. They are right at hand, yet for us citizens they remain something like a bottomless black box. Today they are held by a handful of large corporations, and are used routinely even in wars and genocides.
