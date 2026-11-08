@@ -7,20 +7,24 @@
 // artPosition "body": it starts at the top right of the lead text; the title is not affected.
 // artWrap (default true): the text flows around the picture. false: the text stays in a column beside it.
 import { Image } from 'astro:assets';
-import { render, type CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { getAbout } from '~/lib/about';
 import { shapesSvg } from '~/lib/blob';
 import EditLink from '~/components/shared/EditLink.astro';
 
 interface Props {
   page: CollectionEntry<'pages'>;
-  /** Use the page's Markdown body as the lead text (instead of `lead` / `description` from the frontmatter). */
-  markdown?: boolean;
+  /** A `:::hero` block (see lib/about.ts): its title, lead (HTML) and picture settings win over the frontmatter. */
+  hero?: Awaited<ReturnType<typeof getAbout>>['hero'];
 }
 
-const { title, description, lead, image, art: seed, artPosition: art, artWrap: wrap } = Astro.props.page.data;
+const { description, lead, image, ...data } = Astro.props.page.data;
+const { hero } = Astro.props;
+const title = hero?.title ?? data.title;
+const seed = hero?.art ?? data.art;
+const art = hero?.artPosition ?? data.artPosition;
+const wrap = hero?.artWrap ?? data.artWrap;
 const filePath = Astro.props.page.filePath;
-const { markdown = false } = Astro.props;
-const Body = markdown ? (await render(Astro.props.page)).Content : undefined;
 const paragraphs = (lead ?? description).split(/\n\s*\n/);
 const hasPicture = Boolean(image || seed);
 ---
@@ -44,10 +48,8 @@ const hasPicture = Boolean(image || seed);
                 {image ? <Image src={image} alt="" widths={[480, 960]} sizes="40rem" /> : <Fragment set:html={shapesSvg(seed!)} />}
               </div>
             )}
-            {Body ? (
-              <div class="hero-md">
-                <Body />
-              </div>
+            {hero?.html ? (
+              <div class="hero-md" set:html={hero.html} />
             ) : (
               paragraphs.map((p) => <p class="text-muted">{p}</p>)
             )}
@@ -63,10 +65,8 @@ const hasPicture = Boolean(image || seed);
           <h1 class="hero-title">
             <span class="hero-marker">{title}</span>
           </h1>
-          {Body ? (
-            <div class="hero-md">
-              <Body />
-            </div>
+          {hero?.html ? (
+            <div class="hero-md" set:html={hero.html} />
           ) : (
             paragraphs.map((p) => <p class="text-muted">{p}</p>)
           )}

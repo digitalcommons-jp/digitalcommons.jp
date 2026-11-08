@@ -1,22 +1,21 @@
 ---
 // Mission (goals) and the pillars (approaches). Full width, no background of its own: it continues the page background.
-import type { CollectionEntry } from 'astro:content';
+import type { getAbout } from '~/lib/about';
 import { i18n } from '~/i18n';
 
 const { t } = i18n(Astro);
 
+type About = Awaited<ReturnType<typeof getAbout>>;
 interface Props {
-  page: CollectionEntry<'pages'>;
+  mission: About['mission'];
+  approaches: About['approaches'];
 }
 
-const { mission, approaches = [] } = Astro.props.page.data;
+const { mission, approaches } = Astro.props;
+const items = approaches?.items ?? [];
 
-// Only **bold** is supported in the mission text; everything else is escaped.
-const bold = (text: string) =>
-  text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+// A block with a single paragraph: the text without its <p> (the component draws its own).
+const inline = (html: string) => html.trim().replace(/^<p>([\s\S]*)<\/p>$/, '$1');
 ---
 
 <section class="row about">
@@ -24,20 +23,20 @@ const bold = (text: string) =>
     {
       mission && (
         <div class="about-mission">
-          <h2 class="item-row-label">{mission.title}</h2>
-          <p class="about-mission-text" set:html={bold(mission.text)} />
+          {mission.title && <h2 class="item-row-label">{mission.title}</h2>}
+          <p class="about-mission-text" set:html={inline(mission.html)} />
         </div>
       )
     }
     {
-      approaches.length > 0 && (
+      items.length > 0 && (
         <div>
-          <h2 class="item-row-label">{t('about.approaches')}</h2>
+          <h2 class="item-row-label">{approaches?.title ?? t('about.approaches')}</h2>
           <ul class="about-approaches">
-            {approaches.map((a) => (
+            {items.map((a) => (
               <li>
                 <h3 class="about-approach-title">{a.title}</h3>
-                <p class="text-muted">{a.text}</p>
+                <p class="text-muted" set:html={inline(a.html)} />
               </li>
             ))}
           </ul>

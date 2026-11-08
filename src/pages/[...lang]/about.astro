@@ -5,18 +5,20 @@ import About from '~/components/08_about/03_about.astro';
 import Members from '~/components/08_about/05_members.astro';
 import Overview from '~/components/08_about/07_overview.astro';
 import { getPage } from '~/lib/content';
+import { getAbout } from '~/lib/about';
 import { i18n, langPaths } from '~/i18n';
 
 export const getStaticPaths = langPaths;
 
 const { lang } = i18n(Astro);
 const page = (await getPage('about', lang))!;
+const about = await getAbout(lang);
 ---
 
 <Layout metadata={{ title: page.data.title, description: page.data.description }} wave={false}>
   <!-- hero, about and members continue the same page background (no seams); the overview is a card. -->
-  <Hero page={page} markdown />
-  <About page={page} />
-  <Members page={page} />
-  <Overview page={page} />
+  <Hero page={page} hero={about.hero} />
+  <About mission={about.mission} approaches={about.approaches} />
+  <Members members={about.members} />
+  <Overview overview={about.overview} />
 </Layout>

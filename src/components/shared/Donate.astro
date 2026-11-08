@@ -7,13 +7,15 @@ import { i18n } from '~/i18n';
 const { lang } = i18n(Astro);
 
 const donation = await getDonation(lang);
+// The text is one paragraph: drop its <p> (the component draws its own).
+const inline = (html: string) => html.trim().replace(/^<p>([\s\S]*)<\/p>$/, '$1');
 ---
 
 {
   donation && (
     <div class="overview-donate">
       <h2 class="item-row-label">{donation.title}</h2>
-      <p class="text-muted">{donation.text}</p>
+      <p class="text-muted" set:html={inline(donation.html)} />
       <p>
         <a href={donation.href} class="btn-primary">
           {donation.button}

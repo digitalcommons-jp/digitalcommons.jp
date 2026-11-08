@@ -1,6 +1,6 @@
 ---
 // Staff members, two columns on desktop: each is avatar | name with language labels and social links beside it, and the PGP key band below them. No background of its own.
-import type { CollectionEntry } from 'astro:content';
+import type { Member } from '~/lib/about';
 import SocialIcon from '~/components/shared/SocialIcon.astro';
 import { memberAvatar } from '~/lib/avatar';
 import { i18n } from '~/i18n';
@@ -8,10 +8,11 @@ import { i18n } from '~/i18n';
 const { t } = i18n(Astro);
 
 interface Props {
-  page: CollectionEntry<'pages'>;
+  members?: { title?: string; list: Member[] };
 }
 
-const { members = [] } = Astro.props.page.data;
+const { members: block } = Astro.props;
+const members = block?.list ?? [];
 const services = [
   { key: 'bluesky', icon: 'bluesky', label: 'Bluesky' },
   { key: 'mastodon', icon: 'mastodon', label: 'Mastodon' },
@@ -31,7 +32,7 @@ const languages = (v?: string) =>
   members.length > 0 && (
     <section class="row members">
       <div class="container-cc members-inner">
-        <h3 class="members-title">{t('about.members')}</h3>
+        <h3 class="members-title">{block?.title ?? t('about.members')}</h3>
         <ul class="member-list">
           {members.map((m) => (
             <li class="member">

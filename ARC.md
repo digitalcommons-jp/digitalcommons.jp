@@ -32,6 +32,8 @@ src/
 │   ├── content.ts       getPosts / getEvents / getTags / getSetting …
 │   ├── calendar.ts      jstParts / monthGrid (for the event calendar)
 │   ├── nav.ts           main menu definition (shared by header and footer)
+│   ├── blocks.ts        parses `:::name` directive blocks of a Markdown body (remark-directive) into per-component pieces
+│   ├── about.ts         getAbout(): the about page's hero / mission / pillars / members / overview / donation from its blocks
 │   └── markdown.ts      rehype plugin (makes tables horizontally scrollable; loaded from astro.config.ts)
 ├── pages/             routing only
 ├── content.config.ts  collection schemas
@@ -112,7 +114,7 @@ Every route except 404 also exists under `/en` (e.g. `/en/about`), served from `
 | `/tags/<tag>`      | `pages/tags/[tag].astro`   | `03_tag/*`                                    |
 | `/privacy`         | `pages/[slug].astro`       | `04_page/*` (body is `content/pages/*.md`)    |
 | `/join`            | `pages/join.astro`         | `04_page/01_hero` + `10_join/*` (sections come from the body of `content/pages/join.md`; forms are written as HTML in the body; the cards below use `follow` (frontmatter) + `shared/Donate`) |
-| `/about`           | `pages/about.astro`        | `08_about/*` (content is the frontmatter of `content/pages/about.md`) |
+| `/about`           | `pages/about.astro`        | `04_page/01_hero` + `08_about/*` (content is the `:::hero` `:::mission` `:::approaches` `:::members` `:::overview` `:::donation` blocks in the body of `content/pages/about.md`; see `lib/about.ts`) |
 | `/events/past`     | `pages/events/past.astro`  | `07_past-events/*`                            |
 | 404                | `pages/404.astro`          | `05_not-found/*`                              |
 | `/feed.xml`        | `pages/feed.xml.ts`        | none (RSS)                                    |

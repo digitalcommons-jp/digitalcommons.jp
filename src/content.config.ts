@@ -76,27 +76,7 @@ const pages = (base: string) =>
       // Where the picture starts: beside the title, or beside the lead text. And whether the text flows around it.
       artPosition: blank(z.enum(['title', 'body']).default('title')),
       artWrap: blank(z.boolean().default(true)),
-      // Only the about page uses the fields below (see pages/about.astro).
-      lead: blank(z.string().optional()), // hero text (any page; default: description); paragraphs are separated by a blank line
-      mission: blank(z.object({ title: z.string(), text: z.string() }).optional()),
-      approaches: blank(z.array(z.object({ title: z.string(), text: z.string() })).optional()),
-      members: blank(
-        z
-        .array(
-          z.object({
-            name: z.string(),
-            languages: blank(z.string().optional()), // e.g. "EN, FR": shown as small labels beside the name
-            bluesky: blank(z.string().optional()),
-            mastodon: blank(z.string().optional()),
-            didwebvh: blank(z.string().optional()),
-            chat: blank(z.string().optional()), // URL of a chat room or profile
-            email: blank(z.string().optional()), // an address (shown as a mailto: link)
-            pgp: blank(z.object({ fingerprint: z.string(), file: z.string() }).optional()),
-          }),
-        )
-        .optional(),
-      ),
-      donation: blank(z.object({ title: z.string(), text: z.string(), button: z.string(), href: z.string() }).optional()),
+      lead: blank(z.string().optional()), // hero text (default: description); paragraphs are separated by a blank line. The about page writes its hero in a :::hero block instead (see lib/about.ts).
       overviewTitle: blank(z.string().optional()), // heading of the overview card (default: 団体概要)
       overview: blank(z.array(z.object({ label: z.string(), value: z.string() })).optional()),
       // Only the join page uses `follow` (see 10_join/05_follow.astro).

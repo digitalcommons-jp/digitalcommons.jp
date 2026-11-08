@@ -1,5 +1,6 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { formatDate, type Lang } from '~/i18n';
+import { getAbout } from './about';
 
 /** Collection name of a language: `posts` (ja) or `en_posts`. */
 const col = <N extends 'posts' | 'projects' | 'pages' | 'settings'>(name: N, lang: Lang) =>
@@ -64,7 +65,7 @@ export const getPages = (lang: Lang = 'ja') => getCollection(col('pages', lang))
 
 /** The donation appeal ("活動を支えませんか"): written once, in the about page's `donation`. */
 export async function getDonation(lang: Lang = 'ja') {
-  return (await getEntry(col('pages', lang), 'about'))?.data.donation;
+  return (await getAbout(lang)).donation;
 }
 
 /** RSS / Bluesky / Mastodon links of the site (footer, join page). */
