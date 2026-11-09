@@ -450,7 +450,7 @@ h3 {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 4rem calc(4 * var(--cc-w));
+  padding: 4rem calc(2 * var(--cc-w));
 }
 
 .hero-copy {
