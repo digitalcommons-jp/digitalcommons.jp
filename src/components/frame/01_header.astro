@@ -12,7 +12,6 @@ const items = nav.map((i) => ({ text: t(i.key), href: link(i.href), btn: i.btn, 
 const labels = { site: t('site.name'), nav: t('nav.main'), menu: t('nav.menu'), ja: t('lang.ja'), en: t('lang.en') };
 ---
 
-<div class="site-header-spacer" aria-hidden="true"></div>
 <SiteHeader
   client:load
   items={items}

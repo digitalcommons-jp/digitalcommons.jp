@@ -92,9 +92,7 @@
   --cc-w: 1ch;
   --wave-w: 90rem; /* width of the wave mask: below this the wave keeps its slope and is cut off on the right */
   --header-h-large: 6rem;
-  --header-h-compact: 5rem;
   --logo-size-large: 1.5rem;
-  --logo-size-compact: 1.5rem;
 }
 
 body {
@@ -273,13 +271,9 @@ h3 {
 }
 
 /* ---------------------------------------------------------------
- * Site header: fixed (stays on screen), large at the top, compact once
- * scrolled. A spacer of the large height keeps the layout from jumping.
+ * Site header: a plain block at the top of the page; it scrolls away with
+ * the page (no fixed / sticky behavior, no effects).
  * ------------------------------------------------------------- */
-
-.site-header-spacer {
-  height: var(--header-h-large);
-}
 
 /* Read by the header script (01_header.astro) so the breakpoint is defined only here. */
 .site-header {
@@ -293,38 +287,10 @@ h3 {
 }
 
 .site-header {
-  position: fixed;
-  inset-block-start: 0;
-  inset-inline: 0;
+  position: relative;
   z-index: 40;
   height: var(--header-h-large);
-  background: transparent;
-  /*box-shadow: 0 0.0625rem 0 0 color-mix(in srgb, var(--black) 12%, transparent);*/
-  transition:
-    height 0.2s ease,
-    transform 0.3s ease;
   --logo-size: var(--logo-size-large);
-}
-
-.site-header.is-hidden {
-  transform: translateY(-100%);
-}
-
-/* Floating (the page has scrolled, so the header sits over content): a faint drop shadow under the two white shapes,
- * the logo and the nav bar. At the very top they sit on the plain page, so there is none. */
-.logo-link,
-.nav-items {
-  transition: box-shadow 0.3s ease;
-}
-
-.site-header.is-compact .logo-link,
-.site-header.is-compact .nav-items {
-  box-shadow: 0 0.125rem 0.75rem color-mix(in srgb, var(--black) 8%, transparent);
-}
-
-.site-header.is-compact {
-  height: var(--header-h-compact);
-  --logo-size: var(--logo-size-compact);
 }
 
 /* Header logo: the block logo, always. */
@@ -390,12 +356,6 @@ h3 {
   margin-top: 1.5rem;
   margin-left: 0.5rem;
   background: var(--white); /* canvas */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-header {
-    transition: none;
-  }
 }
 
 /* ---------------------------------------------------------------
@@ -629,21 +589,12 @@ h3 {
   /* Full width: logo at the left edge, menu at the right edge (overrides .container-cc). */
   width: 100%;
   margin-inline: 0;
-  padding-inline: calc(3 * var(--cc-w));
+  padding-inline: calc(3 * var(--cc-w)) calc(3 * var(--cc-w) - 1rem); /* the right side is 1rem narrower */
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
   height: 100%;
-}
-
-/* Floating (scrolled; the header sits over content): no logo, and the nav bar is centered on the screen. */
-.site-header.is-compact .logo-area {
-  display: none;
-}
-
-.site-header.is-compact .header-inner {
-  justify-content: center;
 }
 
 .nav-bar {
@@ -692,11 +643,6 @@ h3 {
   transition:
     background 0.2s ease,
     color 0.2s ease;
-}
-
-/* Plain links: transparent (the bar is the canvas); on hover a pale pill (--header-hover) shows up. */
-.nav-bar .nav-item a:not(.btn-primary, .btn-secondary):hover {
-  background-image: linear-gradient(var(--header-hover), var(--header-hover));
 }
 
 /* The underline of the bar (placed and slid by SiteHeader.tsx): under the current page's item, sliding to the hovered

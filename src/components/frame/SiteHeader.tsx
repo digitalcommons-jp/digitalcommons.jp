@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 
 export interface NavItem {
   text: string;
@@ -16,22 +16,13 @@ interface Props {
   switchHref: string; // the same page in the other language
 }
 
-const EASE = 'cubic-bezier(0.2, 0.7, 0.2, 1)';
-
-// The header slides away while scrolling down and comes back while scrolling up. It stays visible near the top,
-// while the menu is open, and while something inside has focus.
-// "Floating" (is-compact: no logo, centered nav bar, shadow) starts when the page is scrolled UP, never on the way
-// down, and ends when the page is back at the top.
+// A plain fixed header: always visible, the same at every scroll position.
 export default function SiteHeader({ items, logo, labels, lang: pageLang, home, switchHref }: Props) {
   const headerRef = useRef<HTMLElement>(null);
-  const navBarRef = useRef<HTMLElement>(null);
-  const logoAreaRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDetailsElement>(null);
   const navItemsRef = useRef<HTMLUListElement>(null);
   const underlineRef = useRef<HTMLLIElement>(null);
 
-  const [hidden, setHidden] = useState(false);
-  const [compact, setCompact] = useState(false);
   const [inPanel, setInPanel] = useState(false); // false = all items in the bar (also the no-JS / server state)
   const [menuOpen, setMenuOpen] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -39,13 +30,9 @@ export default function SiteHeader({ items, logo, labels, lang: pageLang, home, 
   const lang = pageLang === 'ja' ? 'jp' : 'en';
   const other = lang === 'jp' ? 'en' : 'jp';
 
-  // Mirrors of the state for the scroll / document listeners, which must see changes synchronously.
-  const compactRef = useRef(false);
+  // Mirrors of the state for the document listener, which must see changes synchronously.
   const menuOpenRef = useRef(false);
   const closingRef = useRef(false);
-  const lastY = useRef(0);
-  const navLeftBefore = useRef<number | undefined>(undefined);
-  const logoFadeIn = useRef(false);
 
   const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   // The breakpoint lives in CSS only (--bp-md); style.css exposes it here as --is-mobile on the header.
@@ -58,33 +45,6 @@ export default function SiteHeader({ items, logo, labels, lang: pageLang, home, 
     menuOpenRef.current = open;
     setMenuOpen(open);
   };
-
-  // Switch floating on/off. Moving the nav bar between the right edge and the center cannot be a CSS transition (it
-  // is a layout change), so it is animated by hand: measure where the bar was, switch, then slide it from the old
-  // position to its new one (see the layout effect below). The logo fades in when it comes back.
-  const setFloating = (on: boolean) => {
-    if (on && !isDesktop()) return; // no floating nav on mobile
-    if (compactRef.current === on) return;
-    navLeftBefore.current = navBarRef.current?.getBoundingClientRect().left;
-    logoFadeIn.current = !on;
-    compactRef.current = on;
-    setCompact(on);
-  };
-
-  useLayoutEffect(() => {
-    const navBar = navBarRef.current;
-    const before = navLeftBefore.current;
-    navLeftBefore.current = undefined;
-    if (reducedMotion() || !navBar || before === undefined) return;
-    const dx = before - navBar.getBoundingClientRect().left;
-    if (Math.abs(dx) > 1) {
-      navBar.animate([{ transform: `translateX(${dx}px)` }, { transform: 'none' }], { duration: 350, easing: EASE });
-    }
-    const logoArea = logoAreaRef.current;
-    if (logoFadeIn.current && logoArea) {
-      logoArea.animate([{ opacity: 0 }, { opacity: logoArea.style.opacity || 1 }], { duration: 350, easing: 'ease' });
-    }
-  }, [compact]);
 
   // Closing slides the panel out first; <details> would otherwise hide it at once.
   const toggleMenu = useCallback(() => {
@@ -105,30 +65,6 @@ export default function SiteHeader({ items, logo, labels, lang: pageLang, home, 
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
-    const logoArea = logoAreaRef.current;
-    const menus = [...header.querySelectorAll<HTMLElement>('.nav-bar, .mobile-menu')];
-    lastY.current = window.scrollY;
-
-    const update = () => {
-      const y = Math.max(0, window.scrollY);
-      const delta = y - lastY.current;
-      const fade = Math.max(0, 1 - y / 40);
-      logoArea?.style.setProperty('opacity', String(fade));
-      logoArea?.style.setProperty('pointer-events', fade === 0 ? 'none' : '');
-      if (Math.abs(delta) >= 4) {
-        const pinned = y < 80 || header.querySelector('details[open]') || header.matches(':focus-within');
-        setHidden(delta > 0 && !pinned);
-        if (delta < 0 && y > 16) setFloating(true);
-        lastY.current = y;
-      }
-      if (y <= 16) setFloating(false);
-      // Menu fades with the logo, except while floating (it is the only thing shown then).
-      const menuFade = compactRef.current || menuOpenRef.current ? 1 : fade;
-      menus.forEach((m) => m.style.setProperty('opacity', String(menuFade)));
-    };
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-
     // A click or tap outside the open panel closes it.
     const onDocClick = (e: MouseEvent) => {
       if (!menuOpenRef.current || closingRef.current) return;
@@ -147,14 +83,11 @@ export default function SiteHeader({ items, logo, labels, lang: pageLang, home, 
         closingRef.current = false;
         setClosing(false);
         openMenu(false);
-      } else {
-        setFloating(false);
       }
     });
     ro.observe(header);
 
     return () => {
-      window.removeEventListener('scroll', update);
       document.removeEventListener('click', onDocClick);
       ro.disconnect();
     };
@@ -227,16 +160,6 @@ export default function SiteHeader({ items, logo, labels, lang: pageLang, home, 
     };
   }, [inPanel]);
 
-  // Keep the menu items' opacity in step when the menu opens or the nav bar moves (floating on/off).
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-    const fade = Number(logoAreaRef.current?.style.opacity || 1);
-    header.querySelectorAll<HTMLElement>('.nav-bar, .mobile-menu').forEach((m) => {
-      m.style.setProperty('opacity', String(compact || menuOpen ? 1 : fade));
-    });
-  }, [compact, menuOpen]);
-
   const links = (panel: boolean) =>
     items.map((i) => (
       <li className={['nav-item', i.btn && 'nav-item-action'].filter(Boolean).join(' ')} data-btn={i.btn} key={i.href}>
@@ -250,12 +173,10 @@ export default function SiteHeader({ items, logo, labels, lang: pageLang, home, 
       </li>
     ));
 
-  const cls = ['site-header', hidden && 'is-hidden', compact && 'is-compact'].filter(Boolean).join(' ');
-
   return (
-    <header className={cls} ref={headerRef} onFocus={() => setHidden(false)}>
+    <header className="site-header" ref={headerRef}>
       <div className="container-cc header-inner">
-        <div className="logo-area" ref={logoAreaRef}>
+        <div className="logo-area">
           <a href={home} className="logo-link" aria-label={labels.site}>
             {logo}
           </a>
@@ -271,7 +192,7 @@ export default function SiteHeader({ items, logo, labels, lang: pageLang, home, 
           />
         </div>
 
-        <nav className="nav-bar" aria-label={labels.nav} ref={navBarRef}>
+        <nav className="nav-bar" aria-label={labels.nav}>
           <ul className="nav-items" ref={navItemsRef}>
             {inPanel ? null : links(false)}
             {!inPanel && <li className="nav-underline" ref={underlineRef} aria-hidden="true" />}
